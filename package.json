@@ -1,0 +1,22 @@
+{
+  "name": "vendor_service",
+  "version": "1.0.0",
+  "description": "Projeto de Estudos (API Rest)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/t1ago/vendor_service.git"
+  },
+  "author": "Tiago H. P",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/t1ago/vendor_service/issues"
+  },
+  "homepage": "https://github.com/t1ago/vendor_service#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
