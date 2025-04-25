@@ -4,8 +4,9 @@
   "description": "Projeto de Estudos (API Rest)",
   "main": "app.js",
   "scripts": {
-    "local": "node --env-file=.local.env app.js",
-    "prod": "node --env-file=.prod.env app.js"
+    "ts": "npx tsc",
+    "local": "npm run ts && node --env-file=.local.env dist/app.js",
+    "prod": "npm run ts && node --env-file=.prod.env dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,12 @@
   },
   "homepage": "https://github.com/t1ago/vendor_service#readme",
   "dependencies": {
-    "dotenv": "^16.5.0",
     "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/pg": "^8.11.14",
+    "pg": "^8.15.5",
+    "typescript": "^5.8.3"
   }
 }

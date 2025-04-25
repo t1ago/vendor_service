@@ -12,7 +12,11 @@
                 "<node_internals>/**"
             ],
             "envFile": "${workspaceFolder}/.local.env",
-            "program": "${workspaceFolder}/app.js"
+            "program": "${workspaceFolder}/app.ts",
+            "preLaunchTask": "tsc: compilar - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
         },
         {
             "type": "node",
@@ -22,7 +26,11 @@
                 "<node_internals>/**"
             ],
             "envFile": "${workspaceFolder}/.prod.env",
-            "program": "${workspaceFolder}/app.js"
+            "program": "${workspaceFolder}/app.ts",
+            "preLaunchTask": "tsc: compilar - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
         }
     ]
 }
