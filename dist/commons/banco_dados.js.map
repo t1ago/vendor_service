@@ -1,0 +1,1 @@
+{"version":3,"file":"banco_dados.js","sourceRoot":"","sources":["../../commons/banco_dados.ts"],"names":[],"mappings":";;;AAAC,2BAA4B;AAEtB,MAAM,UAAU,GAAG,GAAG,EAAE;IAC3B,MAAM,OAAO,GAAG,IAAI,WAAM,CAAC;QACvB,gBAAgB,EAAE,OAAO,CAAC,GAAG,CAAC,iBAAiB;QAC/C,GAAG,EAAE,IAAI;KACZ,CAAC,CAAC;IAEH,OAAO,OAAO,CAAA;AAClB,CAAC,CAAA;AAPY,QAAA,UAAU,cAOtB"}
