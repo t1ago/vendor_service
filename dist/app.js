@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const categorias_rotas_1 = __importDefault(require("./categorias/categorias_rotas"));
 /** Constantes do Servidor*/
 const app = (0, express_1.default)();
-const port = process.env.API_PORT;
+const port = process.env.API_PORT || 3000;
 /** Configuração do Servidor */
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
