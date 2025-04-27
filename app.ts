@@ -3,7 +3,7 @@ import rotasCategorias from "./categorias/categorias_rotas"
 
 /** Constantes do Servidor*/
 const app = express()
-const port = process.env.API_PORT
+const port = process.env.API_PORT || 3000
 
 /** Configuração do Servidor */
 app.use(express.json())
