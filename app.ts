@@ -1,4 +1,5 @@
 import express, { Request, Response} from "express"
+import cors from "cors"
 import rotasCategorias from "./categorias/categorias_rotas"
 
 /** Constantes do Servidor*/
@@ -8,6 +9,10 @@ const port = process.env.API_PORT || 3000
 /** Configuração do Servidor */
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(cors({
+  origin: "*",
+  credentials: true
+}))
 
 
 /** Criação de Rotas */
