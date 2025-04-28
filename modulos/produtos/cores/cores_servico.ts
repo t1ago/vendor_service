@@ -104,17 +104,20 @@ export const buscarCorServico = async (cor: any) => {
 
         const resultado_banco = await cliente.query(sql, valores)
 
-        resultado.executado = (resultado_banco.rowCount || 0) > 0
+        resultado.executado = true
         resultado.mensagem = ""
-        resultado.data = [
-            {
-                'id': resultado_banco.rows[0].id,
-                'hexadecimal': resultado_banco.rows[0].hexadecimal
-            }
-        ]
-        
+        resultado.data = []
 
+        if (resultado_banco.rows.length > 0) {
+            resultado.data.push(
+                {
+                    'id': resultado_banco.rows[0].id,
+                    'hexadecimal': resultado_banco.rows[0].hexadecimal
+                }
+            )
+        }
     } catch (erro) {
+        resultado.executado = false
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
     } finally {
         await cliente.end();
@@ -134,19 +137,22 @@ export const buscarCoresServico = async () => {
 
         const resultado_banco = await cliente.query(sql)
 
-        resultado.executado = (resultado_banco.rowCount || 0) > 0
+        resultado.executado = true
         resultado.mensagem = ""
         resultado.data = []
 
-        resultado_banco.rows.forEach(item => {
-            resultado.data.push(
-                {
-                    'id': item.id,
-                    'hexadecimal': item.hexadecimal
-                }
-            )
-        })
+        if (resultado_banco.rows.length > 0) {
+            resultado_banco.rows.forEach(item => {
+                resultado.data.push(
+                    {
+                        'id': item.id,
+                        'hexadecimal': item.hexadecimal
+                    }
+                )
+            })
+        }
     } catch (erro) {
+        resultado.executado = false
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
     } finally {
         await cliente.end();
