@@ -1,6 +1,6 @@
 import express, { Request, Response} from "express"
 import cors from "cors"
-import rotasCategorias from "./categorias/categorias_rotas"
+import rotasCategorias from "./modulos/produtos/categorias/categorias_rotas"
 
 /** Constantes do Servidor*/
 const app = express()
