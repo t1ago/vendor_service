@@ -5,7 +5,7 @@ import rotasCores from "./modulos/produtos/cores/cores_rotas"
 
 /** Constantes do Servidor*/
 const app = express()
-const port = process.env.API_PORT || 4000
+const port = process.env.API_PORT || 3000
 
 /** Configuração do Servidor */
 app.use(express.json())
