@@ -160,3 +160,5 @@ export const buscarCategoriasServico = async () => {
 
     return resultado
 }
+
+dadasdas
