@@ -1,14 +1,11 @@
 import  express  from "express"
-import { alterargrupo, buscargrupo, inserirgrupo, removergrupo } from "./grupo_controlador"
-
+import { alterargrupo, buscargrupo, buscargrupos, inserirgrupo, removergrupo } from "./grupo_controlador"
 
 const gruporota = express.Router() 
 gruporota.post("/", inserirgrupo)
-gruporota.delete("/", removergrupo)
-gruporota.put("/", alterargrupo)
+gruporota.put("/:id", alterargrupo)
+gruporota.delete("/:id", removergrupo)
 gruporota.get("/:id",buscargrupo)
-
+gruporota.get("/", buscargrupos)
 export = gruporota
-
-
 

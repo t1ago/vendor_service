@@ -28,7 +28,7 @@ export const novogrupo = async (grupo:any) => {
     }catch  (erro){ 
         let resultado: Resultado = {
             executado: false,
-            mensagem: 'deu ruim' + erro,
+            mensagem: 'erro' + erro,
             data: {}
         }
         return resultado
@@ -43,18 +43,20 @@ export const alterargruposervico = async (grupo: any) => {
     const cliente = db_cliente();
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
-        const sql = "UPDATE tb_grupos SET nome=$1, WHERE id=$2;";
+        const sql = "UPDATE tb_grupo SET nome=$1 WHERE id=$2;";
         const grupovalores = [grupo.nome, grupo.id]; 
         const resultado_grupo = await cliente.query(sql, grupovalores);
 
-        resultado.executado = (resultado_grupo.rows[0])
+        resultado.executado = resultado_grupo.rows[0]
         resultado.mensagem = "";
         resultado.data = grupo; 
 
     } catch (erro) {
+        resultado.executado = false;
         resultado.mensagem = `Erro. MSG: ${erro}`;
+        resultado.data = []
     } finally {
         await cliente.end();
     }
@@ -81,7 +83,9 @@ export const removergruposervico = async (grupo: any) => {
         }
 
     } catch (erro) {
+        resultado.executado = false
         resultado.mensagem = `Erro . MSG: ${erro}`;
+        resultado.data = []
     } finally {
         await cliente.end();
     }
@@ -90,30 +94,52 @@ export const removergruposervico = async (grupo: any) => {
 
 export const buscargrupoServico = async (grupo: any) => {
     const cliente = db_cliente()
+   
     try {
         cliente.connect()
-        console.log(grupo)
+
         const sql = "SELECT * FROM tb_grupo WHERE id=$1;"
         const valoresgrupo = [grupo.id]
+
         const resultado_grupo = await cliente.query(sql, valoresgrupo)
 
         resultado.executado = true
         resultado.mensagem = ""
-        resultado.data = []
+        resultado.data = resultado_grupo.rows
 
-        if (resultado_grupo.rows.length > 0) {
-            resultado.data = [
-                {
-                    'id': resultado_grupo.rows[0].id,
-                    'nome': resultado_grupo.rows[0].nome
-                }
-            ]
-        }
+       
     } catch (erro) {
         resultado.executado = false
         resultado.mensagem = `Erro. MSG: ${erro}`
+        resultado.data = []
     } finally {
         await cliente.end();
     }
     return resultado
+}
+
+
+export const buscargruposServico = async () => {
+    const cliente = db_cliente() 
+
+    try {
+        cliente.connect()
+        const sql = "SELECT * FROM tb_grupo;"
+
+        const resultado_total = await cliente.query(sql)
+    
+        resultado.executado = true
+        resultado.mensagem = ""
+        resultado.data = resultado_total.rows
+
+
+    } catch(erro){
+        resultado.executado = false
+        resultado.mensagem = `Erro. MSG: ${erro}`
+        resultado.data = []
+    } finally{
+          await cliente.end();
+    }   
+    return resultado
+
 }

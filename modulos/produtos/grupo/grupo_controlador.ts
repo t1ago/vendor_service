@@ -1,4 +1,5 @@
-import { novogrupo, alterargruposervico, removergruposervico, buscargrupoServico } from "./grupo_servico"
+
+import { novogrupo, alterargruposervico, removergruposervico, buscargrupoServico, buscargruposServico} from "./grupo_servico"
 import { Request, Response } from "express"
 
 export const inserirgrupo = async (req: Request, res: Response) => {
@@ -6,9 +7,13 @@ export const inserirgrupo = async (req: Request, res: Response) => {
         nome: req.body.nome
     }
     const resultado = await novogrupo(grupoparametros)
-    res.json(resultado)
+    if(resultado.mensagem === "") {
+        res.json(resultado);
+    } else {
+        res.status(500).json(resultado)
+    }
+    
 }
-
 
 export const alterargrupo = async (req: Request, res: Response) => {
     let alterarparametros = {
@@ -16,20 +21,22 @@ export const alterargrupo = async (req: Request, res: Response) => {
         nome: req.body.nome
     }
     const resultado = await alterargruposervico(alterarparametros)
-    if(resultado.mensagem == "") {
+    if( resultado.mensagem === ""){
+        res.json(resultado);
     } else {
-        res.json(resultado)
+        res.status(500).json(resultado)
     }
 }
 
 export const removergrupo = async (req: Request, res: Response) => {
     let deletegrupo = {
-        id: req.body.id
+        'id': req.params.id 
     }
     const resultado = await removergruposervico(deletegrupo)
     if (resultado.mensagem == "") {
-    } else {
         res.json(resultado)
+    } else {
+        res.status(500).json(resultado)
     }
 }
 
@@ -37,10 +44,19 @@ export const buscargrupo = async (req: Request, res: Response) => {
     let gruposearch = { 
         id: req.params.id
      }
-     console.log(req.params)
-   const resultado = await buscargrupoServico(gruposearch);
-   if (resultado.mensagem === "") {
+    const resultado = await buscargrupoServico(gruposearch);
+    if (resultado.mensagem === "") {
+        res.json(resultado)
     } else {
-      res.json(resultado)
+       res.status(500).json(resultado)
+    }
+}
+
+export const buscargrupos = async (req: Request, res: Response) => {
+    const resultado = await buscargruposServico();
+    if (resultado.mensagem === "") {
+         res.json(resultado);
+     } else {
+        res.status(500).json(resultado);
     }
 }
