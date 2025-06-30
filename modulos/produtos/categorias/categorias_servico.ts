@@ -24,12 +24,13 @@ export const criarCategoriaServico = async (categoria: any) => {
         const valores = [categoria.nome]
 
         const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
-        resultado.executado = (resultado_banco.rowCount || 0) > 0
+        resultado.executado = executed
         resultado.mensagem = ""
-        resultado.data = {
+        resultado.data = executed ? {
             'id': resultado_banco.rows[0].id
-        }
+        } : {}
 
     } catch (erro) {
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
@@ -51,10 +52,11 @@ export const alterarCategoriaServico = async (categoria: any) => {
         const valores = [categoria.nome, categoria.id]
 
         const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
-        resultado.executado = (resultado_banco.rowCount || 0) > 0
+        resultado.executado = executed
         resultado.mensagem = ""
-        resultado.data = categoria
+        resultado.data = executed ? categoria : {}
 
     } catch (erro) {
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
@@ -76,12 +78,13 @@ export const removerCategoriaServico = async (categoria: any) => {
         const valores = [categoria.id]
 
         const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
-        resultado.executado = (resultado_banco.rowCount || 0) > 0
+        resultado.executado = executed
         resultado.mensagem = ""
-        resultado.data = {
+        resultado.data = executed ? {
             'id': categoria.id
-        }
+        } : {}
 
     } catch (erro) {
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
@@ -103,19 +106,11 @@ export const buscarCategoriaServico = async (categoria: any) => {
         const valores = [categoria.id]
 
         const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
         resultado.executado = true
         resultado.mensagem = ""
-        resultado.data = []
-
-        if (resultado_banco.rows.length > 0) {
-            resultado.data = [
-                {
-                    'id': resultado_banco.rows[0].id,
-                    'nome': resultado_banco.rows[0].nome
-                }
-            ]
-        }
+        resultado.data = executed ? resultado_banco.rows : []
     } catch (erro) {
         resultado.executado = false
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
@@ -136,21 +131,11 @@ export const buscarCategoriasServico = async () => {
         const sql = "SELECT * FROM tb_categoria;"
 
         const resultado_banco = await cliente.query(sql)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
         resultado.executado = true
         resultado.mensagem = ""
-        resultado.data = []
-
-        if (resultado_banco.rows.length > 0) {
-            resultado_banco.rows.forEach(item => {
-                resultado.data.push(
-                    {
-                        'id': item.id,
-                        'nome': item.nome
-                    }
-                )
-            })
-        }
+        resultado.data = executed ? resultado_banco.rows : []
     } catch (erro) {
         resultado.executado = false
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
