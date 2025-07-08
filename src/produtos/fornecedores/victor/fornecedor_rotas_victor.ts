@@ -1,5 +1,5 @@
 import express from "express";
-import { atualizarFornecedor, buscarFornecedorById, buscarFornecedorByName, deletarFornecedor, fornecedornovo } from "./fornecedor_victor_controlador";
+import { atualizarFornecedor, buscarFornecedorById, buscarFornecedorByName, deletarFornecedor, fornecedornovo } from "./fornecedor_controlador_victor";
 
 export const rotaFornecedorVictor = express.Router()
 rotaFornecedorVictor.post("/", fornecedornovo)

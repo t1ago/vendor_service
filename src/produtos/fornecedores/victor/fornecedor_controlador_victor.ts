@@ -1,5 +1,5 @@
 import { Request , Response } from "express";
-import { buscarIdFornecedor, buscarNameFornecedor, deleteFornecedor, inserirFornecedor, updateFornecedor } from "./fornecedor_victor_servico";
+import { buscarIdFornecedor, buscarNameFornecedor, deleteFornecedor, inserirFornecedor, updateFornecedor } from "./fornecedor_servico_victor";
 
 export const fornecedornovo = async(req:Request,res:Response) => {
     const parametros = {

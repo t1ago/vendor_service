@@ -1,4 +1,4 @@
-import { resultado_cliente } from "./fornecedor_victor_resultado";
+import { resultado_cliente } from "./fornecedor_resultado_victor";
 
 export const inserirFornecedor = async(lista:any) => {
     try {
