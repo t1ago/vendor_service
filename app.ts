@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express"
 import cors from "cors"
-import rotasCategorias from "./modulos/produtos/categorias/categorias_rotas"
-import rotasCores from "./modulos/produtos/cores/cores_rotas"
-import rota from "./modulos/produtos/marca/marca_rotas"
+import rotasCategorias from "./src/produtos/categorias/categorias_rotas"
+import rotasFornecedoresTiago from "./src/produtos/fornecedores/tiago/fornecedores_rotas"
 
 /** Constantes do Servidor*/
 const app = express()
@@ -23,8 +22,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/categorias", rotasCategorias)
-app.use("/cores", rotasCores)
-app.use("/marca", rota)
+app.use("/fornecedores/tiago", rotasFornecedoresTiago)
 
 /** Inicia o Servidor */
 app.listen(port, () => {
