@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { alterar_marca, buscar_id_marca, buscar_todos_marca, deletar_marca, inserir_marca } from "./marca_servico";
+import { alterar_marca, buscar_id_marca, buscar_nome_todos_marca, deletar_marca, inserir_marca } from "./marca_servico";
 
 //Controle do inserir
 export const control_inserir = async(req: Request, res: Response) => {
@@ -27,7 +27,10 @@ export const control_buscar_id = async(req: Request, res: Response) => {
 }
 //Controle do buscar por todos
 export const control_buscar_todos = async(req: Request, res: Response) => {
-    const resultado_buscar_todos = await buscar_todos_marca()
+    const parametro = {
+        nome: req.body.nome
+    }
+    const resultado_buscar_todos = await buscar_nome_todos_marca(parametro)
     if (resultado_buscar_todos.mensagem === "") {
         res.json(resultado_buscar_todos)
     } else {

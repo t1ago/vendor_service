@@ -1,129 +1,52 @@
-import { db_cliente } from "../../../commons/banco_dados";
-import { Resultado } from "../../../commons/resultado_api";
+import { resultado_all } from "./marca_resultado"
 
-const resultado: Resultado = {
-    executado: false,
-    mensagem: "",
-    data: {}
-}
 // Inserir
 export const inserir_marca = async(marca: any) => {
-    const cliente = db_cliente()
-
-    try{
-        await cliente.connect()
-        const sql = "INSERT into tb_marca(nome) values($1) returning ID"
+    try {
+        const sql = "INSERT INTO tb_marca (nome) VALUES ($1) RETURNING id"
         const parametros = [marca.nome]
-        const resultado_insert = await cliente.query(sql, parametros)
-        resultado.executado = true,
-        resultado.mensagem = "",
-        resultado.data = {
-            id: resultado_insert.rows[0].id
-        }
-        return resultado
-    } 
-    catch(erro) {
-        resultado.executado = false,
-        resultado.mensagem = "ERRO:" + erro,
-        resultado.data = {}
-        return resultado
+        const resultado_insert = await resultado_all(sql,parametros)
+        return resultado_insert
     }
-    finally {
-        await cliente.end()
-    }
+    finally {}
 }
 //Buscar por ID
 export const buscar_id_marca = async(marca: any) => {
-    const cliente = db_cliente()
-    try{
-        await cliente.connect()
-        const sql = "SELECT *from tb_marca where id = $1"
-        const parametros = [marca.id]
-        const resultado_select_id = await cliente.query(sql,parametros)
-        resultado.executado = true,
-        resultado.mensagem = "",
-        resultado.data = resultado_select_id.rows
-        return resultado
-    } 
-    catch(erro) {
-        resultado.executado = false,
-        resultado.mensagem = "ERRO:" + erro,
-        resultado.data = {}
-        return resultado
-    }
-    finally {
-        await cliente.end()
-    }
+   try {
+    const sql = "SELECT * FROM tb_marca WHERE id=$1"
+    const parametros = [marca.id]
+    const resultado_buscar_id = await resultado_all(sql,parametros)
+    return resultado_buscar_id
+   }
+   finally {}
 }
 //Buscar todos
-export const buscar_todos_marca = async() => {
-    const cliente = db_cliente()
-    try{
-        await cliente.connect()
-        const sql = "SELECT *from tb_marca"
-        const resultado_select_all = await cliente.query(sql)
-        resultado.executado = true,
-        resultado.mensagem = "",
-        resultado.data = resultado_select_all.rows
-        return resultado
-    } 
-    catch(erro) {
-        resultado.executado = false,
-        resultado.mensagem = "ERRO:" + erro,
-        resultado.data = {}
-        return resultado
+export const buscar_nome_todos_marca = async(marca:any) => {
+    try {
+        const sql = "SELECT * FROM tb_marca WHERE nome ILIKE $1"
+        const parametros = [`%${marca.nome}%`]
+        const resultado_buscar_nome = await resultado_all(sql,parametros)
+        return resultado_buscar_nome
     }
-    finally {
-        await cliente.end()
-    }
+    finally {}
 }
 //Alterar marca
 export const alterar_marca = async(marca: any) => {
-    const cliente = db_cliente()
-    try{
-        await cliente.connect()
-        const sql = "UPDATE tb_marca set nome=$1 where id=$2"
+    try {
+        const sql = "UPDATE tb_marca SET nome=$1 WHERE id=$2"
         const parametros = [marca.nome,marca.id]
-        const resultado_update = await cliente.query(sql,parametros)
-        resultado.executado = resultado_update.rows[0],
-        resultado.mensagem = "",
-        resultado.data = {
-            id: marca.id
-        }
-        return resultado
-    } 
-    catch(erro) {
-        resultado.executado = false,
-        resultado.mensagem = "ERRO:" + erro,
-        resultado.data = {}
-        return resultado
+        const resultado_atualizar = await resultado_all(sql,parametros)
+        return resultado_atualizar
     }
-    finally {
-        await cliente.end()
-    }
+    finally {}
 }
 //Deletar marca
 export const deletar_marca = async(marca: any) => {
-    const cliente = db_cliente()
-    try{
-        await cliente.connect()
-        const sql = "DELETE from tb_marca where id=$1"
+    try {
+        const sql = "DELETE FROM tb_marca WHERE id=$1"
         const parametros = [marca.id]
-        const resultado_delete = await cliente.query(sql,parametros)
-        resultado.executado = resultado_delete.rows[0],
-        resultado.mensagem = "",
-        resultado.data = {
-            id: marca.id
-        }
-        return resultado
-    } 
-    catch(erro) {
-        resultado.executado = false,
-        resultado.mensagem = "ERRO:" + erro,
-        resultado.data = {}
-        return resultado
+        const resultado_deletar = await resultado_all(sql,parametros)
+        return resultado_deletar
     }
-    finally {
-        await cliente.end()
-    }
+    finally {}
 }
