@@ -9,6 +9,13 @@
 			],
 			"group": "build",
 			"label": "tsc: compilar – tsconfig.json"
+		},
+		{
+			"type": "npm",
+			"script": "local",
+			"problemMatcher": [],
+			"label": "npm: local",
+			"detail": "npm run ts && node --env-file=.local.env dist/app.js"
 		}
 	]
 }

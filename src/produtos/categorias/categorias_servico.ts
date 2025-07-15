@@ -9,27 +9,28 @@ const resultado: Resultado = {
 
 const limparResultado = () => {
     resultado.executado = false,
-    resultado.mensagem = "",
-    resultado.data = {}
+        resultado.mensagem = "",
+        resultado.data = {}
 }
 
-export const criarCorServico = async (cor: any) => {
+export const criarCategoriaServico = async (categoria: any) => {
     const cliente = db_cliente()
     limparResultado()
 
-    try {    
+    try {
         cliente.connect()
 
-        const sql = "INSERT INTO tb_cores (hexadecimal) values ($1) RETURNING id;"
-        const valores = [cor.hexadecimal]
+        const sql = "INSERT INTO tb_categoria (nome) values ($1) RETURNING id;"
+        const valores = [categoria.nome]
 
         const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
-        resultado.executado = (resultado_banco.rowCount || 0) > 0
+        resultado.executado = executed
         resultado.mensagem = ""
-        resultado.data = {
-                'id': resultado_banco.rows[0].id
-            }
+        resultado.data = executed ? {
+            'id': resultado_banco.rows[0].id
+        } : {}
 
     } catch (erro) {
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
@@ -40,21 +41,22 @@ export const criarCorServico = async (cor: any) => {
     return resultado
 }
 
-export const alterarCorServico = async (cor: any) => {
+export const alterarCategoriaServico = async (categoria: any) => {
     const cliente = db_cliente()
     limparResultado()
 
-    try {    
+    try {
         cliente.connect()
 
-        const sql = "UPDATE tb_cores SET hexadecimal=$1 WHERE id=$2;"
-        const valores = [cor.hexadecimal, cor.id]
+        const sql = "UPDATE tb_categoria SET nome=$1 WHERE id=$2;"
+        const valores = [categoria.nome, categoria.id]
 
         const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
-        resultado.executado = (resultado_banco.rowCount || 0) > 0
+        resultado.executado = executed
         resultado.mensagem = ""
-        resultado.data = cor
+        resultado.data = executed ? categoria : {}
 
     } catch (erro) {
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
@@ -65,23 +67,24 @@ export const alterarCorServico = async (cor: any) => {
     return resultado
 }
 
-export const removerCorServico = async (cor: any) => {
+export const removerCategoriaServico = async (categoria: any) => {
     const cliente = db_cliente()
     limparResultado()
 
-    try {    
+    try {
         cliente.connect()
 
-        const sql = "DELETE FROM tb_cores WHERE id=$1;"
-        const valores = [cor.id]
+        const sql = "DELETE FROM tb_categoria WHERE id=$1;"
+        const valores = [categoria.id]
 
         const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
-        resultado.executado = (resultado_banco.rowCount || 0) > 0
+        resultado.executado = executed
         resultado.mensagem = ""
-        resultado.data = {
-            'id': cor.id
-        }
+        resultado.data = executed ? {
+            'id': categoria.id
+        } : {}
 
     } catch (erro) {
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
@@ -92,30 +95,22 @@ export const removerCorServico = async (cor: any) => {
     return resultado
 }
 
-export const buscarCorServico = async (cor: any) => {
+export const buscarCategoriaServico = async (categoria: any) => {
     const cliente = db_cliente()
     limparResultado()
 
-    try {    
+    try {
         cliente.connect()
 
-        const sql = "SELECT * FROM tb_cores WHERE id=$1;"
-        const valores = [cor.id]
+        const sql = "SELECT * FROM tb_categoria WHERE id=$1;"
+        const valores = [categoria.id]
 
         const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
         resultado.executado = true
         resultado.mensagem = ""
-        resultado.data = []
-
-        if (resultado_banco.rows.length > 0) {
-            resultado.data.push(
-                {
-                    'id': resultado_banco.rows[0].id,
-                    'hexadecimal': resultado_banco.rows[0].hexadecimal
-                }
-            )
-        }
+        resultado.data = executed ? resultado_banco.rows : []
     } catch (erro) {
         resultado.executado = false
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
@@ -126,31 +121,21 @@ export const buscarCorServico = async (cor: any) => {
     return resultado
 }
 
-export const buscarCoresServico = async () => {
+export const buscarCategoriasServico = async () => {
     const cliente = db_cliente()
     limparResultado()
 
-    try {    
+    try {
         cliente.connect()
 
-        const sql = "SELECT * FROM tb_cores;"
+        const sql = "SELECT * FROM tb_categoria;"
 
         const resultado_banco = await cliente.query(sql)
+        const executed = (resultado_banco.rowCount || 0) > 0
 
         resultado.executado = true
         resultado.mensagem = ""
-        resultado.data = []
-
-        if (resultado_banco.rows.length > 0) {
-            resultado_banco.rows.forEach(item => {
-                resultado.data.push(
-                    {
-                        'id': item.id,
-                        'hexadecimal': item.hexadecimal
-                    }
-                )
-            })
-        }
+        resultado.data = executed ? resultado_banco.rows : []
     } catch (erro) {
         resultado.executado = false
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
