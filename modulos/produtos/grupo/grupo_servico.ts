@@ -120,8 +120,6 @@ export const buscargrupoServico = async (grupo: any) => {
 
 
 export const buscargruposServico = async () => {
-    const cliente = db_cliente() 
-
     try {
         cliente.connect()
         const sql = "SELECT * FROM tb_grupo;"
