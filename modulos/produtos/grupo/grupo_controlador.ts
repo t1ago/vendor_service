@@ -3,60 +3,59 @@ import { novogrupo, alterargruposervico, removergruposervico, buscargrupoServico
 import { Request, Response } from "express"
 
 export const inserirgrupo = async (req: Request, res: Response) => {
-    let grupoparametros = {
+    let parametros = {
         nome: req.body.nome
     }
-    const resultado = await novogrupo(grupoparametros)
-    if(resultado.mensagem === "") {
-        res.json(resultado);
-    } else {
-        res.status(500).json(resultado)
+    const resultado_inserir = await novogrupo(parametros)
+    if(resultado_inserir.executado) {
+        res.status(200).json(resultado_inserir)
+    }else {
+        res.status(500).json(resultado_inserir)
     }
-    
 }
 
 export const alterargrupo = async (req: Request, res: Response) => {
-    let alterarparametros = {
-        id: req.params.id,
-        nome: req.body.nome
+    let parametros = {
+        nome: req.body.nome,
+        id: req.params.id
     }
-    const resultado = await alterargruposervico(alterarparametros)
-    if( resultado.mensagem === ""){
-        res.json(resultado);
-    } else {
-        res.status(500).json(resultado)
+    const resultado_update = await novogrupo(parametros)
+    if(resultado_update.executado) {
+        res.status(200).json(resultado_update)
+    }else {
+        res.status(500).json(resultado_update)
     }
 }
 
 export const removergrupo = async (req: Request, res: Response) => {
-    let deletegrupo = {
-        'id': req.params.id 
+    let parametros = {
+        id: req.params.id
     }
-    const resultado = await removergruposervico(deletegrupo)
-    if (resultado.mensagem == "") {
-        res.json(resultado)
-    } else {
-        res.status(500).json(resultado)
+    const resultado_delete = await novogrupo(parametros)
+    if(resultado_delete.executado) {
+        res.status(200).json(resultado_delete)
+    }else {
+        res.status(500).json(resultado_delete)
     }
 }
 
 export const buscargrupo = async (req: Request, res: Response) => {
-    let gruposearch = { 
+    let parametros = {
         id: req.params.id
-     }
-    const resultado = await buscargrupoServico(gruposearch);
-    if (resultado.mensagem === "") {
-        res.json(resultado)
-    } else {
-       res.status(500).json(resultado)
+    }
+    const resultado_id = await novogrupo(parametros)
+    if(resultado_id.executado) {
+        res.status(200).json(resultado_id)
+    }else {
+        res.status(500).json(resultado_id)
     }
 }
 
-export const buscargrupos = async (req: Request, res: Response) => {
-    const resultado = await buscargruposServico();
-    if (resultado.mensagem === "") {
-         res.json(resultado);
-     } else {
-        res.status(500).json(resultado);
+export const buscargrupos = async (_: Request, res: Response) => {
+    const resultado_all = await novogrupo(_)
+    if(resultado_all.executado) {
+        res.status(200).json(resultado_all)
+    }else {
+        res.status(500).json(resultado_all)
     }
 }
