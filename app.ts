@@ -28,6 +28,7 @@ app.use("/fornecedores/tiago", rotasFornecedoresTiago)
 app.use("/grupos", gruporota)
 app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 
+
 /** Inicia o Servidor */
 app.listen(port, () => {
   console.log(`Vendor Service (estudos) listen on PORT: ${port}`)
