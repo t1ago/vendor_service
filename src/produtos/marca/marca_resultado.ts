@@ -7,7 +7,7 @@ const resultado: Resultado = {
     data: {}
 }
 
-export const resultado_all = async(sql:string,parametros: any[]) => {
+export const resultado_all = async(sql:string,parametros: any[]=[]) => {
     const cliente = db_cliente()
     try {
         await cliente.connect()

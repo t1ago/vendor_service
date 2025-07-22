@@ -10,25 +10,27 @@ export const inserir_marca = async(marca: any) => {
     }
     finally {}
 }
-//Buscar por ID
-export const buscar_id_marca = async(marca: any) => {
-   try {
-    const sql = "SELECT * FROM tb_marca WHERE id=$1"
-    const parametros = [marca.id]
-    const resultado_buscar_id = await resultado_all(sql,parametros)
-    return resultado_buscar_id
-   }
-   finally {}
-}
-//Buscar todos
-export const buscar_nome_todos_marca = async(marca:any) => {
-    try {
-        const sql = "SELECT * FROM tb_marca WHERE nome ILIKE $1"
-        const parametros = [`%${marca.nome}%`]
-        const resultado_buscar_nome = await resultado_all(sql,parametros)
-        return resultado_buscar_nome
+//Buscar marca (Id, nome e todos)
+export const buscar_marca = async(marca:any) => {
+    let sql : string
+    let parametro: any
+    if (marca.id != null) {
+        sql = "SELECT * FROM tb_marca WHERE id=$1"
+        parametro = [marca.id]
+    } else if (marca.nome !=null) {
+        sql = "SELECT * FROM tb_marca WHERE nome ILIKE $1"
+        parametro = [`%${marca.nome}%`] 
+    } else {
+        sql = "SELECT * FROM tb_marca"
+        parametro = null
     }
-    finally {}
+    if (parametro != null) {
+        const resultado_select = await resultado_all(sql,parametro)
+        return resultado_select
+    } else {
+        const resultado_select = await resultado_all(sql)
+        return resultado_select
+    }
 }
 //Alterar marca
 export const alterar_marca = async(marca: any) => {
