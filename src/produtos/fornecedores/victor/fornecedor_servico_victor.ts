@@ -12,34 +12,30 @@ export const inserirFornecedor = async(lista:any) => {
     }
     finally {}
 }
-export const buscarIdFornecedor = async(lista:any) => {
+export const buscarServico = async(lista:any) => {
     try {
-        const sql = "SELECT * FROM tb_fornecedor_victor WHERE id=$1"
-        const parametro = [lista.id]
-        const resultado_select_id = await resultado_cliente(sql,parametro)
-        return resultado_select_id
+        let sql: string
+        let parametro: any
+        if (lista.id != null) {
+            sql = "SELECT * FROM tb_fornecedor_victor WHERE id=$1"
+            parametro = [lista.id]
+        } else if (lista.nome != null || lista.descricao != null) {
+            sql = "SELECT * FROM tb_fornecedor_victor WHERE nome ILIKE $1 OR descricao ILIKE $2"
+            parametro = [`%${lista.nome}%`, `%${lista.descricao}%`]
+        } else {
+            sql = "SELECT * FROM tb_fornecedor_victor"
+            parametro = null
+        }
+        if (parametro != null) {
+            const resultado_select = await resultado_cliente(sql,parametro)
+            return resultado_select
+        } else {
+            const resultado_select = await resultado_cliente(sql)
+            return resultado_select
+        }
     }
     finally {}
 }
-
-export const buscarNameFornecedor = async(lista:any) => {
-    try {
-        const sql = "SELECT * FROM tb_fornecedor_victor WHERE nome ILIKE $1 OR descricao ILIKE $2"
-        const parametro = [`%${lista.nome}%`,`%${lista.descricao}%`]
-        const resultado_select_name = await resultado_cliente(sql,parametro)
-        return resultado_select_name
-    }
-    finally {}
-}
-
-// export const buscarAllFornecedor = async() => {
-//     try {
-//         const sql = "SELECT * FROM tb_fornecedor_victor"
-//         const resultado_select_all = await resultado_cliente(sql)
-//         return resultado_select_all
-//     }
-//     finally {}
-// }
 
 export const updateFornecedor = async(lista:any) => {
     try {

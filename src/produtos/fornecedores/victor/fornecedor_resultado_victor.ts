@@ -18,7 +18,7 @@ export const resultado_cliente = async(sql: string,parametro: any[]=[]) => {
     }
     catch(erro) {
         resultado.executado = false,
-        resultado.mensagem = "ERRO" + erro,
+        resultado.mensagem = "ERRO " + erro,
         resultado.data = {}
     }
     finally {
