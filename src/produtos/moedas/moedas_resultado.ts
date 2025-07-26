@@ -3,11 +3,7 @@ import { Resultado } from "../../../commons/resultado_api";
 
 export const Resultado_all = async(sql: string, parametros: any[] = []) => {
     const cliente = db_cliente()
-    const resultado: Resultado = {
-        executado: false,
-        mensagem: "",
-        data: []
-    }
+    const resultado: Resultado = {executado: false,mensagem: "",data: []}
 
     try {
         await cliente.connect()
@@ -16,6 +12,7 @@ export const Resultado_all = async(sql: string, parametros: any[] = []) => {
         resultado.executado = true,
         resultado.mensagem = "",
         resultado.data = resultado_api.rows
+        
     } catch(erro) {
         resultado.executado = false,
         resultado.mensagem = "erro" + erro

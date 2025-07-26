@@ -104,7 +104,6 @@ export const buscar = async (fornecedor: any) => {
             parametros = [`%${fornecedor.nome}%`, `%${fornecedor.descricao}%`]
         } else {
             sql = "SELECT * FROM tb_fornecedor_miguel"
-            parametros = null
         }
 
         if(parametros != null) {
