@@ -19,7 +19,7 @@ export const alterargrupo = async (req: Request, res: Response) => {
         nome: req.body.nome,
         id: req.params.id
     }
-    const resultado_update = await novogrupo(parametros)
+    const resultado_update = await alterargruposervico(parametros)
     if(resultado_update.executado) {
         res.status(200).json(resultado_update)
     }else {
@@ -31,7 +31,7 @@ export const removergrupo = async (req: Request, res: Response) => {
     let parametros = {
         id: req.params.id
     }
-    const resultado_delete = await novogrupo(parametros)
+    const resultado_delete = await removergruposervico(parametros)
     if(resultado_delete.executado) {
         res.status(200).json(resultado_delete)
     }else {
@@ -43,7 +43,7 @@ export const buscargrupo = async (req: Request, res: Response) => {
     let parametros = {
         id: req.params.id
     }
-    const resultado_id = await novogrupo(parametros)
+    const resultado_id = await buscargrupoServico(parametros)
     if(resultado_id.executado) {
         res.status(200).json(resultado_id)
     }else {
@@ -52,7 +52,7 @@ export const buscargrupo = async (req: Request, res: Response) => {
 }
 
 export const buscargrupos = async (_: Request, res: Response) => {
-    const resultado_all = await novogrupo(_)
+    const resultado_all = await buscargruposServico()
     if(resultado_all.executado) {
         res.status(200).json(resultado_all)
     }else {
