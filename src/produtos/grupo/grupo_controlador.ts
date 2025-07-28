@@ -6,11 +6,11 @@ export const inserirgrupo = async (req: Request, res: Response) => {
     let parametros = {
         nome: req.body.nome
     }
-    const resultado_inserir = await novogrupo(parametros)
-    if(resultado_inserir.executado) {
-        res.status(200).json(resultado_inserir)
+    const resultado = await novogrupo(parametros)
+    if(resultado.executado) {
+        res.status(200).json(resultado)
     }else {
-        res.status(500).json(resultado_inserir)
+        res.status(500).json(resultado)
     }
 }
 
@@ -19,11 +19,11 @@ export const alterargrupo = async (req: Request, res: Response) => {
         nome: req.body.nome,
         id: req.params.id
     }
-    const resultado_update = await alterargruposervico(parametros)
-    if(resultado_update.executado) {
-        res.status(200).json(resultado_update)
+    const resultado = await alterargruposervico(parametros)
+    if(resultado.executado) {
+        res.status(200).json(resultado)
     }else {
-        res.status(500).json(resultado_update)
+        res.status(500).json(resultado)
     }
 }
 
@@ -31,11 +31,11 @@ export const removergrupo = async (req: Request, res: Response) => {
     let parametros = {
         id: req.params.id
     }
-    const resultado_delete = await removergruposervico(parametros)
-    if(resultado_delete.executado) {
-        res.status(200).json(resultado_delete)
+    const resultado = await removergruposervico(parametros)
+    if(resultado.executado) {
+        res.status(200).json(resultado)
     }else {
-        res.status(500).json(resultado_delete)
+        res.status(500).json(resultado)
     }
 }
 
@@ -43,19 +43,19 @@ export const buscargrupo = async (req: Request, res: Response) => {
     let parametros = {
         id: req.params.id
     }
-    const resultado_id = await buscargrupoServico(parametros)
-    if(resultado_id.executado) {
-        res.status(200).json(resultado_id)
+    const resultado = await buscargrupoServico(parametros)
+    if(resultado.executado) {
+        res.status(200).json(resultado)
     }else {
-        res.status(500).json(resultado_id)
+        res.status(500).json(resultado)
     }
 }
 
 export const buscargrupos = async (_: Request, res: Response) => {
-    const resultado_all = await buscargruposServico()
-    if(resultado_all.executado) {
-        res.status(200).json(resultado_all)
+    const resultado = await buscargruposServico()
+    if(resultado.executado) {
+        res.status(200).json(resultado)
     }else {
-        res.status(500).json(resultado_all)
+        res.status(500).json(resultado)
     }
 }
