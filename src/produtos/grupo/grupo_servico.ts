@@ -30,7 +30,7 @@ export const alterargruposervico = async (grupo: any) => {
 
 export const removergruposervico = async (grupo: any) => {
     try {
-        const sql = "DELETE INTO tb_grupo WHERE id=$1"
+        const sql = "DELETE FROM tb_grupo WHERE id=$1"
         const parametros = [grupo.id]
 
         const resultado_delete = await novoservico(sql, parametros) 
