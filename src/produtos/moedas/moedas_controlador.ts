@@ -18,9 +18,10 @@ export const inserir = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     let parametros = {
-        nome: req.body.nome,
-        moeda: req.body.moeda,
-        id: req.params.id
+        "id": req.body.id,
+        "nome": req.body.nome,
+        "moeda": req.body.moeda
+        
     }
     const resultado_insert = await moedaUpdate(parametros)
     if (resultado_insert.executado) {

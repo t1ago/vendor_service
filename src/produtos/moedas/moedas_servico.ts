@@ -18,7 +18,7 @@ export const moedaInsert = async (moeda: any) => {
 export const moedaUpdate = async (moeda: any) => {
 
     try {
-        const sql = 'UPDATE tb_moeda SET nome=1$, moeda=$2 WHERE id=$3'
+        const sql = 'UPDATE tb_moeda SET nome=$1, moeda=$2 WHERE id=$3'
         const parametros = [moeda.nome, moeda.moeda, moeda.id]
         const resultado_insert = await Resultado_all(sql, parametros)
 
@@ -31,7 +31,7 @@ export const moedaUpdate = async (moeda: any) => {
 export const moedaDelete = async (moeda: any) => {
 
     try {
-        const sql = 'DELETE INTO tb_moeda WHERE id=$1'
+        const sql = 'DELETE FROM tb_moeda WHERE id=$1'
         const parametros = [moeda.id]
         const resultado_insert = await Resultado_all(sql, parametros)
 
