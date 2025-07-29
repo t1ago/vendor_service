@@ -5,8 +5,8 @@ import { moedaBuscar, moedaDelete, moedaInsert, moedaUpdate } from "./moedas_ser
 
 export const inserir = async (req: Request, res: Response) => {
     let parametros = {
-        nome: req.body.nome,
-        moeda: req.body.moeda
+        nome: req.body?.nome,
+        moeda: req.body?.moeda
     }
     const resultado_insert = await moedaInsert(parametros)
     if (resultado_insert.executado) {
@@ -18,9 +18,9 @@ export const inserir = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     let parametros = {
-        "id": req.body.id,
-        "nome": req.body.nome,
-        "moeda": req.body.moeda
+        "id": req.body?.id,
+        "nome": req.body?.nome,
+        "moeda": req.body?.moeda
         
     }
     const resultado_insert = await moedaUpdate(parametros)
@@ -33,7 +33,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const delet = async (req: Request, res: Response) => {
     let parametros = {
-        id: req.params.id
+        id: req.params?.id
     }
     const resultado_insert = await moedaDelete(parametros)
     if (resultado_insert.executado) {
@@ -45,9 +45,9 @@ export const delet = async (req: Request, res: Response) => {
 
 export const buscar = async (req: Request, res: Response) => {
    const parametros = {
-        'id': req.body.id,
-        'nome': req.body.nome,
-        'moeda': req.body.moeda
+        'id': req.body?.id,
+        'nome': req.body?.nome,
+        'moeda': req.body?.moeda
         
     };
     const resultado_insert = await moedaBuscar(parametros)
