@@ -13,13 +13,21 @@ export const control_inserir = async(req: Request, res: Response) => {
         res.status(500).json(resultado_inserir)
     }
 }
-//Controle do buscar por ID
-export const control_buscar = async(req:Request,res:Response) => {
+// Controle do buscar por id
+export const control_buscar_id = async(req:Request,res:Response) => {
     const parametro = {
-        id: req.body.id,
-        nome: req.body.nome
+        id: req.params.id
     }
     const resultado_select = await buscar_marca(parametro)
+    if(resultado_select.executado) {
+        res.json(resultado_select)
+    } else {
+        res.status(500).json(resultado_select)
+    }
+}
+//Controle do buscar por All
+export const control_buscar = async(req:Request,res:Response) => {
+    const resultado_select = await buscar_marca(null)
     if(resultado_select.executado) {
         res.json(resultado_select)
     } else {
