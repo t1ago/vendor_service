@@ -6,6 +6,8 @@ import rota from "./src/produtos/marca/marca_rotas"
 import gruporota from "./src/produtos/grupo/grupo_rotas"
 import rotasfornecedor_miguel from "./src/produtos/fornecedor_miguel/fornecedor_miguel_rotas"
 import { rotas_moedas } from "./src/produtos/moedas/moedas_rotas"
+import rotasCores from "./src/produtos/cores/cores_rotas"
+import rotasMedidas from "./src/produtos/medidas/medidas_rotas"
 
 
 /** Constantes do Servidor*/
@@ -27,6 +29,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/categorias", rotasCategorias)
+app.use("/cores", rotasCores)
+app.use("/medidas", rotasMedidas)
 app.use("/fornecedores/tiago", rotasFornecedoresTiago)
 app.use("/marca", rota)
 app.use("/grupos", gruporota)
