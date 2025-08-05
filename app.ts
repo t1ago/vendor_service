@@ -4,10 +4,10 @@ import rotasCategorias from "./src/produtos/categorias/categorias_rotas"
 import rotasFornecedoresTiago from "./src/produtos/fornecedores/tiago/fornecedores_rotas"
 import rota from "./src/produtos/marca/marca_rotas"
 import gruporota from "./src/produtos/grupo/grupo_rotas"
-import rotasfornecedor_miguel from "./src/produtos/fornecedor_miguel/fornecedor_miguel_rotas"
 import { rotas_moedas } from "./src/produtos/moedas/moedas_rotas"
 import rotasCores from "./src/produtos/cores/cores_rotas"
 import rotasMedidas from "./src/produtos/medidas/medidas_rotas"
+import rotasfornecedor_miguel from "./src/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
 
 
 /** Constantes do Servidor*/
