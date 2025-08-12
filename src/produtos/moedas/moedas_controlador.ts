@@ -18,10 +18,10 @@ export const inserir = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     let parametros = {
-        id: req.params?.id,
-        nome: req.body?.nome,
-        moeda: req.body?.moeda
-
+        "id": req.body?.id,
+        "nome": req.body?.nome,
+        "moeda": req.body?.moeda
+        
     }
     const resultado_insert = await moedaUpdate(parametros)
     if (resultado_insert.executado) {
@@ -44,11 +44,11 @@ export const delet = async (req: Request, res: Response) => {
 }
 
 export const buscar = async (req: Request, res: Response) => {
-    const parametros = {
-        id: req.params?.id,
-        nome: req.body?.nome,
-        moeda: req.body?.moeda
-
+   const parametros = {
+        'id': req.body?.id,
+        'nome': req.body?.nome,
+        'moeda': req.body?.moeda
+        
     };
     const resultado_insert = await moedaBuscar(parametros)
     if (resultado_insert.executado) {

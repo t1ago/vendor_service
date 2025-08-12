@@ -1,5 +1,5 @@
 import { executandoquery } from "./fornecedor_miguel_resultado";
-import { Resultado } from "../../../commons/resultado_api";
+import { Resultado } from "./../../../../commons/resultado_api";
 import { QueryResult } from "pg";
 
 
@@ -99,25 +99,25 @@ export const buscar = async (fornecedor: any) => {
         if (fornecedor.id != null) {
             sql = "SELECT * FROM tb_fornecedor_miguel WHERE id=$1",
                 parametros = [fornecedor.id]
-        } else if (fornecedor.nome != null || fornecedor.descricao != null ) {
+        } else if (fornecedor.nome != null || fornecedor.descricao != null) {
             sql = "SELECT * FROM tb_fornecedor_miguel WHERE nome ILIKE $1 OR descricao ILIKE $2"
             parametros = [`%${fornecedor.nome}%`, `%${fornecedor.descricao}%`]
         } else {
             sql = "SELECT * FROM tb_fornecedor_miguel"
         }
 
-        if(parametros != null) {
+        if (parametros != null) {
             const resultado_busca = await executandoquery(sql, parametros)
             return resultado_busca
-        } else{
+        } else {
             const resultado_sql = await executandoquery(sql)
             return resultado_sql
         }
-            
-        } finally {
 
-        }
+    } finally {
 
-} 
+    }
+
+}
 
 
