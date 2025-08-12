@@ -11,7 +11,14 @@ export const criar = async (req: Request, res: Response) => {
     const parametros = {
         'nome': req.body.nome,
         'descricao': req.body.descricao,
-        'idCategoria': req.body.idCategoria
+        'idCategoria': req.body.idCategoria,
+        'idMoeda': req.body.idMoeda,
+        'idGrupo': req.body.idGrupo,
+        'idUndadeMedida': req.body.idUndadeMedida,
+        'idCor': req.body.idCor,
+        'idMarca': req.body.idMarca,
+        'precoCompra': req.body.precoCompra,
+        'precoVenda': req.body.precoVenda
     }
 
     const resultado = await criarServico(parametros)

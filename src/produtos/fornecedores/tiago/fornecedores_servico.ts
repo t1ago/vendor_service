@@ -21,8 +21,33 @@ export const criarServico = async (parametros: any) => {
     try {
         cliente.connect()
 
-        const sql = "INSERT INTO tb_fornecedor_tiago (nome, descricao, id_categoria) values ($1, $2, $3) RETURNING id;"
-        const valores = [parametros.nome, parametros.descricao, parametros.idCategoria]
+        const sql = `
+            INSERT INTO tb_fornecedor_tiago (
+                nome, 
+                descricao, 
+                id_categoria, 
+                id_moeda, 
+                id_grupo, 
+                id_undade_medida, 
+                id_cor, 
+                id_marca, 
+                preco_compra, 
+                preco_venda
+            ) values (
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+            ) RETURNING id;
+                `
+        const valores = [
+            parametros.nome,
+            parametros.descricao,
+            parametros.idCategoria,
+            parametros.idMoeda,
+            parametros.idGrupo,
+            parametros.idUndadeMedida,
+            parametros.idCor,
+            parametros.idMarca,
+            parametros.precoCompra,
+            parametros.precoVenda]
 
         const resultado_banco = await cliente.query(sql, valores)
         const executed = (resultado_banco.rowCount || 0) > 0
