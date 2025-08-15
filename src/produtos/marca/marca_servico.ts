@@ -12,17 +12,17 @@ export const inserir_marca = async(marca: any) => {
 }
 //Buscar marca (Id, nome e todos)
 export const buscar_marca = async(marca:any) => {
-    let sql : string
-    let parametro: any
-    if (marca.id != null) {
+    var sql : string = ''
+    var parametro: any
+    if (marca == null) {
+        sql = "SELECT * FROM tb_marca"
+        parametro = null
+    } else if (marca.id != null) {
         sql = "SELECT * FROM tb_marca WHERE id=$1"
         parametro = [marca.id]
     } else if (marca.nome !=null) {
         sql = "SELECT * FROM tb_marca WHERE nome ILIKE $1"
         parametro = [`%${marca.nome}%`] 
-    } else {
-        sql = "SELECT * FROM tb_marca"
-        parametro = null
     }
     if (parametro != null) {
         const resultado_select = await resultado_all(sql,parametro)
