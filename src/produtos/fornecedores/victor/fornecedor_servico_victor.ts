@@ -2,8 +2,8 @@ import { resultado_cliente } from "./fornecedor_resultado_victor";
 
 export const inserirFornecedor = async(lista:any) => {
     try {
-        const sql = "INSERT INTO tb_fornecedor_victor (nome,descricao) values($1,$2) RETURNING id"
-        const parametro = [lista.nome,lista.descricao]
+        const sql = "INSERT INTO tb_fornecedor_victor (nome,descricao,id_categoria,id_moeda,id_marca,id_cores,id_unidade_medida,id_grupo, preco_compra,preco_venda) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id"
+        const parametro = [lista.nome,lista.descricao,lista.id_categoria,lista.id_moeda,lista.id_marca,lista.id_cores,lista.id_unidade_medida,lista.id_grupo,lista.preco_compra,lista.preco_venda]
         const resultado_insert = await resultado_cliente(sql,parametro)
         if (resultado_insert.executado) {
             resultado_insert.data = resultado_insert.data.id

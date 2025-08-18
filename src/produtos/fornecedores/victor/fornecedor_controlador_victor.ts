@@ -4,7 +4,15 @@ import { buscarServico, deleteFornecedor, inserirFornecedor, updateFornecedor } 
 export const fornecedornovo = async(req:Request,res:Response) => {
     const parametros = {
         nome: req.body.nome,
-        descricao: req.body.descricao
+        descricao: req.body.descricao,
+        id_categoria: req.body.id_categoria,
+        id_moeda: req.body.id_moeda,
+        id_marca: req.body.id_marca,
+        id_cores: req.body.id_cores,
+        id_unidade_medida: req.body.id_unidade_medida,
+        id_grupo: req.body.id_grupo,
+        preco_compra: req.body.preco_compra,
+        preco_venda: req.body.preco_venda
     }
     const resultado_insert = await inserirFornecedor(parametros)
     if(resultado_insert.executado) {
