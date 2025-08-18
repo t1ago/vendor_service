@@ -3,9 +3,18 @@ import { buscar, MicroservicoDelete, MicroservicoGet_All, MicroservicoGet_Id, Mi
 
 export const NovoPost = async (req: Request, res: Response) => {
     let parametros = {
-        nome: req.body.nome,
-        descricao: req.body.descricao
+        'id_categoria': req.body.id_categoria,
+        'id_cor': req.body.id_cor,
+        'id_unidade_medida': req.body.id_unidade_medida,
+        'id_grupo': req.body.id_grupo,
+        'id_moeda': req.body.id_moeda,
+        'nome': req.body.nome,
+        'descricao': req.body.descricao,
+        'preco_venda': req.body.preco_venda,
+        'preco_compra': req.body.preco_compra,
+        'id_marca': req.body.id_marca
     }
+    
     const resultado_post = await MicroservicoInsert(parametros)
     if (resultado_post.executado) {
         res.status(200).json(resultado_post)
@@ -81,7 +90,7 @@ export const buscar_new = async (req: Request, res: Response) => {
         'id': req.body.id,
         'nome': req.body.nome,
         'descricao': req.body.descricao
-        
+
     };
 
     const resultado_new = await buscar(parametros);

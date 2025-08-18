@@ -14,8 +14,8 @@ const resultado: Resultado = {
 export const MicroservicoInsert = async (fornecedor: any) => {
 
     try {
-        const sql = "INSERT INTO tb_fornecedor_miguel (nome, descricao) VALUES ($1, $2) RETURNING id"
-        const parametros = [fornecedor.nome, fornecedor.descricao]
+        const sql = "INSERT INTO tb_fornecedor_miguel (nome, descricao, id_categoria, id_cor, id_marca, id_grupo, id_moeda, id_unidade_medida, preco_compra, preco_venda) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id"
+        const parametros = [fornecedor.nome, fornecedor.descricao, fornecedor.id_categoria, fornecedor.id_cor, fornecedor.id_marca, fornecedor.id_grupo, fornecedor.id_moeda, fornecedor.id_unidade_medida, fornecedor.preco_compra, fornecedor.preco_venda ]
         const resultado_insert = await executandoquery(sql, parametros)
 
         return resultado_insert
