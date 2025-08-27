@@ -8,9 +8,9 @@ export const listarFornecedor = async (req: Request, res: Response) =>{
 
 export const criar = async (req: Request, res: Response) => {
     try {
-        const { nome, descricao, id_categoria } = req.body;
+        const { nome, descricao } = req.body;
 
-        const resultado = await inserirFornecedor(nome, descricao, id_categoria);
+        const resultado = await inserirFornecedor(nome, descricao);
 
         if (resultado.mensagem === "") {
             res.json(resultado);
@@ -72,9 +72,9 @@ export const buscarid = async (req: Request, res: Response) => {
 
 export const buscarTudo = async (req: Request, res: Response) => {
     try{
-        const { termo } = req.body;
+        const { termo } = req.query;
 
-        const resultado = await buscarGenerico(termo);
+        const resultado = await buscarGenerico(termo as string);
         res.json(resultado);
     } catch (erro) {
         res.status(500).json({ erro: "Erro ao buscar fornecedor", detalhe: erro })

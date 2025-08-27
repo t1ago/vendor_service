@@ -13,17 +13,17 @@ const limparResultado = () => {
     resultado.data = {}
 }
 
-export const inserirFornecedor = async (nome: string, descricao: string, id_categoria: string) => {
+export const inserirFornecedor = async (nome: string, descricao: string) => {
     limparResultado();
 
-    const sql = "INSERT INTO tb_fornecedores_dam (nome, descricao, id_categoria) values ($1, $2, $3) RETURNING id;"
-    const parametros = [nome, descricao, id_categoria];
+    const sql = "INSERT INTO tb_fornecedores_dam (nome, descricao) values ($1, $2) RETURNING id;"
+    const parametros = [nome, descricao];
     const resultado = await executarQuery(sql, parametros);
 
     if (resultado.executado && resultado.data.length > 0) {
         const id = resultado.data[0].id;
         resultado.mensagem = "Nunca dúvidei que o fornecedor seria inserido com sucesso!";
-        resultado.data = {id, nome, descricao, id_categoria};
+        resultado.data = {id, nome, descricao};
     }
 
     return resultado;
