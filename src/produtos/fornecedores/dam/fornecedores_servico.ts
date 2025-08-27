@@ -15,13 +15,14 @@ const limparResultado = () => {
 
 export const inserirFornecedor = async (nome: string, descricao: string, id_categoria: string) => {
     limparResultado();
-    const sql = "INSERT INTO tb_fornecedores_dam (nome, descricao, id_categoria) values ($1, $2, $3) RETURNUNG id;"
+
+    const sql = "INSERT INTO tb_fornecedores_dam (nome, descricao, id_categoria) values ($1, $2, $3) RETURNING id;"
     const parametros = [nome, descricao, id_categoria];
     const resultado = await executarQuery(sql, parametros);
 
-    if (resultado.executado && resultado.data.lenght > 0) {
+    if (resultado.executado && resultado.data.length > 0) {
         const id = resultado.data[0].id;
-        resultado.mensagem = "Nunca dúvidei que a cor seria inserida com sucesso!";
+        resultado.mensagem = "Nunca dúvidei que o fornecedor seria inserido com sucesso!";
         resultado.data = {id, nome, descricao, id_categoria};
     }
 
@@ -46,7 +47,7 @@ export const buscarFornecedorId = async (id: number) => {
     const parametros = [id];
     const resultado = await executarQuery(sql, parametros);
 
-    if (resultado.executado && resultado.data.lenght > 0) {
+    if (resultado.executado && resultado.data.length > 0) {
         resultado.mensagem = "Nunca dúvidei que o fornecedor apareceria!"
     } else {
         resultado.mensagem = "Foda em, não tem nenhum fornecedor nesse ID."
@@ -61,7 +62,7 @@ export const atualizarFornecedor = async (id: number, nome: string, descricao: s
     const parametros = [nome, descricao, id_categoria, id];
     const resultado = await executarQuery(sql, parametros);
 
-    if (resultado.executado && resultado.data.lenght > 0) {
+    if (resultado.executado && resultado.data.length > 0) {
         resultado.mensagem = "Foda em, não conseguiu alterar o forncedor!";
         resultado.data = resultado.data[0];
     }else{
@@ -86,4 +87,29 @@ export const apagarFornecedor = async (id: number) => {
     }
 
     return resultado;
+}
+
+export const buscarGenerico = async (parametro: string) => {
+    return {
+        sql: `
+            SELECT
+                f. id,
+                f. nome,
+                f. descricao,
+                f. cor,
+                f. marca,
+                f. id_categoria,
+                c. nome AS nome_categoria
+            from tb_fornecedor_dam f
+            INNER JOIN tb_categorias c ON f.id_categoria = c.id
+            WHERE
+                f.nome ILIKE $1
+                OR f.descricao ILIkE $1
+                OR f.cor ILIkE $1
+                OR f.marca ILIkE $1
+                OR c.nome ILIkE $1
+            ORDER BY f.nome;
+        `,
+        valores: [`%${parametro}%`]
+    }
 }
