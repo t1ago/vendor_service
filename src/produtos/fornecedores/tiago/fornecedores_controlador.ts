@@ -59,9 +59,18 @@ export const remover = async (req: Request, res: Response) => {
 }
 
 export const buscar = async (req: Request, res: Response) => {
-    const parametros = {
-        'id': req.body.id,
-        'nome': req.body.nome
+
+    let parametros: any;
+
+    if (req.params.id) {
+        parametros = {
+            id: req.params.id
+        }
+    } else if (req.body.id) {
+        parametros = {
+            'id': req.body.id,
+            'nome': req.body.nome
+        }
     }
 
     const resultado = await buscarServico(parametros)

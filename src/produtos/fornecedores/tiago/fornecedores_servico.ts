@@ -162,15 +162,32 @@ export const buscarServico = async (parametros?: any) => {
 const buscarPorId = (parametros: any) => {
     return {
         sql: `
-            SELECT 
-                tb_fortiago.id,
-                tb_fortiago.nome,
-                tb_fortiago.descricao,
-                tb_fortiago.id_categoria,
-                tb_cat.nome as nome_categoria
-            FROM tb_fornecedor_tiago tb_fortiago
-            inner join tb_categoria tb_cat on tb_fortiago.id_categoria = tb_cat.id
-            WHERE tb_fortiago.id=$1;
+            select 
+                tb_forn.id,
+                tb_forn.descricao,
+                tb_forn.id_categoria,
+                tb_cat.nome as "nome_categoria",
+                tb_forn.id_moeda,
+                tb_mo.nome as "nome_moeda",
+                tb_forn.id_cor,
+                tb_cor.hexadecimal as "hexadecimal",
+                tb_forn.id_grupo,
+                tb_group.nome as "nome_grupo",
+                tb_forn.id_marca,
+                tb_mar.nome as "nome_marca",
+                tb_forn.id_undade_medida,
+                tb_med.nome as "nome_unidade_medida",
+                tb_forn.nome,
+                tb_forn.preco_compra,
+                tb_forn.preco_venda
+            from tb_fornecedor_tiago tb_forn
+            inner join tb_categoria tb_cat on tb_forn.id_categoria = tb_cat.id
+            inner  join tb_moeda tb_mo on tb_forn.id_moeda = tb_mo.id
+            inner  join tb_cores tb_cor on tb_forn.id_cor = tb_cor.id
+            inner  join tb_grupo tb_group on tb_forn.id_grupo = tb_group.id
+            inner  join tb_marca tb_mar on tb_forn.id_marca = tb_mar.id
+            inner  join tb_medida tb_med on tb_forn.id_undade_medida = tb_med.id
+            WHERE tb_forn.id=$1;
         `,
         valores: [parametros.id]
     }
