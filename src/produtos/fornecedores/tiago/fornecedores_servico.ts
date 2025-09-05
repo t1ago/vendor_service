@@ -74,8 +74,33 @@ export const alterarServico = async (parametros: any) => {
     try {
         cliente.connect()
 
-        const sql = "UPDATE tb_fornecedor_tiago SET nome=$1, descricao=$2, id_categoria=$3 WHERE id=$4;"
-        const valores = [parametros.nome, parametros.descricao, parametros.idCategoria, parametros.id]
+        const sql = `
+            UPDATE tb_fornecedor_tiago 
+                SET nome=$1, 
+                    descricao=$2,
+                    id_categoria=$3, 
+                    id_moeda=$4, 
+                    id_grupo=$5, 
+                    id_undade_medida=$6, 
+                    id_cor=$7, 
+                    id_marca=$8, 
+                    preco_compra=$9, 
+                    preco_venda=$10
+                WHERE id=$11
+        `
+        const valores = [
+            parametros.nome,
+            parametros.descricao,
+            parametros.idCategoria,
+            parametros.idMoeda,
+            parametros.idGrupo,
+            parametros.idUndadeMedida,
+            parametros.idCor,
+            parametros.idMarca,
+            parametros.precoCompra,
+            parametros.precoVenda,
+            parametros.id
+        ]
 
         const resultado_banco = await cliente.query(sql, valores)
         const executed = (resultado_banco.rowCount || 0) > 0
