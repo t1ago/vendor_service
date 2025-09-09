@@ -3,6 +3,13 @@ import cors from "cors"
 import rotasCategorias from "./src/produtos/categorias/categorias_rotas"
 import rotasFornecedoresTiago from "./src/produtos/fornecedores/tiago/fornecedores_rotas"
 import { rotaFornecedorVictor } from "./src/produtos/fornecedores/victor/fornecedor_rotas_victor"
+import rota from "./src/produtos/marca/marca_rotas"
+import gruporota from "./src/produtos/grupo/grupo_rotas"
+import { rotas_moedas } from "./src/produtos/moedas/moedas_rotas"
+import rotasCores from "./src/produtos/cores/cores_rotas"
+import rotasMedidas from "./src/produtos/medidas/medidas_rotas"
+import rotasfornecedor_miguel from "./src/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
+
 
 /** Constantes do Servidor*/
 const app = express()
@@ -23,8 +30,16 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/categorias", rotasCategorias)
+app.use("/cores", rotasCores)
+app.use("/medidas", rotasMedidas)
 app.use("/fornecedores/tiago", rotasFornecedoresTiago)
 app.use("/fornecedores/victor", rotaFornecedorVictor)
+app.use("/marca", rota)
+app.use("/grupos", gruporota)
+app.use("/fornecedor/miguel", rotasfornecedor_miguel)
+app.use("/moedas", rotas_moedas)
+
+
 /** Inicia o Servidor */
 app.listen(port, () => {
   console.log(`Vendor Service (estudos) listen on PORT: ${port}`)
