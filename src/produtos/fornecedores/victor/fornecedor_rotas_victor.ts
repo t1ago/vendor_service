@@ -4,5 +4,6 @@ import { atualizarFornecedor, buscarFornecedor, deletarFornecedor, fornecedornov
 export const rotaFornecedorVictor = express.Router()
 rotaFornecedorVictor.post("/", fornecedornovo)
 rotaFornecedorVictor.get("/", buscarFornecedor)
+rotaFornecedorVictor.get("/:id", buscarFornecedor)
 rotaFornecedorVictor.put("/:id", atualizarFornecedor)
 rotaFornecedorVictor.delete("/:id",deletarFornecedor)

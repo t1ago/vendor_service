@@ -22,11 +22,17 @@ export const fornecedornovo = async(req:Request,res:Response) => {
     }
 }
 export const buscarFornecedor = async(req:Request,res:Response) => {
-    const parametros = {
-        id: req.body.id,
-        nome: req.body.nome,
-        descricao: req.body.descricao
-    }
+    let parametros: any 
+    if(req.params.id) {
+        parametros = {
+            id: req.params.id
+        }
+    } else if(req.body.nome) {
+        parametros = {
+            nome: req.body.nome,
+            descricao: req.body.descricao
+        }
+    } 
     const resultado_select = await buscarServico(parametros)
     if(resultado_select.executado) {
         res.json(resultado_select)
@@ -39,6 +45,14 @@ export const atualizarFornecedor = async(req:Request,res:Response) => {
     const parametros = {
         nome: req.body.nome,
         descricao: req.body.descricao,
+        id_categoria: req.body.id_categoria,
+        id_moeda: req.body.id_moeda,
+        id_marca: req.body.id_marca,
+        id_cores: req.body.id_cores,
+        id_unidade_medida: req.body.id_unidade_medida,
+        id_grupo: req.body.id_grupo,
+        preco_compra: req.body.preco_compra,
+        preco_venda: req.body.preco_venda,
         id: req.params.id
     }
     const resultado_update = await updateFornecedor(parametros)
