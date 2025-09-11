@@ -10,8 +10,13 @@ import {
 
 // LISTAR TODOS
 export const listarFornecedor = async (req: Request, res: Response) =>{
-    const resultado = await buscarFornecedor();
-    res.json(resultado);
+    try{
+        const resultado = await buscarFornecedor();
+        res.json(resultado);
+    } catch (erro) {
+        console.error("Erro ao listar fornecedores:", erro);
+        res.status(500).json({ mensagem: "Erro no servidor", erro });
+    }
 }
 
 // SALVAR (cria ou altera)

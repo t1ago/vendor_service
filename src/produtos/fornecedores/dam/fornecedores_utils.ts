@@ -11,7 +11,8 @@ export const executarQuery = async (sql: string /* Recebe o comando SQL */, para
         resultado.executado = true;
         resultado.data = resultadoBanco.rows;
     } catch (erro) {
-        resultado.mensagem = `Erro na consulta. MSG: ${erro}`;
+        console.error("Erro ao executarQuery:", erro); // 👈 aparece no terminal
+        resultado.mensagem = `Erro na consulta. MSG: ${erro}`
     } finally {
         await cliente.end();
     }

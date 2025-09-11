@@ -36,7 +36,7 @@ app.use("/marca", rota)
 app.use("/grupos", gruporota)
 app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 app.use("/moedas", rotas_moedas)
-app.use("/fornecedoresdam", rotasFornecedoresDam);
+app.use("/fornecedoresDam", rotasFornecedoresDam);
 
 /** Inicia o Servidor */
 app.listen(port, () => {

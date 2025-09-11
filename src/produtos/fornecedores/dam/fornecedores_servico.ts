@@ -18,7 +18,7 @@ export const inserirFornecedor = async (nome: string, descricao: string, id_cate
     limparResultado();
 
     const sql = `
-        INSERT INTO tb_fornecedores_dam (nome, descricao, id_categoria)
+        INSERT INTO tb_fornecedor_dam (nome, descricao, id_categoria)
         VALUES ($1, $2, $3) RETURNING id;
     `;
     const parametros = [nome, descricao, id_categoria];
@@ -37,8 +37,7 @@ export const inserirFornecedor = async (nome: string, descricao: string, id_cate
 
 // LISTAR TODOS
 export const buscarFornecedor = async () => {
-    limparResultado();
-    const sql = "SELECT * FROM tb_fornecedores_dam;";
+    const sql = "SELECT * FROM tb_fornecedor_dam;";
     const resultado = await executarQuery(sql);
 
     if (resultado.executado) {
@@ -53,7 +52,7 @@ export const buscarFornecedor = async () => {
 // BUSCAR POR ID
 export const buscarFornecedorId = async (id: number) => {
     limparResultado();
-    const sql = "SELECT id, nome, descricao, id_categoria FROM tb_fornecedores_dam WHERE id = $1;";
+    const sql = "SELECT id, nome, descricao, id_categoria FROM tb_fornecedor_dam WHERE id = $1;";
     const parametros = [id];
     const resultado = await executarQuery(sql, parametros);
 
@@ -69,7 +68,7 @@ export const buscarFornecedorId = async (id: number) => {
 // ATUALIZAR
 export const atualizarFornecedor = async (id: number, nome: string, descricao: string, id_categoria: number) => {
     limparResultado();
-    const sql = "UPDATE tb_fornecedores_dam SET nome = $1, descricao = $2, id_categoria = $3 WHERE id = $4;";
+    const sql = "UPDATE tb_fornecedor_dam SET nome = $1, descricao = $2, id_categoria = $3 WHERE id = $4;";
     const parametros = [nome, descricao, id_categoria, id];
     const resultado = await executarQuery(sql, parametros);
 
@@ -86,7 +85,7 @@ export const atualizarFornecedor = async (id: number, nome: string, descricao: s
 // APAGAR
 export const apagarFornecedor = async (id: number) => {
     limparResultado();
-    const sql = "DELETE FROM tb_fornecedores_dam WHERE id = $1;";
+    const sql = "DELETE FROM tb_fornecedor_dam WHERE id = $1;";
     const parametros = [id];
     const resultado = await executarQuery(sql, parametros);
 
@@ -112,7 +111,7 @@ export const buscarGenerico = async (parametro: string) => {
             f.marca,
             f.id_categoria,
             c.nome AS nome_categoria
-        FROM tb_fornecedores_dam f
+        FROM tb_fornecedor_dam f
         INNER JOIN tb_categorias c ON f.id_categoria = c.id
         WHERE
             f.nome ILIKE $1
