@@ -101,3 +101,17 @@ export const buscar_por_id = async (req: Request, res: Response) => {
         res.status(500).json(resultado);
     }
 };
+
+export const buscar_todos = async (req: Request, res: Response) => {
+      const parametros = {
+        
+    };
+    const resultado_new = await buscar(parametros);
+
+    if (resultado_new.executado) {
+        res.status(200).json(resultado_new);
+    } else {
+        res.status(500).json(resultado_new);
+    }
+
+}

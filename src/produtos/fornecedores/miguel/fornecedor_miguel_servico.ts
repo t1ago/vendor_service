@@ -2,7 +2,7 @@ import { db_cliente } from "../../../../commons/banco_dados";
 import { QueryResult } from "pg"
 
 // A função 'resultado' deve ser criada dentro de cada método para evitar problemas de concorrência
-const criarResultado = (): { executado: boolean; mensagem: string; data: any } => ({
+const criarResultado = (): { executado:  boolean; mensagem: string; data: any } => ({
     executado: false,
     mensagem: "",
     data: []
