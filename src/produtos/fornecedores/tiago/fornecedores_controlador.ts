@@ -69,15 +69,17 @@ export const buscar = async (req: Request, res: Response) => {
 
     let parametros: any;
 
-    if (req.params.id) {
+    if (req.params != undefined && req.params.id) {
         parametros = {
             id: req.params.id
         }
-    } else if (req.body.id) {
+    } else if (req.body != undefined && req.body.id) {
         parametros = {
             'id': req.body.id,
             'nome': req.body.nome
         }
+    } else {
+        parametros = {}
     }
 
     const resultado = await buscarServico(parametros)
