@@ -73,10 +73,9 @@ export const buscar = async (req: Request, res: Response) => {
         parametros = {
             id: req.params.id
         }
-    } else if (req.body != undefined && req.body.id) {
+    } else if (req.query != undefined && req.query.name) {
         parametros = {
-            'id': req.body.id,
-            'nome': req.body.nome
+            'nome': req.query.name
         }
     } else {
         parametros = {}
