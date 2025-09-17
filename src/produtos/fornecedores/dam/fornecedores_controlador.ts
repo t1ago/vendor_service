@@ -22,15 +22,47 @@ export const listarFornecedor = async (req: Request, res: Response) =>{
 // SALVAR (cria ou altera)
 export const salvar = async (req: Request, res: Response) => {
     try {
-        const { id, nome, descricao, id_categoria } = req.body;
 
+        const id = req.body.id
+        const nome = req.body.nome
+        const descricao = req.body.descricao
+        const id_categoria = req.body.id_categoria
+        const id_moeda = req.body.id_moeda
+        const id_grupo = req.body.id_grupo
+        const id_unidade_medida = req.body.id_unidade_medida
+        const id_cor = req.body.id_cor
+        const id_marca = req.body.id_marca
+        const preco_compra = req.body.preco_compra
+        const preco_venda = req.body.preco_venda
+        
         let resultado;
         if (!id) {
-            // Se não veio ID → cria
-            resultado = await inserirFornecedor(nome, descricao, id_categoria);
+            resultado = await inserirFornecedor(
+                nome,
+                descricao,
+                id_categoria,
+                id_moeda,
+                id_grupo,
+                id_unidade_medida,
+                id_cor,
+                id_marca,
+                preco_compra,
+                preco_venda     
+        );
         } else {
-            // Se veio ID → altera
-            resultado = await atualizarFornecedor(id, nome, descricao, id_categoria);
+            resultado = await atualizarFornecedor(
+                id,
+                nome,
+                descricao,
+                id_categoria,
+                id_moeda,
+                id_grupo,
+                id_unidade_medida,
+                id_cor,
+                id_marca,
+                preco_compra,
+                preco_venda  
+            );
         }
 
         res.json(resultado);

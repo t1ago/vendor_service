@@ -14,20 +14,50 @@ const limparResultado = () => {
 }
 
 // INSERIR
-export const inserirFornecedor = async (nome: string, descricao: string, id_categoria: number) => {
+export const inserirFornecedor = async (
+    nome: string,
+    descricao: string,
+    id_categoria: number,
+    id_moeda: number,
+    id_grupo: number,
+    id_unidade_medida: number,
+    id_cor: number,
+    id_marca: number,
+    preco_compra: number,
+    preco_venda: number
+) => {
     limparResultado();
 
     const sql = `
-        INSERT INTO tb_fornecedor_dam (nome, descricao, id_categoria)
-        VALUES ($1, $2, $3) RETURNING id;
+        INSERT INTO tb_fornecedor_dam 
+        (nome, descricao, id_categoria, id_moeda, id_grupo,
+        id_unidade_medida,id_cor, id_marca, preco_compra, preco_venda)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        RETURNING id;
     `;
-    const parametros = [nome, descricao, id_categoria];
+
+    const parametros = [
+        nome, descricao, id_categoria, id_moeda, id_grupo,
+        id_unidade_medida, id_cor, id_marca, preco_compra, preco_venda
+    ];
+    console.log(parametros)
     const resultado = await executarQuery(sql, parametros);
 
     if (resultado.executado && resultado.data.length > 0) {
         const id = resultado.data[0].id;
         resultado.mensagem = "Fornecedor inserido com sucesso!";
-        resultado.data = { id, nome, descricao, id_categoria };
+        resultado.data = {
+            nome,
+            descricao,
+            id_categoria,
+            id_moeda,
+            id_grupo,
+            id_unidade_medida,
+            id_cor,
+            id_marca,
+            preco_compra,
+            preco_venda    
+        };
     } else {
         resultado.mensagem = "Erro ao inserir fornecedor.";
     }
@@ -66,15 +96,67 @@ export const buscarFornecedorId = async (id: number) => {
 }
 
 // ATUALIZAR
-export const atualizarFornecedor = async (id: number, nome: string, descricao: string, id_categoria: number) => {
+export const atualizarFornecedor = async (
+    id: number,
+    nome: string,
+    descricao: string,
+    id_categoria: number,
+    id_moeda: number,
+    id_grupo: number,
+    id_unidade_medida: number,
+    id_cor: number,
+    id_marca: number,
+    preco_compra: number,
+    preco_venda: number
+) => {
     limparResultado();
-    const sql = "UPDATE tb_fornecedor_dam SET nome = $1, descricao = $2, id_categoria = $3 WHERE id = $4;";
-    const parametros = [nome, descricao, id_categoria, id];
+
+    const sql = `
+        UPDATE tb_fornecedor_dam 
+        SET
+            nome = $1,
+            descricao = $2,
+            id_categoria = $3,
+            id_moeda = $4,
+            id_grupo = $5,
+            id_unidade_medida = $6,
+            id_cor = $7,
+            id_marca = $8,
+            preco_compra = $9,
+            preco_venda = $10
+        WHERE id = $11;
+    `;
+
+    const parametros = [
+        nome,
+        descricao,
+        id_categoria,
+        id_moeda,
+        id_grupo,
+        id_unidade_medida,
+        id_cor,
+        id_marca,
+        preco_compra,
+        preco_venda,
+        id
+    ];
     const resultado = await executarQuery(sql, parametros);
 
     if (resultado.executado) {
         resultado.mensagem = "Fornecedor atualizado com sucesso!";
-        resultado.data = { id, nome, descricao, id_categoria };
+        resultado.data = {
+            id, 
+            nome, 
+            descricao, 
+            id_categoria, 
+            id_moeda, 
+            id_grupo, 
+            id_unidade_medida, 
+            id_cor, 
+            id_marca, 
+            preco_compra, 
+            preco_venda 
+        };
     } else {
         resultado.mensagem = "Erro ao atualizar fornecedor!";
     }
@@ -107,17 +189,19 @@ export const buscarGenerico = async (parametro: string) => {
             f.id,
             f.nome,
             f.descricao,
-            f.cor,
-            f.marca,
             f.id_categoria,
-            c.nome AS nome_categoria
+            c.nome AS nome_categoria,
+            cor.nome AS nome_cor,
+            m.nome AS nome_marca
         FROM tb_fornecedor_dam f
-        INNER JOIN tb_categorias c ON f.id_categoria = c.id
+        INNER JOIN tb_categoria c ON f.id_categoria = c.id
+        INNER JOIN tb_cores cor ON f.id_cor = cor.id
+        INNER JOIN tb_marca m ON f.id_marca = m.id
         WHERE
             f.nome ILIKE $1
             OR f.descricao ILIKE $1
-            OR f.cor ILIKE $1
-            OR f.marca ILIKE $1
+            OR cor.nome ILIKE $1
+            OR m.nome ILIKE $1
             OR c.nome ILIKE $1
         ORDER BY f.nome;
     `;
