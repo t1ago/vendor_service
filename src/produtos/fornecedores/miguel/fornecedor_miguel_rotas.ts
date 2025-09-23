@@ -1,5 +1,5 @@
 import express from "express";
-import { buscar_new, NovoDelete, NovoPost, NovoUpdate, buscar_todos } from "./fornecedor_miguel_controlador";
+import { buscar_new, NovoDelete, NovoPost, NovoUpdate, buscar_todos, buscar_por_id } from "./fornecedor_miguel_controlador";
 
 const rotasfornecedor_miguel = express.Router();
 
@@ -7,7 +7,9 @@ const rotasfornecedor_miguel = express.Router();
 rotasfornecedor_miguel.get("/", buscar_todos);
 
 // Buscar por ID
-rotasfornecedor_miguel.get("/:id", buscar_new);
+
+rotasfornecedor_miguel.get("/:id", buscar_por_id);
+
 
 // Inserir novo
 rotasfornecedor_miguel.post("/", NovoPost);

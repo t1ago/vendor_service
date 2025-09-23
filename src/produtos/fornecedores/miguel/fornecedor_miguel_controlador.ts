@@ -103,9 +103,12 @@ export const buscar_por_id = async (req: Request, res: Response) => {
 };
 
 export const buscar_todos = async (req: Request, res: Response) => {
-      const parametros = {
-        
-    };
+    const parametros: any = {};
+
+    if (req.query.name) {
+        parametros.nome = req.query.name; // agora usa buscar_nome
+    }
+
     const resultado_new = await buscar(parametros);
 
     if (resultado_new.executado) {
@@ -113,5 +116,4 @@ export const buscar_todos = async (req: Request, res: Response) => {
     } else {
         res.status(500).json(resultado_new);
     }
-
-}
+};
