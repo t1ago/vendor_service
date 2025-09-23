@@ -1,15 +1,15 @@
 import { Resultado_all } from "./moedas_resultado";
 
-export const moedaInsert = async (moeda: any) => {
+export const moedainsert = async (moeda: any) => {
     try {
-        const sql = 'INSERT INTO tb_moeda (nome, moeda) VALUES ($1, $2) RETURNING id'
+        const sql = 'Insert into tb_moeda (nome, moeda) Values ($1, $2) Returning id'
         const parametros = [moeda.nome, moeda.moeda]
         const resultado_insert = await Resultado_all(sql, parametros)
         return resultado_insert
-    } finally {
+    } catch (error) {
+        throw error
     }
 }
-
 export const moedaUpdate = async (moeda: any) => {
     try {
         // CORREÇÃO: A ordem dos parâmetros foi ajustada para corresponder ao SQL
@@ -17,20 +17,20 @@ export const moedaUpdate = async (moeda: any) => {
         const parametros = [moeda.nome, moeda.moeda, moeda.id]
         const resultado_insert = await Resultado_all(sql, parametros)
         return resultado_insert
-    } finally {
+    } catch (error) {
+        throw error
     }
 }
-
 export const moedaDelete = async (moeda: any) => {
     try {
         const sql = 'DELETE FROM tb_moeda WHERE id=$1'
         const parametros = [moeda.id]
         const resultado_insert = await Resultado_all(sql, parametros)
         return resultado_insert
-    } finally {
+    } catch (error) {
+        throw error
     }
 }
-
 export const moedaBuscar = async (moeda: any) => {
     try {
         let sql: string
@@ -55,6 +55,8 @@ export const moedaBuscar = async (moeda: any) => {
             const resultado_sql = await Resultado_all(sql)
             return resultado_sql
         }
-    } finally {
+    } catch (error) {
+       
     }
-}
+}       
+    
