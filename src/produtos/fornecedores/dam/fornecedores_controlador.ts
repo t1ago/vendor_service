@@ -74,7 +74,10 @@ export const salvar = async (req: Request, res: Response) => {
 // REMOVER
 export const remover = async (req: Request, res: Response) => {
     try {
-        const { id } = req.body;
+        const idParam = req.params?.id;
+        const idBody = req.body?.id;
+        const id = Number(idParam ?? idBody);
+        
         const resultado = await apagarFornecedor(id);
         res.json(resultado);
     } catch (erro) {

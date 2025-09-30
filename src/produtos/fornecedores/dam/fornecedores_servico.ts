@@ -67,7 +67,48 @@ export const inserirFornecedor = async (
 
 // LISTAR TODOS
 export const buscarFornecedor = async () => {
-    const sql = "SELECT * FROM tb_fornecedor_dam;";
+    const sql = `
+        SELECT
+            f.id,
+            f.nome,
+            f.descricao,
+            f.preco_compra,
+            f.preco_venda,
+            
+            -- Categoria
+            f.id_categoria,
+            c.nome AS nome_categoria,
+
+            -- Moeda
+            f.id_moeda,
+            mo.nome AS nome_moeda,
+
+            -- Grupo
+            f.id_grupo,
+            g.nome AS nome_grupo,
+
+            -- Unidade de medida
+            f.id_unidade_medida,
+            um.nome AS nome_unidade_medida,
+
+            -- Marca
+            f.id_marca,
+            m.nome AS nome_marca,
+
+            -- Cor
+            f.id_cor,
+            co.hexadecimal AS cor_hexadecimal
+
+        FROM tb_fornecedor_dam f
+        LEFT JOIN tb_categoria c ON f.id_categoria = c.id
+        LEFT JOIN tb_moeda mo ON f.id_moeda = mo.id
+        LEFT JOIN tb_grupo g ON f.id_grupo = g.id
+        LEFT JOIN tb_medida um ON f.id_unidade_medida = um.id
+        LEFT JOIN tb_marca m ON f.id_marca = m.id
+        LEFT JOIN tb_cores co ON f.id_cor = co.id
+        ORDER BY f.nome;
+    `;
+
     const resultado = await executarQuery(sql);
 
     if (resultado.executado) {
@@ -77,7 +118,7 @@ export const buscarFornecedor = async () => {
     }
 
     return resultado;
-}
+};
 
 // BUSCAR POR ID
 export const buscarFornecedorId = async (id: number) => {
