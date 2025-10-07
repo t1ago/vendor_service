@@ -4,14 +4,21 @@ import {
     alterarServico,
     removerServico,
     buscarServico
-} from "./fornecedores_servico"
+} from "./produto_servico"
 
 
 export const criar = async (req: Request, res: Response) => {
     const parametros = {
         'nome': req.body.nome,
         'descricao': req.body.descricao,
-        'idCategoria': req.body.idCategoria
+        'idCategoria': req.body.idCategoria,
+        'idMoeda': req.body.idMoeda,
+        'idGrupo': req.body.idGrupo,
+        'idUndadeMedida': req.body.idUndadeMedida,
+        'idCor': req.body.idCor,
+        'idMarca': req.body.idMarca,
+        'precoCompra': req.body.precoCompra,
+        'precoVenda': req.body.precoVenda
     }
 
     const resultado = await criarServico(parametros)
@@ -27,7 +34,14 @@ export const alterar = async (req: Request, res: Response) => {
         'id': req.params.id,
         'nome': req.body.nome,
         'descricao': req.body.descricao,
-        'idCategoria': req.body.idCategoria
+        'idCategoria': req.body.idCategoria,
+        'idMoeda': req.body.idMoeda,
+        'idGrupo': req.body.idGrupo,
+        'idUndadeMedida': req.body.idUndadeMedida,
+        'idCor': req.body.idCor,
+        'idMarca': req.body.idMarca,
+        'precoCompra': req.body.precoCompra,
+        'precoVenda': req.body.precoVenda
     }
 
     const resultado = await alterarServico(parametros)
@@ -52,9 +66,19 @@ export const remover = async (req: Request, res: Response) => {
 }
 
 export const buscar = async (req: Request, res: Response) => {
-    const parametros = {
-        'id': req.body.id,
-        'nome': req.body.nome
+
+    let parametros: any;
+
+    if (req.params != undefined && req.params.id) {
+        parametros = {
+            id: req.params.id
+        }
+    } else if (req.query != undefined && req.query.name) {
+        parametros = {
+            'nome': req.query.name
+        }
+    } else {
+        parametros = {}
     }
 
     const resultado = await buscarServico(parametros)
