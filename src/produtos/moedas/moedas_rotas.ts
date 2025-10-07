@@ -5,5 +5,5 @@ export const rotas_moedas = express.Router()
 
 rotas_moedas.get("/", buscar)
 rotas_moedas.post("/", inserir)
-rotas_moedas.put("/", update)
+rotas_moedas.put("/:id", update) 
 rotas_moedas.delete("/:id", delet)

@@ -14,9 +14,10 @@ export const inserir = async (req: Request, res: Response) => {
     }
 }
 
+// CORREÇÃO: O ID deve ser pego dos parâmetros da rota (req.params)
 export const update = async (req: Request, res: Response) => {
     let parametros = {
-        "id": req.body?.id,
+        "id": req.params.id, // CORRIGIDO: Pega o ID da URL
         "nome": req.body?.nome,
         "moeda": req.body?.moeda
     }
@@ -27,7 +28,6 @@ export const update = async (req: Request, res: Response) => {
         res.status(500).json(resultado_insert)
     }
 }
-
 export const delet = async (req: Request, res: Response) => {
     let parametros = {
         id: req.params?.id
