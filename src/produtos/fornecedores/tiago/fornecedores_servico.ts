@@ -49,7 +49,7 @@ export const criarServico = async (parametros: any) => {
             parametros.precoCompra,
             parametros.precoVenda]
 
-        const resultado_banco = await cliente.query(sql, valores)
+        const resultado_banco = await cliente.query(sql, valores,)
         const executed = (resultado_banco.rowCount || 0) > 0
 
         resultado.executado = executed
@@ -194,6 +194,7 @@ const buscarPorId = (parametros: any) => {
                 tb_cat.nome as "nome_categoria",
                 tb_forn.id_moeda,
                 tb_mo.nome as "nome_moeda",
+                tb_mo.moeda as "simbolo_moeda",
                 tb_forn.id_cor,
                 tb_cor.hexadecimal as "hexadecimal",
                 tb_forn.id_grupo,
@@ -228,6 +229,7 @@ const buscarTodos = () => {
                 tb_cat.nome as "nome_categoria",
                 tb_forn.id_moeda,
                 tb_mo.nome as "nome_moeda",
+                tb_mo.moeda as "simbolo_moeda",
                 tb_forn.id_cor,
                 tb_cor.hexadecimal as "hexadecimal",
                 tb_forn.id_grupo,
@@ -262,6 +264,7 @@ const buscarPorNome = (parametros: any) => {
                 tb_cat.nome as "nome_categoria",
                 tb_forn.id_moeda,
                 tb_mo.nome as "nome_moeda",
+                tb_mo.moeda as "simbolo_moeda",
                 tb_forn.id_cor,
                 tb_cor.hexadecimal as "hexadecimal",
                 tb_forn.id_grupo,
