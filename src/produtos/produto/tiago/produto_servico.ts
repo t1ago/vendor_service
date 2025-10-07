@@ -1,6 +1,6 @@
 import { QueryResult } from "pg"
-import { db_cliente } from "./../../../../commons/banco_dados"
-import { Resultado } from "./../../../../commons/resultado_api"
+import { db_cliente } from "../../../../commons/banco_dados"
+import { Resultado } from "../../../../commons/resultado_api"
 
 const resultado: Resultado = {
     executado: false,
@@ -22,7 +22,7 @@ export const criarServico = async (parametros: any) => {
         cliente.connect()
 
         const sql = `
-            INSERT INTO tb_fornecedor_tiago (
+            INSERT INTO tb_produto_tiago (
                 nome, 
                 descricao, 
                 id_categoria, 
@@ -75,7 +75,7 @@ export const alterarServico = async (parametros: any) => {
         cliente.connect()
 
         const sql = `
-            UPDATE tb_fornecedor_tiago 
+            UPDATE tb_produto_tiago 
                 SET nome=$1, 
                     descricao=$2,
                     id_categoria=$3, 
@@ -125,7 +125,7 @@ export const removerServico = async (parametros: any) => {
     try {
         cliente.connect()
 
-        const sql = "DELETE FROM tb_fornecedor_tiago WHERE id=$1;"
+        const sql = "DELETE FROM tb_produto_tiago WHERE id=$1;"
         const valores = [parametros.id]
 
         const resultado_banco = await cliente.query(sql, valores)
@@ -188,32 +188,32 @@ const buscarPorId = (parametros: any) => {
     return {
         sql: `
             select 
-                tb_forn.id,
-                tb_forn.descricao,
-                tb_forn.id_categoria,
+                tb_prod.id,
+                tb_prod.descricao,
+                tb_prod.id_categoria,
                 tb_cat.nome as "nome_categoria",
-                tb_forn.id_moeda,
+                tb_prod.id_moeda,
                 tb_mo.nome as "nome_moeda",
                 tb_mo.moeda as "simbolo_moeda",
-                tb_forn.id_cor,
+                tb_prod.id_cor,
                 tb_cor.hexadecimal as "hexadecimal",
-                tb_forn.id_grupo,
+                tb_prod.id_grupo,
                 tb_group.nome as "nome_grupo",
-                tb_forn.id_marca,
+                tb_prod.id_marca,
                 tb_mar.nome as "nome_marca",
-                tb_forn.id_undade_medida,
+                tb_prod.id_undade_medida,
                 tb_med.nome as "nome_unidade_medida",
-                tb_forn.nome,
-                tb_forn.preco_compra,
-                tb_forn.preco_venda
-            from tb_fornecedor_tiago tb_forn
-            inner join tb_categoria tb_cat on tb_forn.id_categoria = tb_cat.id
-            inner  join tb_moeda tb_mo on tb_forn.id_moeda = tb_mo.id
-            inner  join tb_cores tb_cor on tb_forn.id_cor = tb_cor.id
-            inner  join tb_grupo tb_group on tb_forn.id_grupo = tb_group.id
-            inner  join tb_marca tb_mar on tb_forn.id_marca = tb_mar.id
-            inner  join tb_medida tb_med on tb_forn.id_undade_medida = tb_med.id
-            WHERE tb_forn.id=$1;
+                tb_prod.nome,
+                tb_prod.preco_compra,
+                tb_prod.preco_venda
+            from tb_produto_tiago tb_prod
+            inner join tb_categoria tb_cat on tb_prod.id_categoria = tb_cat.id
+            inner  join tb_moeda tb_mo on tb_prod.id_moeda = tb_mo.id
+            inner  join tb_cores tb_cor on tb_prod.id_cor = tb_cor.id
+            inner  join tb_grupo tb_group on tb_prod.id_grupo = tb_group.id
+            inner  join tb_marca tb_mar on tb_prod.id_marca = tb_mar.id
+            inner  join tb_medida tb_med on tb_prod.id_undade_medida = tb_med.id
+            WHERE tb_prod.id=$1;
         `,
         valores: [parametros.id]
     }
@@ -223,32 +223,32 @@ const buscarTodos = () => {
     return {
         sql: `
             select 
-                tb_forn.id,
-                tb_forn.descricao,
-                tb_forn.id_categoria,
+                tb_prod.id,
+                tb_prod.descricao,
+                tb_prod.id_categoria,
                 tb_cat.nome as "nome_categoria",
-                tb_forn.id_moeda,
+                tb_prod.id_moeda,
                 tb_mo.nome as "nome_moeda",
                 tb_mo.moeda as "simbolo_moeda",
-                tb_forn.id_cor,
+                tb_prod.id_cor,
                 tb_cor.hexadecimal as "hexadecimal",
-                tb_forn.id_grupo,
+                tb_prod.id_grupo,
                 tb_group.nome as "nome_grupo",
-                tb_forn.id_marca,
+                tb_prod.id_marca,
                 tb_mar.nome as "nome_marca",
-                tb_forn.id_undade_medida,
+                tb_prod.id_undade_medida,
                 tb_med.nome as "nome_unidade_medida",
-                tb_forn.nome,
-                tb_forn.preco_compra,
-                tb_forn.preco_venda
-            from tb_fornecedor_tiago tb_forn
-            inner join tb_categoria tb_cat on tb_forn.id_categoria = tb_cat.id
-            inner  join tb_moeda tb_mo on tb_forn.id_moeda = tb_mo.id
-            inner  join tb_cores tb_cor on tb_forn.id_cor = tb_cor.id
-            inner  join tb_grupo tb_group on tb_forn.id_grupo = tb_group.id
-            inner  join tb_marca tb_mar on tb_forn.id_marca = tb_mar.id
-            inner  join tb_medida tb_med on tb_forn.id_undade_medida = tb_med.id
-            ORDER BY tb_forn.nome
+                tb_prod.nome,
+                tb_prod.preco_compra,
+                tb_prod.preco_venda
+            from tb_produto_tiago tb_prod
+            inner join tb_categoria tb_cat on tb_prod.id_categoria = tb_cat.id
+            inner  join tb_moeda tb_mo on tb_prod.id_moeda = tb_mo.id
+            inner  join tb_cores tb_cor on tb_prod.id_cor = tb_cor.id
+            inner  join tb_grupo tb_group on tb_prod.id_grupo = tb_group.id
+            inner  join tb_marca tb_mar on tb_prod.id_marca = tb_mar.id
+            inner  join tb_medida tb_med on tb_prod.id_undade_medida = tb_med.id
+            ORDER BY tb_prod.nome
         `,
         valores: null
     }
@@ -258,41 +258,41 @@ const buscarPorNome = (parametros: any) => {
     return {
         sql: `
             select 
-                tb_forn.id,
-                tb_forn.descricao,
-                tb_forn.id_categoria,
+                tb_prod.id,
+                tb_prod.descricao,
+                tb_prod.id_categoria,
                 tb_cat.nome as "nome_categoria",
-                tb_forn.id_moeda,
+                tb_prod.id_moeda,
                 tb_mo.nome as "nome_moeda",
                 tb_mo.moeda as "simbolo_moeda",
-                tb_forn.id_cor,
+                tb_prod.id_cor,
                 tb_cor.hexadecimal as "hexadecimal",
-                tb_forn.id_grupo,
+                tb_prod.id_grupo,
                 tb_group.nome as "nome_grupo",
-                tb_forn.id_marca,
+                tb_prod.id_marca,
                 tb_mar.nome as "nome_marca",
-                tb_forn.id_undade_medida,
+                tb_prod.id_undade_medida,
                 tb_med.nome as "nome_unidade_medida",
-                tb_forn.nome,
-                tb_forn.preco_compra,
-                tb_forn.preco_venda
-            from tb_fornecedor_tiago tb_forn
-            inner join tb_categoria tb_cat on tb_forn.id_categoria = tb_cat.id
-            inner  join tb_moeda tb_mo on tb_forn.id_moeda = tb_mo.id
-            inner  join tb_cores tb_cor on tb_forn.id_cor = tb_cor.id
-            inner  join tb_grupo tb_group on tb_forn.id_grupo = tb_group.id
-            inner  join tb_marca tb_mar on tb_forn.id_marca = tb_mar.id
-            inner  join tb_medida tb_med on tb_forn.id_undade_medida = tb_med.id
+                tb_prod.nome,
+                tb_prod.preco_compra,
+                tb_prod.preco_venda
+            from tb_produto_tiago tb_prod
+            inner join tb_categoria tb_cat on tb_prod.id_categoria = tb_cat.id
+            inner  join tb_moeda tb_mo on tb_prod.id_moeda = tb_mo.id
+            inner  join tb_cores tb_cor on tb_prod.id_cor = tb_cor.id
+            inner  join tb_grupo tb_group on tb_prod.id_grupo = tb_group.id
+            inner  join tb_marca tb_mar on tb_prod.id_marca = tb_mar.id
+            inner  join tb_medida tb_med on tb_prod.id_undade_medida = tb_med.id
             WHERE
-                lower(tb_forn.nome) like lower(concat('%', $1::text, '%'))
-                or lower(tb_forn.descricao) like lower(concat('%', $1::text, '%'))
+                lower(tb_prod.nome) like lower(concat('%', $1::text, '%'))
+                or lower(tb_prod.descricao) like lower(concat('%', $1::text, '%'))
                 or lower(tb_cat.nome) like lower(concat('%', $1::text, '%'))
                 or lower(tb_group.nome) like lower(concat('%', $1::text, '%'))
                 or lower(tb_mar.nome) like lower(concat('%', $1::text, '%'))
                 or lower(tb_mo.nome) like lower(concat('%', $1::text, '%'))
                 or lower(tb_med.nome) like lower(concat('%', $1::text, '%'))
-                or lower(tb_forn.preco_venda::text) like lower(concat('%', $1::text, '%'))
-            ORDER BY tb_forn.nome;
+                or lower(tb_prod.preco_venda::text) like lower(concat('%', $1::text, '%'))
+            ORDER BY tb_prod.nome;
         `,
         valores: [parametros.search]
     }

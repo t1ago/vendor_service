@@ -4,7 +4,7 @@ import {
     alterarServico,
     removerServico,
     buscarServico
-} from "./fornecedores_servico"
+} from "./produto_servico"
 
 
 export const criar = async (req: Request, res: Response) => {
