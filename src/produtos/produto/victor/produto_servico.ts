@@ -10,7 +10,7 @@ function resultadoComum() {
     resultado.mensagem = "",
     resultado.data = {}
 }
-export const inserirFornecedor = async(lista:any) => {
+export const inserirProduto = async(lista:any) => {
     const cliente = db_cliente()
     resultadoComum()
     try {
@@ -67,7 +67,7 @@ export const buscarServico = async(lista:any) => {
     return resultado
 }
 
-export const updateFornecedor = async(lista:any) => {
+export const updateProduto = async(lista:any) => {
     const cliente = db_cliente()
     resultadoComum()
     try {
@@ -105,7 +105,7 @@ export const updateFornecedor = async(lista:any) => {
     return resultado
 }
 
-export const deleteFornecedor = async(lista:any) => {
+export const deleteProduto = async(lista:any) => {
     const cliente = db_cliente()
     try {
         await cliente.connect()

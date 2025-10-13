@@ -1,7 +1,7 @@
 import { Request , Response } from "express";
-import { buscarServico, deleteFornecedor, inserirFornecedor, updateFornecedor } from "./fornecedor_servico_victor";
+import { buscarServico, deleteProduto, inserirProduto, updateProduto } from "./produto_servico";
 
-export const fornecedornovo = async(req:Request,res:Response) => {
+export const Produtonovo = async(req:Request,res:Response) => {
     const parametros = {
         nome: req.body.nome,
         descricao: req.body.descricao,
@@ -14,14 +14,14 @@ export const fornecedornovo = async(req:Request,res:Response) => {
         preco_compra: req.body.preco_compra,
         preco_venda: req.body.preco_venda
     }
-    const resultado_insert = await inserirFornecedor(parametros)
+    const resultado_insert = await inserirProduto(parametros)
     if(resultado_insert.executado) {
         res.json(resultado_insert)
     } else {
         res.status(500).json(resultado_insert)
     }
 }
-export const buscarFornecedor = async(req:Request,res:Response) => {
+export const buscarProduto = async(req:Request,res:Response) => {
     let parametros: any 
     if(req.params.id) {
         parametros = {
@@ -40,7 +40,7 @@ export const buscarFornecedor = async(req:Request,res:Response) => {
     }
 }
 
-export const atualizarFornecedor = async(req:Request,res:Response) => {
+export const atualizarProduto = async(req:Request,res:Response) => {
     const parametros = {
         nome: req.body.nome,
         descricao: req.body.descricao,
@@ -54,7 +54,7 @@ export const atualizarFornecedor = async(req:Request,res:Response) => {
         preco_venda: req.body.preco_venda,
         id: req.params.id
     }
-    const resultado_update = await updateFornecedor(parametros)
+    const resultado_update = await updateProduto(parametros)
     if(resultado_update.executado) {
         res.json(resultado_update)
     } else {
@@ -62,11 +62,11 @@ export const atualizarFornecedor = async(req:Request,res:Response) => {
     }
 }
 
-export const deletarFornecedor = async(req:Request,res:Response) => {
+export const deletarProduto = async(req:Request,res:Response) => {
     const parametros = {
         id: req.params.id
     }
-    const resultado_delete = await deleteFornecedor(parametros)
+    const resultado_delete = await deleteProduto(parametros)
     if(resultado_delete.executado) {
         res.json(resultado_delete)
     } else {
