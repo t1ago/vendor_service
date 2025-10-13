@@ -52,10 +52,9 @@ export const buscarServico = async(lista:any) => {
         } else {
             resultado_select = await cliente.query(requisicao.sql)
         }
-        const executado = (resultado_select.rowCount || 0) > 0
-        resultado.executado = executado,
-        resultado.mensagem = executado ? "Dados buscados com sucesso" : "Dados não foram buscados, por algum erro interno",
-        resultado.data = executado ? resultado_select.rows : []
+        resultado.executado = true,
+        resultado.mensagem = "Dados buscados com sucesso",
+        resultado.data = resultado_select.rows
     } 
     catch(erro) {
         resultado.executado = false,
@@ -75,18 +74,18 @@ export const updateFornecedor = async(lista:any) => {
         await cliente.connect()
         const sql = `
         UPDATE tb_fornecedor_victor 
-        SET 
-        nome=$1,
-        descricao=$2,
-        id_categoria=$3,
-        id_moeda=$4,
-        id_marca=$5,
-        id_cores=$6,
-        id_unidade_medida=$7,
-        id_grupo=$8,
-        preco_compra=$9,
-        preco_venda=$10
-        WHERE id=$11
+            SET 
+                nome=$1,
+                descricao=$2,
+                id_categoria=$3,
+                id_moeda=$4,
+                id_marca=$5,
+                id_cores=$6,
+                id_unidade_medida=$7,
+                id_grupo=$8,
+                preco_compra=$9,
+                preco_venda=$10
+            WHERE id=$11
         `
         const parametro = [lista.nome,lista.descricao,lista.id_categoria,lista.id_moeda,lista.id_marca,lista.id_cores,lista.id_unidade_medida,lista.id_grupo,lista.preco_compra,lista.preco_venda,lista.id]
         const resultado_update = await cliente.query(sql,parametro)
@@ -156,7 +155,8 @@ function buscarTodos() {
             INNER JOIN tb_marca tb_mar on tb_forn_victor.id_marca = tb_mar.id
             INNER JOIN tb_cores tb_co on tb_forn_victor.id_cores = tb_co.id
             INNER JOIN tb_medida tb_med on tb_forn_victor.id_unidade_medida = tb_med.id
-            INNER JOIN tb_grupo tb_gru on tb_forn_victor.id_grupo = tb_gru.id`,
+            INNER JOIN tb_grupo tb_gru on tb_forn_victor.id_grupo = tb_gru.id
+        ORDER BY tb_forn_victor.nome`,
         "parametros": []
     }
 }
@@ -196,7 +196,7 @@ function buscarId(lista: any) {
 function buscarNome(lista: any) {
     return {
         "sql": `
-            SELECT 
+        SELECT 
             tb_forn_victor.id,
             tb_forn_victor.nome,
             tb_forn_victor.descricao,
@@ -221,8 +221,17 @@ function buscarNome(lista: any) {
             INNER JOIN tb_cores tb_co on tb_forn_victor.id_cores = tb_co.id
             INNER JOIN tb_medida tb_med on tb_forn_victor.id_unidade_medida = tb_med.id
             INNER JOIN tb_grupo tb_gru on tb_forn_victor.id_grupo = tb_gru.id
-        WHERE tb_forn_victor.nome ILIKE $1 OR tb_forn_victor.descricao ILIKE $2
+        WHERE 
+            lower(tb_forn_victor.nome) LIKE lower(concat('%',$1::text,'%')) OR
+            lower(tb_forn_victor.descricao) LIKE lower(concat('%',$1::text,'%')) OR
+            lower(tb_cat.nome) LIKE lower(concat('%',$1::text,'%')) OR
+            lower(tb_mo.nome) LIKE lower(concat('%',$1::text,'%')) OR
+            lower(tb_mar.nome) LIKE lower(concat('%',$1::text,'%')) OR
+            lower(tb_co.hexadecimal) LIKE lower(concat('%',$1::text,'%')) OR
+            lower(tb_med.nome) LIKE lower(concat('%',$1::text,'%')) OR
+            lower(tb_gru.nome) LIKE lower(concat('%',$1::text,'%')) OR
+            tb_forn_victor.preco_venda::text LIKE concat('%',$1::text,'%')
         `,
-        "parametros": [`%${lista.nome}%`, `%${lista.descricao}%`]
+        "parametros": [lista.nome.replace(',','.')]
     }
 }

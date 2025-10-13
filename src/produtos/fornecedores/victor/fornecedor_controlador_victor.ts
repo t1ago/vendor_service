@@ -26,13 +26,12 @@ export const buscarFornecedor = async(req:Request,res:Response) => {
     if(req.params.id) {
         parametros = {
             id: req.params.id
-        }
-    } else if(req.body.nome) {
+        } 
+    } else if (req.query != undefined && req.query.nome) {
         parametros = {
-            nome: req.body.nome,
-            descricao: req.body.descricao
+            nome: req.query.nome
         }
-    } 
+    }
     const resultado_select = await buscarServico(parametros)
     if(resultado_select.executado) {
         res.json(resultado_select)
