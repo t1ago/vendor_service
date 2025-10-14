@@ -88,7 +88,7 @@ export const remover = async (req: Request, res: Response) => {
 // BUSCAR POR ID
 export const buscarid = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params; // ← usei params ao invés de body
+        const { id } = req.params;
         const resultado = await buscarFornecedorId(Number(id));
         res.json(resultado);
     } catch (erro) {
