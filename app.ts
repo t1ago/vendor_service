@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express"
 import cors from "cors"
 import rotasCategorias from "./src/produtos/categorias/categorias_rotas"
-import rotasFornecedoresTiago from "./src/produtos/fornecedores/tiago/fornecedores_rotas"
+import { rotaProdutoVictor } from "./src/produtos/produto/victor/produto_rotas"
+import rotasProdutoTiago from "./src/produtos/produto/tiago/produto_rotas"
 import rota from "./src/produtos/marca/marca_rotas"
 import gruporota from "./src/produtos/grupo/grupo_rotas"
 import { rotas_moedas } from "./src/produtos/moedas/moedas_rotas"
@@ -29,9 +30,10 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/categorias", rotasCategorias)
-app.use("/cores", rotasCores);
-app.use("/medidas", rotasMedidas);
-app.use("/fornecedores/tiago", rotasFornecedoresTiago)
+app.use("/cores", rotasCores)
+app.use("/medidas", rotasMedidas)
+app.use("/produto/victor", rotaProdutoVictor)
+app.use("/produtos/tiago", rotasProdutoTiago)
 app.use("/marca", rota)
 app.use("/grupos", gruporota)
 app.use("/fornecedor/miguel", rotasfornecedor_miguel)
