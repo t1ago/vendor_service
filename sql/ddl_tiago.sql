@@ -43,10 +43,10 @@ CREATE TABLE tb_pessoa_tiago (
 CREATE TABLE tb_endereco_pessoa_tiago (
     id integer GENERATED ALWAYS AS IDENTITY NOT NULL,
     id_pessoa integer,
-    cep varchar(8) NOT NULL,
+    cep varchar(9) NOT NULL,
     logradouro varchar(256) NOT NULL,
     numero varchar(12),
-    bairro VARCHAR(64),
+    bairro VARCHAR(64) NOT NULL,
     cidade VARCHAR(64) NOT NULL,
     estado VARCHAR(2) NOT NULL,
     tipo_endereco CHAR(1) CHECK (
