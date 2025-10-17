@@ -8,6 +8,7 @@ import { rotas_moedas } from "./src/produtos/moedas/moedas_rotas"
 import rotasCores from "./src/produtos/cores/cores_rotas"
 import rotasMedidas from "./src/produtos/medidas/medidas_rotas"
 import rotasfornecedor_miguel from "./src/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
+import rotasEnderecoTiago from "./src/enderecos/tiago/endereco_rotas"
 
 
 /** Constantes do Servidor*/
@@ -28,15 +29,18 @@ app.get("/", (req: Request, res: Response) => {
   res.json({ 'status': 'OK' })
 });
 
+/**Produtos */
 app.use("/categorias", rotasCategorias)
 app.use("/cores", rotasCores)
 app.use("/medidas", rotasMedidas)
-app.use("/produtos/tiago", rotasProdutoTiago)
 app.use("/marca", rota)
 app.use("/grupos", gruporota)
-app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 app.use("/moedas", rotas_moedas)
+app.use("/produtos/tiago", rotasProdutoTiago)
+app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 
+/**Enderecos */
+app.use("/enderecos/tiago", rotasEnderecoTiago)
 
 /** Inicia o Servidor */
 app.listen(port, () => {
