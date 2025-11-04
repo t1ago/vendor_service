@@ -14,12 +14,12 @@ export const novoservico = async (sql: string, parametros: any[] = []) => {
 
         const resultado_all = await cliente.query(sql, parametros)
         resultado.executado = true,
-        resultado.mensagem = "",
-        resultado.data = resultado_all.rows
+            resultado.mensagem = "",
+            resultado.data = resultado_all.rows
 
     } catch (erro) {
         resultado.executado = false,
-        resultado.mensagem = "erro" + erro
+            resultado.mensagem = "erro" + erro
         resultado.data = {}
     } finally {
         await cliente.end()

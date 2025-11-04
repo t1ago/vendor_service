@@ -24,6 +24,5 @@ export const executandoquery = async (sql: string, parametros: any[] = []) => {
     } finally {
         await cliente.end()
     }
-
     return resultado
 }

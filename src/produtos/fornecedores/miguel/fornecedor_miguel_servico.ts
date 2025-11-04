@@ -1,9 +1,5 @@
 import { executandoquery } from "./fornecedor_miguel_resultado";
 import { Resultado } from "./../../../../commons/resultado_api";
-import { QueryResult } from "pg";
-
-
-
 
 const resultado: Resultado = {
     executado: false,
@@ -23,8 +19,6 @@ export const MicroservicoInsert = async (fornecedor: any) => {
 
     }
 }
-
-
 
 export const MicroservicoGet_All = async () => {
 
