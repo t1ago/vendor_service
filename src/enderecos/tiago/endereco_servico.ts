@@ -3,7 +3,7 @@ import axios from "axios"
 import { Resultado } from "../../../commons/resultado_api"
 
 const API_BUSCAR_ESTADOS = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados'
-const API_BUSCAR_LOCALIDADE_POR_CEP = 'https://brasilapi.com.br/api/cep/v2'
+const API_BUSCAR_LOCALIDADE_POR_CEP = 'https://viacep.com.br/ws/{CEP}/json/'
 
 const resultado: Resultado = {
     executado: false,
@@ -43,21 +43,22 @@ export const buscarLocalidadePorCep = async (cep: string) => {
     limparResultado()
 
     try {
-        const response = await axios.get(`${API_BUSCAR_LOCALIDADE_POR_CEP}/${cep}`);
+        const response = await axios.get(`${API_BUSCAR_LOCALIDADE_POR_CEP.replace('{CEP}', cep)}`);
         resultado.executado = true
         resultado.mensagem = ""
 
         const dados = await response.data
-        const estados = await buscarTodosEstados()
 
-        const estado = (estados.data as []).find((estado: any) => estado.sigla == dados.state)
-
-        resultado.data = {
-            cep: dados.cep,
-            estado: estado,
-            cidade: dados.city,
-            bairro: dados.neighborhood,
-            logradouro: dados.street
+        if (dados.erro == undefined) {
+            resultado.data = {
+                cep: dados.cep,
+                estado: { sigla: dados.uf, nome: dados.estado },
+                cidade: dados.localidade,
+                bairro: dados.bairro,
+                logradouro: dados.logradouro
+            }
+        } else {
+            throw new Error('Address not found')
         }
     } catch (erro) {
         console.log(erro)
