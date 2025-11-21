@@ -9,6 +9,7 @@ import rotasCores from "./src/produtos/cores/cores_rotas"
 import rotasMedidas from "./src/produtos/medidas/medidas_rotas"
 import rotasfornecedor_miguel from "./src/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
 import rotasEnderecoTiago from "./src/enderecos/tiago/endereco_rotas"
+import rotasPessoasTiago from "./src/pessoas/tiago/pessoas_rotas"
 
 
 /** Constantes do Servidor*/
@@ -41,6 +42,9 @@ app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 
 /**Enderecos */
 app.use("/enderecos/tiago", rotasEnderecoTiago)
+
+/**Pessoas */
+app.use("/pessoas/tiago", rotasPessoasTiago)
 
 /** Inicia o Servidor */
 app.listen(port, () => {

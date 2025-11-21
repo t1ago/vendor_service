@@ -32,8 +32,8 @@ CREATE TABLE tb_pessoa_tiago (
     tipo_pessoa CHAR(1) CHECK (tipo_pessoa IN ('J', 'F')) NOT NULL,
     sexo CHAR(1) CHECK (sexo IN ('M', 'F')),
     data_inicio TIMESTAMP,
-    documento_estadual VARCHAR(14) NOT NULL,
-    documento_federeal VARCHAR(14) NOT NULL,
+    documento_estadual VARCHAR(32) NOT NULL,
+    documento_federeal VARCHAR(32) NOT NULL,
     id_vinculo integer,
     ativo CHAR(1) CHECK (ativo IN ('A', 'I')),
     PRIMARY KEY (id),
@@ -52,6 +52,7 @@ CREATE TABLE tb_endereco_pessoa_tiago (
     tipo_endereco CHAR(1) CHECK (
         tipo_endereco IN ('M', 'C', 'E')
     ),
+    buscado_por_cep CHAR(1) CHECK (buscado_por_cep IN ('S', 'N')),
     ativo CHAR(1) CHECK (ativo IN ('A', 'I')),
     PRIMARY KEY (id),
     CONSTRAINT fk_pessoa_tiago FOREIGN key (id_pessoa) REFERENCES tb_pessoa_tiago (id)
