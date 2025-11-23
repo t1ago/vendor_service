@@ -153,6 +153,125 @@ export const buscarVinculosServico = async (parametros?: any) => {
     return resultado
 }
 
+export const buscarServico = async (parametros: any) => {
+    const cliente = db_cliente()
+    limparResultado()
+
+    try {
+        cliente.connect()
+        let parametros_busca: any
+        let resultado_banco: QueryResult<any>
+
+        if (parametros.id != null) {
+            parametros_busca = buscarPorId(parametros)
+            resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores)
+            const executedPessoa = (resultado_banco.rowCount || 0) > 0
+
+            let data = null
+            if (executedPessoa) {
+                data = resultado_banco.rows[0]
+            }
+
+            parametros_busca = buscarEnderecosPorIdPessoa(parametros)
+            resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores)
+            const executedEndereco = (resultado_banco.rowCount || 0) > 0
+
+            data['enderecos'] = executedEndereco ? resultado_banco.rows : []
+
+            resultado.data = data
+
+        } else if (parametros.termo != null) {
+            parametros_busca = buscarPorTermo(parametros)
+            resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores)
+            const executed = (resultado_banco.rowCount || 0) > 0
+            resultado.data = executed ? resultado_banco.rows : []
+        } else {
+            parametros_busca = buscarTodos(parametros)
+            resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores)
+            const executed = (resultado_banco.rowCount || 0) > 0
+            resultado.data = executed ? resultado_banco.rows : []
+        }
+
+        resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores)
+
+        resultado.executado = true
+        resultado.mensagem = ""
+    } catch (erro) {
+        resultado.executado = false
+        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
+    } finally {
+        await cliente.end();
+    }
+
+    return resultado
+}
+
+export const inativarServico = async (parametros: any) => {
+    const cliente = db_cliente()
+    limparResultado()
+
+    try {
+        cliente.connect()
+
+        const sql = `
+            UPDATE tb_pessoa_tiago 
+                SET ativo=$1
+                WHERE id=$2
+        `
+        const valores = ['I', parametros.id]
+
+        const resultado_banco = await cliente.query(sql, valores)
+        const executed = (resultado_banco.rowCount || 0) > 0
+
+        resultado.executado = executed
+        resultado.mensagem = ""
+        resultado.data = executed ? parametros : {}
+
+    } catch (erro) {
+        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
+    } finally {
+        await cliente.end();
+    }
+
+    return resultado
+}
+
+export const buscarEnderecoServico = async (parametros: any) => {
+    const cliente = db_cliente()
+    limparResultado()
+
+    try {
+        cliente.connect()
+        const sql = `
+            SELECT 
+                tb_end.cep,
+                tb_end.logradouro,
+                tb_end.numero,
+                tb_end.bairro,
+                tb_end.cidade,
+                tb_end.estado
+            FROM tb_endereco_pessoa_tiago tb_end
+            WHERE tb_end.id=$1
+        `
+        const valores = [parametros.id]
+
+        const resultado_banco = await cliente.query(sql, valores)
+
+        const executed = (resultado_banco.rowCount || 0) > 0
+
+        resultado.executado = true
+        resultado.mensagem = ""
+        resultado.data = executed ? resultado_banco.rows[0] : {}
+    } catch (erro) {
+        resultado.executado = false
+        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
+    } finally {
+        await cliente.end();
+    }
+
+    return resultado
+}
+
 // export const alterarServico = async (parametros: any) => {
 //     const cliente = db_cliente()
 //     limparResultado()
@@ -232,154 +351,108 @@ export const buscarVinculosServico = async (parametros?: any) => {
 //     return resultado
 // }
 
-// export const buscarServico = async (parametros?: any) => {
-//     const cliente = db_cliente()
-//     limparResultado()
 
-//     try {
-//         cliente.connect()
-//         let parametros_busca: any
-//         let resultado_banco: QueryResult<any>
 
-//         if (parametros.id != null) {
-//             parametros_busca = buscarPorId(parametros)
-//         } else if (parametros.nome != null) {
-//             parametros_busca = buscarPorNome({ search: parametros.nome.replace(',', '.') })
-//         } else {
-//             parametros_busca = buscarTodos()
-//         }
+const buscarPorId = (parametros: any) => {
+    return {
+        sql: `
+             SELECT 
+                tb_pessoa.id,
+                tb_pessoa.nome,
+                tb_pessoa.apelido,
+                tb_pessoa.tipo_pessoa,
+                tb_pessoa.sexo,
+                tb_pessoa.data_inicio,
+                tb_pessoa.documento_estadual,
+                tb_pessoa.documento_federeal,
+                tb_pessoa.id_vinculo,
+                tb_pessoa.ativo
+            FROM tb_pessoa_tiago tb_pessoa
+            WHERE tb_pessoa.id=$1
+            ORDER BY tb_pessoa.nome
+        `,
+        valores: [parametros.id]
+    }
+}
 
-//         if (parametros_busca.valores != null) {
-//             resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores)
-//         } else {
-//             resultado_banco = await cliente.query(parametros_busca.sql)
-//         }
+const buscarTodos = (parametros: any) => {
+    return {
+        sql: `
+            SELECT 
+                tb_pessoa.id,
+                tb_pessoa.nome,
+                tb_pessoa.apelido,
+                tb_pessoa.tipo_pessoa,
+                tb_pessoa.sexo,
+                tb_pessoa.data_inicio,
+                tb_pessoa.documento_estadual,
+                tb_pessoa.documento_federeal,
+                tb_pessoa.id_vinculo,
+                tb_pessoa.ativo,
+                tb_vinculo.nome as nome_vinculo,
+                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'M') as id_moradia,
+                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'C') as id_cobranca,
+                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'E') as id_entrega
+            FROM tb_pessoa_tiago tb_pessoa
+            LEFT JOIN tb_pessoa_tiago tb_vinculo on tb_vinculo.id = tb_pessoa.id_vinculo
+            WHERE tb_pessoa.tipo_pessoa=$1
+            ORDER BY tb_pessoa.nome
+        `,
+        valores: [parametros.tipo_pessoa]
+    }
+}
 
-//         const executed = (resultado_banco.rowCount || 0) > 0
+const buscarPorTermo = (parametros: any) => {
+    return {
+        sql: `
+            SELECT 
+                tb_pessoa.id,
+                tb_pessoa.nome,
+                tb_pessoa.apelido,
+                tb_pessoa.tipo_pessoa,
+                tb_pessoa.sexo,
+                tb_pessoa.data_inicio,
+                tb_pessoa.documento_estadual,
+                tb_pessoa.documento_federeal,
+                tb_pessoa.id_vinculo,
+                tb_pessoa.ativo,
+                tb_vinculo.nome as nome_vinculo,
+                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'M') as id_moradia,
+                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'C') as id_cobranca,
+                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'E') as id_entrega
+            FROM tb_pessoa_tiago tb_pessoa
+            LEFT JOIN tb_pessoa_tiago tb_vinculo on tb_vinculo.id = tb_pessoa.id_vinculo
+            WHERE tb_pessoa.tipo_pessoa=$1
+            AND (lower(tb_pessoa.nome) LIKE lower(concat('%', $2::text, '%'))
+            OR lower(tb_pessoa.apelido) LIKE lower(concat('%', $2::text, '%'))
+            OR lower(tb_pessoa.documento_estadual) LIKE lower(concat('%', $2::text, '%'))
+            OR lower(tb_pessoa.documento_federeal) LIKE lower(concat('%', $2::text, '%'))
+            OR ((SELECT lower(tb_end.cep || tb_end.logradouro || tb_end.numero || tb_end.bairro || tb_end.cidade || tb_end.estado) FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'M') LIKE lower(concat('%', $2::text, '%'))
+            OR (SELECT lower(tb_end.cep || tb_end.logradouro || tb_end.numero || tb_end.bairro || tb_end.cidade || tb_end.estado) FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'C') LIKE lower(concat('%', $2::text, '%'))
+            OR (SELECT lower(tb_end.cep || tb_end.logradouro || tb_end.numero || tb_end.bairro || tb_end.cidade || tb_end.estado) FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'E') LIKE lower(concat('%', $2::text, '%'))))
+            ORDER BY tb_pessoa.nome
+        `,
+        valores: [parametros.tipo_pessoa, parametros.termo]
+    }
+}
 
-//         resultado.executado = true
-//         resultado.mensagem = ""
-//         resultado.data = executed ? resultado_banco.rows : []
-//     } catch (erro) {
-//         resultado.executado = false
-//         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
-//     } finally {
-//         await cliente.end();
-//     }
-
-//     return resultado
-// }
-
-// const buscarPorId = (parametros: any) => {
-//     return {
-//         sql: `
-//             select 
-//                 tb_prod.id,
-//                 tb_prod.descricao,
-//                 tb_prod.id_categoria,
-//                 tb_cat.nome as "nome_categoria",
-//                 tb_prod.id_moeda,
-//                 tb_mo.nome as "nome_moeda",
-//                 tb_mo.moeda as "simbolo_moeda",
-//                 tb_prod.id_cor,
-//                 tb_cor.hexadecimal as "hexadecimal",
-//                 tb_prod.id_grupo,
-//                 tb_group.nome as "nome_grupo",
-//                 tb_prod.id_marca,
-//                 tb_mar.nome as "nome_marca",
-//                 tb_prod.id_undade_medida,
-//                 tb_med.nome as "nome_unidade_medida",
-//                 tb_prod.nome,
-//                 tb_prod.preco_compra,
-//                 tb_prod.preco_venda
-//             from tb_produto_tiago tb_prod
-//             inner join tb_categoria tb_cat on tb_prod.id_categoria = tb_cat.id
-//             inner  join tb_moeda tb_mo on tb_prod.id_moeda = tb_mo.id
-//             inner  join tb_cores tb_cor on tb_prod.id_cor = tb_cor.id
-//             inner  join tb_grupo tb_group on tb_prod.id_grupo = tb_group.id
-//             inner  join tb_marca tb_mar on tb_prod.id_marca = tb_mar.id
-//             inner  join tb_medida tb_med on tb_prod.id_undade_medida = tb_med.id
-//             WHERE tb_prod.id=$1;
-//         `,
-//         valores: [parametros.id]
-//     }
-// }
-
-// const buscarTodos = () => {
-//     return {
-//         sql: `
-//             select 
-//                 tb_prod.id,
-//                 tb_prod.descricao,
-//                 tb_prod.id_categoria,
-//                 tb_cat.nome as "nome_categoria",
-//                 tb_prod.id_moeda,
-//                 tb_mo.nome as "nome_moeda",
-//                 tb_mo.moeda as "simbolo_moeda",
-//                 tb_prod.id_cor,
-//                 tb_cor.hexadecimal as "hexadecimal",
-//                 tb_prod.id_grupo,
-//                 tb_group.nome as "nome_grupo",
-//                 tb_prod.id_marca,
-//                 tb_mar.nome as "nome_marca",
-//                 tb_prod.id_undade_medida,
-//                 tb_med.nome as "nome_unidade_medida",
-//                 tb_prod.nome,
-//                 tb_prod.preco_compra,
-//                 tb_prod.preco_venda
-//             from tb_produto_tiago tb_prod
-//             inner join tb_categoria tb_cat on tb_prod.id_categoria = tb_cat.id
-//             inner  join tb_moeda tb_mo on tb_prod.id_moeda = tb_mo.id
-//             inner  join tb_cores tb_cor on tb_prod.id_cor = tb_cor.id
-//             inner  join tb_grupo tb_group on tb_prod.id_grupo = tb_group.id
-//             inner  join tb_marca tb_mar on tb_prod.id_marca = tb_mar.id
-//             inner  join tb_medida tb_med on tb_prod.id_undade_medida = tb_med.id
-//             ORDER BY tb_prod.nome
-//         `,
-//         valores: null
-//     }
-// }
-
-// const buscarPorNome = (parametros: any) => {
-//     return {
-//         sql: `
-//             select 
-//                 tb_prod.id,
-//                 tb_prod.descricao,
-//                 tb_prod.id_categoria,
-//                 tb_cat.nome as "nome_categoria",
-//                 tb_prod.id_moeda,
-//                 tb_mo.nome as "nome_moeda",
-//                 tb_mo.moeda as "simbolo_moeda",
-//                 tb_prod.id_cor,
-//                 tb_cor.hexadecimal as "hexadecimal",
-//                 tb_prod.id_grupo,
-//                 tb_group.nome as "nome_grupo",
-//                 tb_prod.id_marca,
-//                 tb_mar.nome as "nome_marca",
-//                 tb_prod.id_undade_medida,
-//                 tb_med.nome as "nome_unidade_medida",
-//                 tb_prod.nome,
-//                 tb_prod.preco_compra,
-//                 tb_prod.preco_venda
-//             from tb_produto_tiago tb_prod
-//             inner join tb_categoria tb_cat on tb_prod.id_categoria = tb_cat.id
-//             inner  join tb_moeda tb_mo on tb_prod.id_moeda = tb_mo.id
-//             inner  join tb_cores tb_cor on tb_prod.id_cor = tb_cor.id
-//             inner  join tb_grupo tb_group on tb_prod.id_grupo = tb_group.id
-//             inner  join tb_marca tb_mar on tb_prod.id_marca = tb_mar.id
-//             inner  join tb_medida tb_med on tb_prod.id_undade_medida = tb_med.id
-//             WHERE
-//                 lower(tb_prod.nome) like lower(concat('%', $1::text, '%'))
-//                 or lower(tb_prod.descricao) like lower(concat('%', $1::text, '%'))
-//                 or lower(tb_cat.nome) like lower(concat('%', $1::text, '%'))
-//                 or lower(tb_group.nome) like lower(concat('%', $1::text, '%'))
-//                 or lower(tb_mar.nome) like lower(concat('%', $1::text, '%'))
-//                 or lower(tb_mo.nome) like lower(concat('%', $1::text, '%'))
-//                 or lower(tb_med.nome) like lower(concat('%', $1::text, '%'))
-//                 or lower(tb_prod.preco_venda::text) like lower(concat('%', $1::text, '%'))
-//             ORDER BY tb_prod.nome;
-//         `,
-//         valores: [parametros.search]
-//     }
-// }
+const buscarEnderecosPorIdPessoa = (parametros: any) => {
+    return {
+        sql: `
+             SELECT 
+                tb_end.id,
+                tb_end.cep,
+                tb_end.logradouro,
+                tb_end.numero,
+                tb_end.bairro,
+                tb_end.cidade,
+                tb_end.estado,
+                tb_end.tipo_endereco,
+                tb_end.buscado_por_cep,
+                tb_end.ativo
+            FROM tb_endereco_pessoa_tiago tb_end
+            WHERE tb_end.id_pessoa=$1
+        `,
+        valores: [parametros.id]
+    }
+}

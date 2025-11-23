@@ -1,15 +1,16 @@
 import express from "express"
-import { buscarVinculos, criar } from "./pessoas_controlador"
+import { buscarVinculos, criar, buscar, inativar, buscarEndereco } from "./pessoas_controlador"
 
 const rotasPessoasTiago = express.Router()
 
 
 rotasPessoasTiago.post('/', criar)
 rotasPessoasTiago.get('/vinculos', buscarVinculos)
-// rotasPessoasTiago.get('/', buscar)
-// rotasPessoasTiago.get('/:id', buscar)
+rotasPessoasTiago.get('/', buscar)
+rotasPessoasTiago.get('/:id', buscar)
+rotasPessoasTiago.put('/inativar/:id', inativar)
+rotasPessoasTiago.get('/enderecos/:id', buscarEndereco)
 
 // rotasPessoasTiago.put('/:id', alterar)
-// rotasPessoasTiago.delete('/:id', remover)
 
 export = rotasPessoasTiago

@@ -2,9 +2,11 @@ import { Request, Response } from "express"
 import {
     buscarVinculosServico,
     criarServico,
+    buscarServico,
+    inativarServico,
+    buscarEnderecoServico
     // alterarServico,
-    // removerServico,
-    // buscarServico
+
 } from "./pessoas_servico"
 import { param } from "./pessoas_rotas"
 import { Resultado } from "../../../commons/resultado_api"
@@ -74,29 +76,53 @@ export const buscarVinculos = async (req: Request, res: Response) => {
 //     }
 // }
 
-// export const buscar = async (req: Request, res: Response) => {
+export const buscar = async (req: Request, res: Response) => {
 
-//     let parametros: any;
+    let parametros: any = {}
 
-//     if (req.params != undefined && req.params.id) {
-//         parametros = {
-//             id: req.params.id
-//         }
-//     } else if (req.query != undefined && req.query.name) {
-//         parametros = {
-//             'nome': req.query.name
-//         }
-//     } else {
-//         parametros = {}
-//     }
+    if (req.params != undefined && req.params.id) {
+        parametros['id'] = req.params.id
+    } else if (req.query != undefined && req.query.q) {
+        parametros['termo'] = req.query.q
+        parametros['tipo_pessoa'] = req.query.tipo_pessoa
+    } else {
+        parametros['tipo_pessoa'] = req.query.tipo_pessoa
+    }
 
-//     const resultado = await buscarServico(parametros)
-//     if (resultado.mensagem == "") {
-//         res.json(resultado)
-//     } else {
-//         res.status(500).json(resultado)
-//     }
-// }
+    if (req.params.id == undefined && parametros.tipo_pessoa == undefined) {
+        res.status(500).json({ mensagem: 'Tipo de pessoa não informada', data: {}, executado: false } as Resultado)
+    }
+
+    const resultado = await buscarServico(parametros)
+    if (resultado.mensagem == "") {
+        res.json(resultado)
+    } else {
+        res.status(500).json(resultado)
+    }
+}
+
+export const inativar = async (req: Request, res: Response) => {
+    const parametros = { id: req.params.id }
+
+    const resultado = await inativarServico(parametros)
+    if (resultado.mensagem == "") {
+        res.json(resultado)
+    } else {
+        res.status(500).json(resultado)
+    }
+}
+
+export const buscarEndereco = async (req: Request, res: Response) => {
+
+    const parametros = { id: req.params.id }
+
+    const resultado = await buscarEnderecoServico(parametros)
+    if (resultado.mensagem == "") {
+        res.json(resultado)
+    } else {
+        res.status(500).json(resultado)
+    }
+}
 
 const mapear_body = (req: Request) => {
     const dataEndereco = (req.body.enderecos || []).map((item: any) => {
