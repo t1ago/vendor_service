@@ -9,6 +9,8 @@ import { rotas_moedas } from "./src/produtos/moedas/moedas_rotas"
 import rotasCores from "./src/produtos/cores/cores_rotas"
 import rotasMedidas from "./src/produtos/medidas/medidas_rotas"
 import rotasfornecedor_miguel from "./src/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
+import rotasEnderecoTiago from "./src/enderecos/tiago/endereco_rotas"
+import rotasPessoasTiago from "./src/pessoas/tiago/pessoas_rotas"
 import rotasFornecedoresDam from "./src/produtos/fornecedores/dam/fornecedores_rotas";
 
 /** Constantes do Servidor*/
@@ -29,16 +31,27 @@ app.get("/", (req: Request, res: Response) => {
   res.json({ 'status': 'OK' })
 });
 
-app.use("/categorias", rotasCategorias)
-app.use("/cores", rotasCores)
-app.use("/medidas", rotasMedidas)
-app.use("/produto/victor", rotaProdutoVictor)
-app.use("/produtos/tiago", rotasProdutoTiago)
+
+/**Miguel */
+app.use("/moedas", rotas_moedas)
+app.use("/fornecedor/miguel", rotasfornecedor_miguel)
+
+/**Victor */
 app.use("/marca", rota)
 app.use("/grupos", gruporota)
-app.use("/fornecedor/miguel", rotasfornecedor_miguel)
-app.use("/moedas", rotas_moedas)
+app.use("/produto/victor", rotaProdutoVictor)
+
+/**Danilo */
+app.use("/cores", rotasCores)
+app.use("/medidas", rotasMedidas)
 app.use("/fornecedoresDam", rotasFornecedoresDam);
+
+/**Tiago */
+app.use("/categorias", rotasCategorias)
+app.use("/produtos/tiago", rotasProdutoTiago)
+app.use("/enderecos/tiago", rotasEnderecoTiago)
+app.use("/pessoas/tiago", rotasPessoasTiago)
+
 
 /** Inicia o Servidor */
 app.listen(port, () => {
