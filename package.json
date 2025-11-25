@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/t1ago/vendor_service.git"
+    "url": "git+https://github.com/t1ago/vendor_service.git"
   },
   "author": "Tiago",
   "license": "ISC",
@@ -24,9 +24,11 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
-    "@types/pg": "^8.11.14",
+    "@types/pg": "^8.15.6",
     "cors": "^2.8.5",
-    "pg": "^8.15.5",
+    "pg": "^8.16.3",
     "typescript": "^5.8.3"
-  }
+  },
+  "keywords": [],
+  "type": "commonjs"
 }

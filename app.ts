@@ -10,6 +10,7 @@ import rotasCores from "./src/produtos/cores/cores_rotas"
 import rotasMedidas from "./src/produtos/medidas/medidas_rotas"
 import rotasfornecedor_miguel from "./src/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
 import rotasFornecedoresDam from "./src/produtos/fornecedores/dam/fornecedores_rotas";
+import rotasClientesDam from './src/produtos/clientes/dam/clientes.rotas';
 
 /** Constantes do Servidor*/
 const app = express()
@@ -39,6 +40,7 @@ app.use("/grupos", gruporota)
 app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 app.use("/moedas", rotas_moedas)
 app.use("/fornecedoresDam", rotasFornecedoresDam);
+app.use("/clientesDam", rotasClientesDam);
 
 /** Inicia o Servidor */
 app.listen(port, () => {

@@ -8,3 +8,12 @@ export const db_cliente = () => {
 
     return cliente
 }
+
+import { Pool } from "pg";
+
+    const dbpool = new Pool({
+        connectionString: process.env.CONNECTION_STRING,
+        ssl: true
+});
+
+export const db = dbpool
