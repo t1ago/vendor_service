@@ -4,11 +4,10 @@ import {
     criarServico,
     buscarServico,
     inativarServico,
-    buscarEnderecoServico
-    // alterarServico,
+    buscarEnderecoServico,
+    alterarServico,
 
 } from "./pessoas_servico"
-import { param } from "./pessoas_rotas"
 import { Resultado } from "../../../commons/resultado_api"
 
 export const criar = async (req: Request, res: Response) => {
@@ -18,16 +17,14 @@ export const criar = async (req: Request, res: Response) => {
 
     if (validacao_mensagem != '') {
         res.status(500).json({ mensagem: validacao_mensagem, data: {}, executado: false } as Resultado)
-    }
-
-    const resultado = await criarServico(parametros)
-    if (resultado.mensagem == "") {
-        res.json(resultado)
     } else {
-        res.status(500).json(resultado)
+        const resultado = await criarServico(parametros)
+        if (resultado.mensagem == "") {
+            res.json(resultado)
+        } else {
+            res.status(500).json(resultado)
+        }
     }
-
-    res.json({})
 }
 
 export const buscarVinculos = async (req: Request, res: Response) => {
@@ -40,41 +37,21 @@ export const buscarVinculos = async (req: Request, res: Response) => {
     }
 }
 
-// export const alterar = async (req: Request, res: Response) => {
-//     const parametros = {
-//         'id': req.params.id,
-//         'nome': req.body.nome,
-//         'descricao': req.body.descricao,
-//         'idCategoria': req.body.idCategoria,
-//         'idMoeda': req.body.idMoeda,
-//         'idGrupo': req.body.idGrupo,
-//         'idUndadeMedida': req.body.idUndadeMedida,
-//         'idCor': req.body.idCor,
-//         'idMarca': req.body.idMarca,
-//         'precoCompra': req.body.precoCompra,
-//         'precoVenda': req.body.precoVenda
-//     }
+export const alterar = async (req: Request, res: Response) => {
+    const parametros = mapear_body(req)
+    let validacao_mensagem = validar_regras_pessoa(parametros)
 
-//     const resultado = await alterarServico(parametros)
-//     if (resultado.mensagem == "") {
-//         res.json(resultado)
-//     } else {
-//         res.status(500).json(resultado)
-//     }
-// }
-
-// export const remover = async (req: Request, res: Response) => {
-//     const parametros = {
-//         'id': req.params.id
-//     }
-
-//     const resultado = await removerServico(parametros)
-//     if (resultado.mensagem == "") {
-//         res.json(resultado)
-//     } else {
-//         res.status(500).json(resultado)
-//     }
-// }
+    if (validacao_mensagem != '') {
+        res.status(500).json({ mensagem: validacao_mensagem, data: {}, executado: false } as Resultado)
+    } else {
+        const resultado = await alterarServico(parametros)
+        if (resultado.mensagem == "") {
+            res.json(resultado)
+        } else {
+            res.status(500).json(resultado)
+        }
+    }
+}
 
 export const buscar = async (req: Request, res: Response) => {
 
@@ -141,7 +118,7 @@ const mapear_body = (req: Request) => {
     })
 
     const data = {
-        id: req.body.id_pessoa,
+        id: req.body.id_pessoa || req.params.id,
         nome: req.body.nome,
         apelido: req.body.apelido,
         tipoPessoa: req.body.tipo_pessoa,
@@ -163,7 +140,7 @@ const validar_regras_enderecos = (enderecos: any) => {
     }
 
     let validMoradia = enderecos.filter((item: any) => {
-        return item.tipoEndereco == 'M' && item.ativo == true
+        return item.tipoEndereco == 'M' && item.ativo == 'A'
     })
 
     if (validMoradia.length > 1) {
@@ -243,7 +220,7 @@ const validar_regras_pessoa = (pessoa: any) => {
     }
 
     const validacao_mensagem = validar_regras_enderecos(pessoa.enderecos)
-    console.log(validacao_mensagem)
+
     if (validacao_mensagem != '') {
         return validacao_mensagem
     }

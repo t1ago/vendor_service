@@ -62,7 +62,7 @@ export const criarServico = async (parametros: any) => {
             parametros.documentoEstadual,
             parametros.documentoFedereal,
             parametros.idVinculo,
-            parametros.ativo ? 'A' : 'I']
+            parametros.ativo]
 
         await cliente.query('BEGIN');
 
@@ -99,7 +99,7 @@ export const criarServico = async (parametros: any) => {
                 endereco.estado,
                 endereco.tipoEndereco,
                 endereco.buscadoPorCep ? 'S' : 'N',
-                endereco.ativo ? 'A' : 'I']
+                endereco.ativo]
 
             await cliente.query(sql, valores)
         }
@@ -192,12 +192,11 @@ export const buscarServico = async (parametros: any) => {
             resultado.data = executed ? resultado_banco.rows : []
         }
 
-        resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores)
-
         resultado.executado = true
         resultado.mensagem = ""
     } catch (erro) {
         resultado.executado = false
+        resultado.data = {}
         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
     } finally {
         await cliente.end();
@@ -272,86 +271,142 @@ export const buscarEnderecoServico = async (parametros: any) => {
     return resultado
 }
 
-// export const alterarServico = async (parametros: any) => {
-//     const cliente = db_cliente()
-//     limparResultado()
+export const alterarServico = async (parametros: any) => {
+    const pool = db_pool()
+    limparResultado()
 
-//     try {
-//         cliente.connect()
+    const cliente = await pool.connect()
+    let sql = ''
+    let valores = []
+    let resultado_banco = null
 
-//         const sql = `
-//             UPDATE tb_produto_tiago 
-//                 SET nome=$1, 
-//                     descricao=$2,
-//                     id_categoria=$3, 
-//                     id_moeda=$4, 
-//                     id_grupo=$5, 
-//                     id_undade_medida=$6, 
-//                     id_cor=$7, 
-//                     id_marca=$8, 
-//                     preco_compra=$9, 
-//                     preco_venda=$10
-//                 WHERE id=$11
-//         `
-//         const valores = [
-//             parametros.nome,
-//             parametros.descricao,
-//             parametros.idCategoria,
-//             parametros.idMoeda,
-//             parametros.idGrupo,
-//             parametros.idUndadeMedida,
-//             parametros.idCor,
-//             parametros.idMarca,
-//             parametros.precoCompra,
-//             parametros.precoVenda,
-//             parametros.id
-//         ]
-
-//         const resultado_banco = await cliente.query(sql, valores)
-//         const executed = (resultado_banco.rowCount || 0) > 0
-
-//         resultado.executado = executed
-//         resultado.mensagem = ""
-//         resultado.data = executed ? parametros : {}
-
-//     } catch (erro) {
-//         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
-//     } finally {
-//         await cliente.end();
-//     }
-
-//     return resultado
-// }
-
-// export const removerServico = async (parametros: any) => {
-//     const cliente = db_cliente()
-//     limparResultado()
-
-//     try {
-//         cliente.connect()
-
-//         const sql = "DELETE FROM tb_produto_tiago WHERE id=$1;"
-//         const valores = [parametros.id]
-
-//         const resultado_banco = await cliente.query(sql, valores)
-//         const executed = (resultado_banco.rowCount || 0) > 0
-
-//         resultado.executado = executed
-//         resultado.mensagem = ""
-//         resultado.data = executed ? {
-//             'id': parametros.id
-//         } : {}
-
-//     } catch (erro) {
-//         resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
-//     } finally {
-//         await cliente.end();
-//     }
-
-//     return resultado
-// }
+    try {
+        sql = `
+                UPDATE tb_pessoa_tiago 
+                    SET nome=$1, 
+                        apelido=$2, 
+                        tipo_pessoa=$3, 
+                        sexo=$4, 
+                        data_inicio=$5, 
+                        documento_estadual=$6, 
+                        documento_federeal=$7, 
+                        id_vinculo=$8, 
+                        ativo=$9
+                WHERE id=$10
+            `
 
 
+        let dataInicio = undefined
+
+        if (parametros.dataInicio != undefined) {
+            let dateInput = parametros.dataInicio
+            let dateArray = dateInput.split("/");
+
+            const day = dateArray[0].padStart(2, '0');
+            const month = dateArray[1].padStart(2, '0');
+            const year = dateArray[2];
+
+            dataInicio = `${year}-${month}-${day} 00:00:00`
+        }
+
+        valores = [
+            parametros.nome,
+            parametros.apelido,
+            parametros.tipoPessoa,
+            parametros.sexo,
+            dataInicio,
+            parametros.documentoEstadual,
+            parametros.documentoFedereal,
+            parametros.idVinculo,
+            parametros.ativo ? 'A' : 'I',
+            parametros.id
+        ]
+
+        await cliente.query('BEGIN');
+        await cliente.query(sql, valores)
+
+        for (let index = 0; index < parametros.enderecos.length; index++) {
+            const endereco = parametros.enderecos[index];
+
+            if (endereco.id == undefined) {
+                sql = `
+                    INSERT INTO tb_endereco_pessoa_tiago (
+                        id_pessoa, 
+                        cep, 
+                        logradouro, 
+                        numero, 
+                        bairro, 
+                        cidade, 
+                        estado, 
+                        tipo_endereco,
+                        buscado_por_cep, 
+                        ativo
+                    ) values (
+                        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+                    );
+                `
+
+                valores = [
+                    parametros.id,
+                    endereco.cep,
+                    endereco.logradouro,
+                    endereco.numero,
+                    endereco.bairro,
+                    endereco.cidade,
+                    endereco.estado,
+                    endereco.tipoEndereco,
+                    endereco.buscadoPorCep ? 'S' : 'N',
+                    endereco.ativo]
+            } else {
+                sql = `
+                    UPDATE tb_endereco_pessoa_tiago
+                        SET cep=$1, 
+                            logradouro=$2, 
+                            numero=$3, 
+                            bairro=$4, 
+                            cidade=$5, 
+                            estado=$6, 
+                            tipo_endereco=$7,
+                            buscado_por_cep=$8, 
+                            ativo=$9
+                    WHERE id=$10 AND id_pessoa=$11
+                `
+
+                valores = [
+                    endereco.cep,
+                    endereco.logradouro,
+                    endereco.numero,
+                    endereco.bairro,
+                    endereco.cidade,
+                    endereco.estado,
+                    endereco.tipoEndereco,
+                    endereco.buscadoPorCep ? 'S' : 'N',
+                    endereco.ativo,
+                    endereco.id,
+                    parametros.id]
+            }
+
+            await cliente.query(sql, valores)
+        }
+
+        await cliente.query('COMMIT');
+
+        resultado.executado = true
+        resultado.mensagem = ""
+        resultado.data = {
+            'id': parametros.id
+        }
+
+    } catch (erro) {
+        await cliente.query('ROLLBACK');
+        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`
+
+    } finally {
+        cliente.release();
+    }
+
+    return resultado
+}
 
 const buscarPorId = (parametros: any) => {
     return {

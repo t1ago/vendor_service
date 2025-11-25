@@ -61,7 +61,6 @@ export const buscarLocalidadePorCep = async (cep: string) => {
             throw new Error('Address not found')
         }
     } catch (erro) {
-        console.log(erro)
         limparResultado()
     }
 
