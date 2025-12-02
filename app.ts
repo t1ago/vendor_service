@@ -8,7 +8,10 @@ import { rotas_moedas } from "./src/produtos/moedas/moedas_rotas"
 import rotasCores from "./src/produtos/cores/cores_rotas"
 import rotasMedidas from "./src/produtos/medidas/medidas_rotas"
 import rotasfornecedor_miguel from "./src/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
-import rotas_pessoas_miguel from "./src/produtos/pessoas/miguel/pessoa_miguel_rotas"
+import rotasPessoasMiguel from "./src/produtos/pessoas/miguel/pessoa_miguel_rotas"
+import rotasEnderecos from "./src/produtos/pessoas/miguel/endereco_miguel_rotas"
+
+
 
 
 
@@ -38,7 +41,8 @@ app.use("/marca", rota)
 app.use("/grupos", gruporota)
 app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 app.use("/moedas", rotas_moedas)
-app.use("/pessoa/miguel", rotas_pessoas_miguel)
+app.use("/pessoa/miguel", rotasPessoasMiguel);
+app.use("/enderecos", rotasEnderecos);
 
 
 /** Inicia o Servidor */
