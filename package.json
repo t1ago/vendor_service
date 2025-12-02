@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/t1ago/vendor_service#readme",
   "dependencies": {
-    "axios": "^1.12.2",
+    "axios": "^1.13.2",
     "express": "^5.1.0"
   },
   "devDependencies": {

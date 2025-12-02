@@ -12,6 +12,7 @@ import rotasfornecedor_miguel from "./src/produtos/fornecedores/miguel/fornecedo
 import rotasEnderecoTiago from "./src/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/pessoas/tiago/pessoas_rotas"
 import rotasFornecedoresDam from "./src/produtos/fornecedores/dam/fornecedores_rotas";
+import { rotaPessoaVictor } from "./src/pessoas/victor/pessoas_rotas"
 
 /** Constantes do Servidor*/
 const app = express()
@@ -51,6 +52,7 @@ app.use("/categorias", rotasCategorias)
 app.use("/produtos/tiago", rotasProdutoTiago)
 app.use("/enderecos/tiago", rotasEnderecoTiago)
 app.use("/pessoas/tiago", rotasPessoasTiago)
+app.use("/pessoas/victor", rotaPessoaVictor)
 
 
 /** Inicia o Servidor */
