@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { service_delete, service_get, service_insert, service_update } from "./pessoa_miguel_servico";
+import { service_get, service_inativar, service_insert, service_update } from "./pessoa_miguel_servico";
 
 
 export const insert = async (req: Request, res: Response) => {
@@ -48,32 +48,30 @@ export const update = async (req: Request, res: Response) => {
     }
 }
 
-export const control_delete = async (req: Request, res: Response) => {
+export const control_inativar = async (req: Request, res: Response) => {
     const parametros = {
-        id: req.params.id
+        id: req.params.id 
     }
-    const resultado_parametros = await service_delete(parametros)
-    if (resultado_parametros.executado) {
-        res.status(200).json(resultado_parametros)
+    
+    const resultado_inativacao = await service_inativar(parametros) 
+    if (resultado_inativacao.executado) {
+        res.status(200).json(resultado_inativacao)
     } else {
-        res.status(500).json(resultado_parametros)
+        res.status(500).json(resultado_inativacao)
     }
 }
-
 export const control_get = async (req: Request, res: Response) => {
+
     const parametros = {
-        id: req.params.id || null,
-        nome: req.query.nome || null,
-        apelido: req.query.apelido || null,
-        tipo_pessoa: req.query.tipo_pessoa || null,
-        sexo: req.query.sexo || null,
-        idade: req.query.idade || null,
-        documento_estadual: req.query.documento_estadual || null,
-        documento_federal: req.query.documento_federal || null,
-        ativo: req.query.ativo || null,
-        id_vinculo: req.query.id_vinculo || null
-    };
+        id: req.params.id,
+        tipo_pessoa: (req.query.tipo as string) || "",  
+    }
 
     const resultado = await service_get(parametros);
-    res.status(resultado.executado ? 200 : 500).json(resultado);
-};
+
+    if (resultado.executado) {
+        res.status(200).json(resultado)
+    } else {
+        res.status(500).json(resultado)
+    }
+}
