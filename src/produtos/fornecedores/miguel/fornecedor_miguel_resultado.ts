@@ -1,12 +1,12 @@
 
-import { db_cliente } from "./../../../../commons/banco_dados";
-import { Resultado } from "./../../../../commons/resultado_api";
+import { dbCliente, dbPool, executarQuery } from "../../../utils/banco_dados"
+import { IResultadoAPI } from "../../../interfaces/resultado_api"
 
 
 
 export const executandoquery = async (sql: string, parametros: any[] = []) => {
-    const cliente = db_cliente()
-    const resultado: Resultado = { executado: false, mensagem: "", data: {} }
+    const cliente = dbCliente()
+    const resultado: IResultadoAPI = { executado: false, mensagem: "", data: {} }
 
     try {
         await cliente.connect()

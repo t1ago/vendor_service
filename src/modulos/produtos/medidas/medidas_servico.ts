@@ -1,15 +1,15 @@
-import { db_cliente } from "../../../commons/banco_dados";
-import { Resultado } from "../../../commons/resultado_api";
+import { IResultadoAPI } from "../../../interfaces/resultado_api";
+import { dbCliente } from "../../../utils/banco_dados";
 
-const limparResultado = (resultado: Resultado) => {
+const limparResultado = (resultado: IResultadoAPI) => {
   resultado.executado = false;
   resultado.mensagem = "";
   resultado.data = {};
 };
 
 export const inserirMedida = async (medidas: any) => {
-  const cliente = db_cliente();
-  const resultado: Resultado = { executado: false, mensagem: "", data: {} };
+  const cliente = dbCliente();
+  const resultado: IResultadoAPI = { executado: false, mensagem: "", data: {} };
 
   try {
     await cliente.connect();
@@ -29,8 +29,8 @@ export const inserirMedida = async (medidas: any) => {
 };
 
 export const buscarTodasMedidas = async () => {
-  const cliente = db_cliente();
-  const resultado: Resultado = { executado: false, mensagem: "", data: {} };
+  const cliente = dbCliente();
+  const resultado: IResultadoAPI = { executado: false, mensagem: "", data: {} };
 
   try {
     await cliente.connect();
@@ -50,8 +50,8 @@ export const buscarTodasMedidas = async () => {
 };
 
 export const buscarPorId = async (id: number) => {
-  const cliente = db_cliente();
-  const resultado: Resultado = { executado: false, mensagem: "", data: {} };
+  const cliente = dbCliente();
+  const resultado: IResultadoAPI = { executado: false, mensagem: "", data: {} };
 
   try {
     await cliente.connect();
@@ -71,8 +71,8 @@ export const buscarPorId = async (id: number) => {
 };
 
 export const atualizarMedida = async (id: number, nome: string) => {
-  const cliente = db_cliente();
-  const resultado: Resultado = { executado: false, mensagem: "", data: {} };
+  const cliente = dbCliente();
+  const resultado: IResultadoAPI = { executado: false, mensagem: "", data: {} };
 
   try {
     await cliente.connect();
@@ -98,8 +98,8 @@ export const atualizarMedida = async (id: number, nome: string) => {
 };
 
 export const apagarMedida = async (id: number) => {
-  const cliente = db_cliente();
-  const resultado: Resultado = { executado: false, mensagem: "", data: {} };
+  const cliente = dbCliente();
+  const resultado: IResultadoAPI = { executado: false, mensagem: "", data: {} };
 
   try {
     await cliente.connect();

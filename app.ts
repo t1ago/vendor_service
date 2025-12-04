@@ -33,10 +33,12 @@ app.get("/", (req: Request, res: Response) => {
   res.json({ 'status': 'OK' })
 });
 
-app.use("/categorias", rotasCategorias)
-app.use("/cores", rotasCores)
-app.use("/medidas", rotasMedidas)
-app.use("/fornecedores/tiago", rotasFornecedoresTiago)
+
+/**Miguel */
+app.use("/moedas", rotas_moedas)
+app.use("/fornecedor/miguel", rotasfornecedor_miguel)
+
+/**Victor */
 app.use("/marca", rota)
 app.use("/grupos", gruporota)
 app.use("/fornecedor/miguel", rotasfornecedor_miguel)

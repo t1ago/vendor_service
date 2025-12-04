@@ -1,7 +1,7 @@
 import { executandoquery } from "./fornecedor_miguel_resultado";
-import { Resultado } from "./../../../../commons/resultado_api";
+import { IResultadoAPI } from "../../../interfaces/resultado_api"
 
-const resultado: Resultado = {
+const resultado: IResultadoAPI = {
     executado: false,
     mensagem: "",
     data: []

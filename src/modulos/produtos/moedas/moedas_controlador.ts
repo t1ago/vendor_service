@@ -1,14 +1,12 @@
 import { Request, Response } from "express"
-
-import { moedaBuscar, moedaDelete, moedaInsert, moedaUpdate } from "./moedas_servico"
-
+import { moedaBuscar, moedaDelete, moedainsert, moedaUpdate } from "./moedas_servico"
 
 export const inserir = async (req: Request, res: Response) => {
     let parametros = {
         nome: req.body?.nome,
         moeda: req.body?.moeda
     }
-    const resultado_insert = await moedaInsert(parametros)
+    const resultado_insert = await moedainsert(parametros)
     if (resultado_insert.executado) {
         res.status(200).json(resultado_insert)
     } else {
@@ -16,12 +14,12 @@ export const inserir = async (req: Request, res: Response) => {
     }
 }
 
+// CORREÇÃO: O ID deve ser pego dos parâmetros da rota (req.params)
 export const update = async (req: Request, res: Response) => {
     let parametros = {
-        "id": req.body?.id,
+        "id": req.params.id, // CORRIGIDO: Pega o ID da URL
         "nome": req.body?.nome,
         "moeda": req.body?.moeda
-        
     }
     const resultado_insert = await moedaUpdate(parametros)
     if (resultado_insert.executado) {
@@ -30,7 +28,6 @@ export const update = async (req: Request, res: Response) => {
         res.status(500).json(resultado_insert)
     }
 }
-
 export const delet = async (req: Request, res: Response) => {
     let parametros = {
         id: req.params?.id
@@ -44,17 +41,16 @@ export const delet = async (req: Request, res: Response) => {
 }
 
 export const buscar = async (req: Request, res: Response) => {
-   const parametros = {
-        'id': req.body?.id,
-        'nome': req.body?.nome,
-        'moeda': req.body?.moeda
-        
+    // CORREÇÃO: agora pega os parâmetros de busca da URL (GET)
+    const parametros = {
+        'id': req.query?.id,
+        'nome': req.query?.nome,
+        'moeda': req.query?.moeda
     };
-    const resultado_insert = await moedaBuscar(parametros)
-    if (resultado_insert.executado) {
-        res.status(200).json(resultado_insert)
+    const resultado_busca = await moedaBuscar(parametros)
+    if (resultado_busca && resultado_busca.executado) {
+        res.status(200).json(resultado_busca)
     } else {
-        res.status(500).json(resultado_insert)
+        res.status(500).json(resultado_busca)
     }
 }
-

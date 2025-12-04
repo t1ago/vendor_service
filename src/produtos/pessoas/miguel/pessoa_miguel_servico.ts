@@ -1,12 +1,12 @@
 import { db_cliente } from "../../../../commons/banco_dados";
-import { Resultado } from "../../../../commons/resultado_api";
+import { IResultadoAPI } from "../../../interfaces/resultado_api"
 
 // Pessoa Física
 
 export const service_insert = async (pessoas: any) => {
 
     const cliente = db_cliente()
-    const resultado: Resultado = { executado: false, mensagem: "", data: [] };
+    const resultado: IResultadoAPI = { executado: false, mensagem: "", data: [] };
 
     try {
         await cliente.connect()
