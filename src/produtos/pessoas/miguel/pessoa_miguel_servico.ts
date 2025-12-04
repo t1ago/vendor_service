@@ -126,22 +126,41 @@ export const service_get = async (parametros: any) => {
 const inserirSQL = function () {
     return `
         INSERT INTO tb_pessoa_miguel
-        (nome, apelido, tipo_pessoa, sexo, data_nascimento, documento_estadual, documento_federal, ativo, id_vinculo) 
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+        (nome,
+        apelido,
+        tipo_pessoa,
+        sexo,
+        data_nascimento,
+        documento_estadual,
+        documento_federal,
+        ativo,
+        id_vinculo) 
+        VALUES
+        ($1,$2,$3,$4,$5,$6,$7,$8,$9)
         RETURNING ID
     `;
 }; // OK   
 const alterarSQL = function () {
     return `
         UPDATE tb_pessoa_miguel
-        SET nome=$1, apelido=$2, tipo_pessoa=$3, sexo=$4, data_nascimento=$5, documento_estadual=$6, documento_federal=$7, ativo=$8, id_vinculo=$9 
-        WHERE id=$10
+        SET
+        nome=$1,
+        apelido=$2,
+        tipo_pessoa=$3,
+        sexo=$4,
+        data_nascimento=$5,
+        documento_estadual=$6,
+        documento_federal=$7,
+        ativo=$8,
+        id_vinculo=$9 
+        WHERE
+        id=$10
     `;
 }; // OK
 const inativarSQL = function () {
     return `
         UPDATE tb_pessoa_miguel
-        SET ativo = 'I'
+        SET ativo ='I'
         WHERE id=$1
     `;
 }; // OK
@@ -152,3 +171,28 @@ const buscarDadoSQL = function () {
         WHERE 1=1
     `;
 }; // OK
+
+export function montarInsert(tabela: string, dados: any) {
+    const campos = Object.keys(dados);
+    const parametros = Object.values(dados);
+
+    const placeholders = campos.map((_, i) => `$${i + 1}`).join(",");
+
+    inserirSQL()
+
+    return { inserirSQL, parametros };
+}
+
+export function montarUpdate(tabela: string, dados: any, campoWhere: string, valorWhere: any) {
+
+    const campos = Object.keys(dados);
+    const parametros = Object.values(dados);
+
+    const setSQL = campos.map((c, i) => `${c} = $${i + 1}`).join(", ");
+
+    parametros.push(valorWhere);
+
+    alterarSQL()
+
+    return { alterarSQL, parametros };
+}
