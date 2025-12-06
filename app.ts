@@ -12,7 +12,7 @@ import rotasCategorias from "./src/modulos/produtos/categorias/categorias_rotas"
 import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rotas"
 import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas"
-import rotasClientesDam from './src/produtos/clientes/dam/clientes.rotas';
+import rotasClientesDam from './src/modulos/pessoas/dam/clientes.rotas';
 
 /** Constantes do Servidor*/
 const app = express()
