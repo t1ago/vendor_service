@@ -1,4 +1,4 @@
-// /src/produtos/clientes/dam/clientes.modelo.ts
+// /src/modulos/pessoas/damdam/clientes.modelo.ts
 
 export interface EnderecoDam {
     id?: number;

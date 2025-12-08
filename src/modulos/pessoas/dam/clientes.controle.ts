@@ -1,4 +1,4 @@
-// /src/produtos/clientes/dam/clientes.controller.ts
+// /src/modulos/pessoas/dam/clientes.controller.ts
 
 import { request, Request, response, Response } from "express";
 import { PessoaDam } from "./clientes.modelo";

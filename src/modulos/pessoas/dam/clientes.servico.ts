@@ -1,8 +1,14 @@
-// /src/produtos/clientes/dam/service/clientes.servico.ts
+// /src/modulos/pessoas/dam/service/clientes.servico.ts
 
-import { EnderecoDam, PessoaDam } from "./clientes.modelo";
+import { PoolClient } from "pg";
+import { dbPool } from "../../../utils/banco_dados";
+import { PessoaDam, EnderecoDam } from "./clientes.modelo";
 import { validarCampos, buscarCep } from "./clientes.utils";
-import * as repositorioClientes from "./clientes.repositorio"
+import * as sqlConstants from "./clientes_sql_constants";
+
+async function executarQuery(cliente: PoolClient, sqlDados: sqlConstants.ISqlDados) {
+    return await cliente.query(sqlDados.sql, sqlDados.valores);
+}
 
 export async function criar(pessoa: PessoaDam): Promise<number> {
     validarCampos(pessoa);
@@ -11,134 +17,178 @@ export async function criar(pessoa: PessoaDam): Promise<number> {
         throw new Error('É obrigatório fornecer pelo menos um endereço (Moradia).');
     }
 
-    const tiposEncontrados = new Set<string>();
-    let moradiaAtivo = false;
-    
-    for (const endereco of pessoa.enderecos) {
-        if (tiposEncontrados.has(endereco.tipo_endereco)) {
-            throw new Error(`O tipo de endereço '${endereco.tipo_endereco}' está duplicado na lista.`);
-        }
-        tiposEncontrados.add(endereco.tipo_endereco);
+    const pool = dbPool();
+    const cliente = await pool.connect();
 
-        if (endereco.tipo_endereco === 'Moradia') {
-            if (!endereco.ativo) {
-                throw new Error('O endereço de Moradia deve estar ativo para o primeiro cadastro.');
+    try {
+        await cliente.query('BEGIN');
+
+        const sqlPessoa = sqlConstants.sqlCriarPessoa(pessoa);
+        const resultadoPessoa = await executarQuery(cliente, sqlPessoa);
+        const idPessoa = resultadoPessoa.rows[0].id;
+
+        for (const endereco of pessoa.enderecos) {
+            endereco.id_pessoa = idPessoa;
+            if (!endereco.logradouro) {
+                 const dadosCep = await buscarCep(endereco.cep);
+                 endereco.logradouro = dadosCep.logradouro;
+                endereco.bairro = dadosCep.bairro;
+                endereco.cidade = dadosCep.cidade;
+                endereco.estado = dadosCep.estado;
             }
-            moradiaAtivo = true;
+
+            const sqlEnd = sqlConstants.sqlCriarEndereco(endereco);
+            await executarQuery(cliente, sqlEnd);
         }
-        
-        if (!endereco.logradouro || !endereco.bairro || !endereco.cidade || !endereco.estado) {
-            const dadosCep = await buscarCep(endereco.cep);
-            endereco.logradouro = dadosCep.logradouro;
-            endereco.bairro = dadosCep.bairro;
-            endereco.cidade = dadosCep.cidade;
-            endereco.estado = dadosCep.estado;
-        }
-    }
 
-    if (!moradiaAtivo) {
-        throw new Error('É obrigatório que um endereço de Moradia esteja ativo.');
-    }
+        await cliente.query('COMMIT');
+        return idPessoa;
 
-    pessoa.ativo = true;
-    const idGerado = await repositorioClientes.inserirPessoaDam(pessoa);
-
-    for (const endereco of pessoa.enderecos) {
-        endereco.id_pessoa = idGerado;
-        await repositorioClientes.inserirEndereco(endereco);
+    } catch (erro) {
+        await cliente.query('ROLLBACK');
+        console.error('Erro na transação criar:', erro);
+        throw new Error('Erro ao criar cliente e endereços.');
+    } finally {
+        cliente.release();
     }
-    
-    return idGerado;
 }
 
-
-
 export async function buscarTodasPessoas(): Promise<PessoaDam[]> {
-    return repositorioClientes.buscarTudo();
+    const pool = dbPool();
+    const cliente = await pool.connect();
+    try {
+        const sql = sqlConstants.sqlBuscarTodos();
+        const resultado = await executarQuery(cliente, sql);
+        return resultado.rows;
+    } finally {
+        cliente.release();
+    }
 }
 
 export async function buscarPorId(id: number): Promise<PessoaDam> {
-    const pessoa = await repositorioClientes.buscarPorId(id);
+    const pool = dbPool();
+    const cliente = await pool.connect();
+    
+    try {
+        const sqlPessoa = sqlConstants.sqlBuscarPorId(id);
+        const resPessoa = await executarQuery(cliente, sqlPessoa);
+        
+        if (resPessoa.rows.length === 0) {
+            throw new Error(`Pessoa com ID ${id} não encontrada.`);
+        }
+        
+        const pessoa = resPessoa.rows[0];
 
-    if (!pessoa) {
-        throw new Error(`Pessoa com ID ${id} não encontrada.`);
+        const sqlEnderecos = sqlConstants.sqlBuscarEnderecosPorPessoa(id);
+        const resEnderecos = await executarQuery(cliente, sqlEnderecos);
+        
+        pessoa.enderecos = resEnderecos.rows;
+        return pessoa;
+
+    } finally {
+        cliente.release();
     }
-    const enderecos = await repositorioClientes.buscarEndPorId(id);
-    pessoa.enderecos = enderecos;
-
-    return pessoa;
-}
-
-export async function pesquisarPorNome(termoBusca: string): Promise<PessoaDam[]> {
-    if (termoBusca.trim(). length <3) {
-        return [];
-    }
-    return repositorioClientes.encontrarPessoaPorNome(termoBusca);
 }
 
 export async function atualizarDados(id: number, novosDados: PessoaDam): Promise<PessoaDam> {
-    const existe = await buscarPorId(id);
-    if (!existe) {
-        throw new Error(`Pessoa com ID ${id} não pode ser atualizada, pois não foi encontrada.`);
-    }
-    
     validarCampos(novosDados);
-    novosDados.id = id;
-
-    const moradiaAtivo = novosDados.enderecos?.some(e => e.tipo_endereco === 'Moradia' && e.ativo);
-    if (!moradiaAtivo) {
-        throw new Error('A atualização exige que um endereço de Moradia esteja sempre ativo.');
-    }
-
-    const sucessoPessoa = await repositorioClientes.atualizar(id, novosDados);
-
-    if(!sucessoPessoa) {
-        throw new Error(`Falha ao aplicar atualização na Pessoa com ID ${id}.`);
-    }
-
-    if (novosDados.enderecos) {
-        const enderecosExistentes = new Set(existe.enderecos?.map(e => e.id));
-        const tiposAtuais = new Set<string>();
-
-        for (const novoEndereco of novosDados.enderecos) {
-            if (tiposAtuais.has(novoEndereco.tipo_endereco)) {
-                 throw new Error(`O tipo de endereço '${novoEndereco.tipo_endereco}' está duplicado no objeto de atualização.`);
-            }
-            tiposAtuais.add(novoEndereco.tipo_endereco);
-
-            if (!novoEndereco.logradouro || !novoEndereco.bairro) {
-                const dadosCep = await buscarCep(novoEndereco.cep);
-                novoEndereco.logradouro = dadosCep.logradouro;
-                novoEndereco.bairro = dadosCep.bairro;
-                novoEndereco.cidade = dadosCep.cidade;
-                novoEndereco.estado = dadosCep.estado;
-            }
-
-            if (novoEndereco.id && enderecosExistentes.has(novoEndereco.id)) {
-                novoEndereco.id_pessoa = id;
-                await repositorioClientes.atualizarEnderecos(novoEndereco as EnderecoDam); 
-                enderecosExistentes.delete(novoEndereco.id);
-            } else {
-                novoEndereco.id_pessoa = id;
-                await repositorioClientes.inserirEndereco(novoEndereco as EnderecoDam);
-            }
-        }
-        
-        for (const idParaDeletar of enderecosExistentes) {
-            if (idParaDeletar) {
-                await repositorioClientes.deletarEnd(idParaDeletar);
-            }
-        }
-    }
     
-    return buscarPorId(id);
+    const pool = dbPool();
+    const cliente = await pool.connect();
+
+    try {
+        await cliente.query('BEGIN');
+
+        const sqlPessoa = sqlConstants.sqlAlterarPessoa(id, novosDados);
+        const resUpd = await executarQuery(cliente, sqlPessoa);
+        
+        if (resUpd.rowCount === 0) {
+            throw new Error('Pessoa n�o encontrada para atualiza��o.');
+        }
+
+        if (novosDados.enderecos) {
+            
+            const sqlBuscaEnderecos = sqlConstants.sqlBuscarEnderecosPorPessoa(id);
+            const resEnderecosAtuais = await executarQuery(cliente, sqlBuscaEnderecos);
+            
+            const idsNoBanco = resEnderecosAtuais.rows.map((row: any) => row.id);
+
+            const idsNaTela = novosDados.enderecos
+                .filter(end => end.id)
+                .map(end => end.id);
+
+            for (const end of novosDados.enderecos) {
+                end.id_pessoa = id;
+
+                if (!end.logradouro && end.cep) {
+                    try {
+                        const dadosCep = await buscarCep(end.cep);
+                        end.logradouro = dadosCep.logradouro;
+                        end.bairro = dadosCep.bairro;
+                        end.cidade = dadosCep.cidade;
+                        end.estado = dadosCep.estado;
+                    } catch (e) {
+                    }
+                }
+
+                if (end.id) {
+                    const sqlUpdEnd = sqlConstants.sqlAlterarEndereco(end);
+                    await executarQuery(cliente, sqlUpdEnd);
+                } else {
+                    const sqlInsEnd = sqlConstants.sqlCriarEndereco(end);
+                    await executarQuery(cliente, sqlInsEnd);
+                }
+            }
+
+            const idsParaDeletar = idsNoBanco.filter((idBanco: number) => !idsNaTela.includes(idBanco));
+
+            for (const idDel of idsParaDeletar) {
+                const sqlDel = sqlConstants.sqlDeletarEndereco(idDel);
+                await executarQuery(cliente, sqlDel);
+            }
+        }
+
+        await cliente.query('COMMIT');
+        
+        return novosDados; 
+
+    } catch (erro) {
+        await cliente.query('ROLLBACK');
+        console.error('Erro na atualiza��o:', erro);
+        throw erro;
+    } finally {
+        cliente.release();
+    }
+}
+
+export async function pesquisarPorNome(termoBusca: string): Promise<PessoaDam[]> {
+    const pool = dbPool();
+    const cliente = await pool.connect();
+    
+    try {
+        const sql = sqlConstants.sqlBuscarPorTermo(termoBusca);
+        
+        const resultado = await executarQuery(cliente, sql);
+        
+        return resultado.rows;
+
+    } catch (erro) {
+        console.error('Erro ao pesquisar por nome:', erro);
+        throw new Error('Falha na pesquisa de pessoas por nome.');
+    } finally {
+        cliente.release();
+    }
 }
 
 export async function apagarPessoa(id: number): Promise<boolean> {
-    const sucesso = await repositorioClientes.deletar(id);
-
-    if(!sucesso) {
-        throw new Error(`Pessoa com ID ${id} não encontrada ou já deletada.`)
+    const pool = dbPool();
+    const cliente = await pool.connect();
+    try {
+        const sql = sqlConstants.sqlDeletarPessoa(id);
+        const res = await executarQuery(cliente, sql);
+        if (res.rowCount === 0) throw new Error('Pessoa não encontrada.');
+        return true;
+    } finally {
+        cliente.release();
     }
-    return true;
 }
