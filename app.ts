@@ -12,8 +12,7 @@ import rotasCategorias from "./src/modulos/produtos/categorias/categorias_rotas"
 import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rotas"
 import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas"
-import { rotaPessoaVictor } from "./src/pessoas/victor/pessoas_rotas"
-
+import { rotaPessoaVictor } from "./src/modulos/pessoas/victor/pessoas_rotas"
 /** Constantes do Servidor*/
 const app = express()
 const port = process.env.API_PORT || 3000
@@ -41,6 +40,7 @@ app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 app.use("/marca", rota)
 app.use("/grupos", gruporota)
 app.use("/produto/victor", rotaProdutoVictor)
+app.use("/pessoas/victor",rotaPessoaVictor)
 
 /**Danilo */
 app.use("/cores", rotasCores)
@@ -52,7 +52,7 @@ app.use("/categorias", rotasCategorias)
 app.use("/produtos/tiago", rotasProdutoTiago)
 app.use("/enderecos/tiago", rotasEnderecoTiago)
 app.use("/pessoas/tiago", rotasPessoasTiago)
-app.use("/pessoas/victor", rotaPessoaVictor)
+
 
 
 /** Inicia o Servidor */
