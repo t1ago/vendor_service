@@ -6,9 +6,15 @@ import {
     criarEnderecoSql,
     atualizarEnderecoSql,
     atualizarInativarSql,
-    atualizarPessoaSql
+    atualizarPessoaSql,
+    buscarVinculoSql,
+    buscarPessoaIdSql,
+    buscarEnderecosIdPessoaSql,
+    buscarPessoaSql,
+    buscarEnderecosIdSql,
 } from "./pesssoas_sql";
 import { ERROR_MESSAGES } from "../../../utils/error_messages";
+import { ISqlDados } from "../../../interfaces/sql_filtro";
 
 let resultado : IResultadoAPI = {
     executado: true,
@@ -100,6 +106,79 @@ export const servicoInativar = async(lista:any) => {
         });
     } catch(erro:any){
         resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
+    } finally {
+        cliente.end();
+    }
+    return resultado;
+}
+
+export const servicoBuscarVinculos = async() => {
+    const cliente = dbCliente();
+    try{
+        await cliente.connect();
+        let sql_buscar_vinculos = buscarVinculoSql();
+        const resultado_select_vinculos = await executarQuery(cliente,sql_buscar_vinculos);
+
+        resultado = processarDados(()=>{
+            return resultado_select_vinculos.rows
+        });
+    } catch(erro:any) {
+        resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
+    }finally {
+        cliente.end();
+    }
+    return resultado;
+}
+
+export const servicoBuscar = async(lista:any) => {
+    const cliente = dbCliente();
+    let sql_buscar : ISqlDados;
+    try{
+        await cliente.connect();
+        if(lista.id_pessoa != undefined) {
+            sql_buscar = buscarPessoaIdSql(lista);
+            const resultado_select_id = await executarQuery(cliente,sql_buscar);
+
+            const info_pessoa = (resultado_select_id.rowCount || 0) > 0 ? resultado_select_id.rows[0] : {};
+
+            sql_buscar = buscarEnderecosIdPessoaSql(lista);
+
+            const resultado_select_endereco = await executarQuery(cliente,sql_buscar);
+
+            const info_endereco = (resultado_select_endereco.rowCount || 0) > 0 ? resultado_select_endereco.rows : {};
+            resultado = processarDados(()=>{
+                info_pessoa['enderecos'] = info_endereco;
+                return info_pessoa;
+            });
+        } else {
+            sql_buscar = buscarPessoaSql();
+            const resultado_select = await executarQuery(cliente,sql_buscar);
+
+            resultado = processarDados(()=>{
+                return (resultado_select.rowCount || 0) > 0 ? resultado_select.rows : {};
+            })
+        }
+    } catch(erro: any){
+        resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
+    } finally {
+        cliente.end();
+    }
+    return resultado;
+}
+
+export const servicoBuscarEnderecos = async(lista:any) => {
+    const cliente = dbCliente();
+    try {
+        await cliente.connect();
+        let sql_buscar_enderecos = buscarEnderecosIdSql(lista);
+        const resultado_select_endereco_id = await executarQuery(cliente,sql_buscar_enderecos);
+
+
+        resultado = processarDados(()=>{
+                return (resultado_select_endereco_id.rowCount || 0) > 0 ? resultado_select_endereco_id.rows : {};
+            });
+    } catch(erro:any) {
+         resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
     } finally {
         cliente.end();
     }

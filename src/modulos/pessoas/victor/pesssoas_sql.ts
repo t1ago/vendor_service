@@ -140,3 +140,104 @@ export const atualizarInativarSql = (lista:any): ISqlDados => {
         'valores': ['I',lista.id_pessoa]
     }
 }
+export const buscarVinculoSql = () : ISqlDados => {
+    return {
+        'sql':
+        `
+        SELECT 
+        pessoa.id_pessoa,
+        pessoa.nome
+        FROM
+        tb_pessoas_victor as pessoa
+        WHERE 
+        pessoa.ativo = 'A' AND
+        pessoa.tipo_pessoa = 'J'
+        `,
+        'valores' : null
+    }
+}
+export const buscarPessoaIdSql = (lista:any) : ISqlDados => {
+    return {
+        'sql':
+        `
+        SELECT 
+        pessoa.nome,
+        pessoa.apelido,
+        pessoa.tipo_pessoa,
+        pessoa.sexo,
+        pessoa.data_nascimento,
+        pessoa.documento_federal,
+        pessoa.documento_estadual,
+        pessoa.ativo,
+        pessoa.id_vinculo
+        FROM
+        tb_pessoa_victor as pessoa
+        WHERE 
+        pessoa.id_pessoa = $1
+        `,
+        'valores':[lista.id_pessoa]
+    }
+}
+
+export const buscarEnderecosIdPessoaSql = (lista:any) : ISqlDados => {
+    return {
+        'sql': 
+        `
+        SELECT 
+        endereco.cep,
+        endereco.logradouro,
+        endereco.numero,
+        endereco.bairro,
+        endereco.cidade,
+        endereco.estado,
+        endereco.ativo,
+        endereco.tipo_endereco,
+        FROM
+        tb_enderecos_pessoas_victor as endereco
+        WHERE
+        endereco.id_pessoa = $1
+        `,
+        'valores':
+        [lista.id_pessoa]
+    }
+}
+export const buscarEnderecosIdSql = (lista:any) : ISqlDados => {
+    return {
+        'sql': 
+        `
+        SELECT 
+        endereco.cep,
+        endereco.logradouro,
+        endereco.numero,
+        endereco.bairro,
+        endereco.cidade,
+        endereco.estado
+        FROM
+        tb_enderecos_pessoas_victor as endereco
+        WHERE
+        endereco.id_endereco = $1
+        `,
+        'valores':
+        [lista.id_endereco]
+    }
+}
+export const buscarPessoaSql = () : ISqlDados => {
+    return {
+        'sql':
+        `
+        SELECT 
+        pessoa.nome,
+        pessoa.apelido,
+        pessoa.tipo_pessoa,
+        pessoa.sexo,
+        pessoa.data_nascimento,
+        pessoa.documento_federal,
+        pessoa.documento_estadual,
+        pessoa.ativo,
+        pessoa.id_vinculo
+        FROM
+        tb_pessoa_victor as pessoa
+        `,
+        'valores':null
+    }
+}
