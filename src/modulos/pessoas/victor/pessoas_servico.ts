@@ -153,7 +153,6 @@ export const servicoBuscar = async(lista:any) => {
         } else {
             sql_buscar = buscarPessoaSql(lista);
             const resultado_select = await executarQuery(cliente,sql_buscar);
-
             resultado = processarDados(()=>{
                 return (resultado_select.rowCount || 0) > 0 ? resultado_select.rows : {};
             })

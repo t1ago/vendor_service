@@ -48,9 +48,10 @@ export const inativar = async(req:Request,res:Response) => {
 export const buscar = async(req:Request,res:Response) => {
     let parametros: any = {};
     if(req.params != undefined && req.params.id) {
-        parametros['id_pessoa'] = req.params.id
-    } else if (req.query) {
-        parametros['tipo_pessoa'] = req.body.tipo_pessoa
+    } else if (req.query != undefined && req.query.esp) {
+        parametros['tipo_pessoa'] = req.query.esp;
+    } else {
+        parametros['tipo_pessoa'] = req.query.esp;
     }
     resultado = await servicoBuscar(parametros);
     responseAPI(res,resultado);

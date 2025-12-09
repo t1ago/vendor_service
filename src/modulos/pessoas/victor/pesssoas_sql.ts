@@ -246,7 +246,7 @@ export const buscarPessoaSql = (lista:any) : ISqlDados => {
         FROM
         tb_pessoas_victor as pessoa
         WHERE 
-        pessoa.tipo_pessoa ILIKE '%' || 'F' || '%'
+        pessoa.tipo_pessoa ILIKE '%' || $1 || '%'
         ORDER BY pessoa.nome
         `,
         'valores':[lista.tipo_pessoa]
