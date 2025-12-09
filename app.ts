@@ -13,6 +13,8 @@ import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rota
 import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas"
 import { rotaPessoaVictor } from "./src/modulos/pessoas/victor/pessoas_rotas"
+import { rotaEnderecoVictor } from "./src/modulos/enderecos/victor/endereco_rotas"
+
 /** Constantes do Servidor*/
 const app = express()
 const port = process.env.API_PORT || 3000
@@ -41,6 +43,7 @@ app.use("/marca", rota)
 app.use("/grupos", gruporota)
 app.use("/produto/victor", rotaProdutoVictor)
 app.use("/pessoas/victor",rotaPessoaVictor)
+app.use("/enderecos/victor",rotaEnderecoVictor)
 
 /**Danilo */
 app.use("/cores", rotasCores)

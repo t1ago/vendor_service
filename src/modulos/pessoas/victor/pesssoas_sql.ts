@@ -61,7 +61,8 @@ export const atualizarPessoaSql = (lista:any) : ISqlDados => {
         documento_estadual=$6,
         ativo=$7,
         id_vinculo=$8
-        WHERE id_pessoa=$9
+        WHERE 
+        id_pessoa=$9
         `,
         'valores':[
             lista.nome,
@@ -110,7 +111,7 @@ export const atualizarEnderecoSql = (lista:any): ISqlDados => {
         cidade=$5,
         estado=$6,
         ativo=$7,
-        tipo_endereco=$8,
+        tipo_endereco=$8
         WHERE
         id_pessoa = $9 AND id_endereco = $10
         `,
@@ -152,6 +153,7 @@ export const buscarVinculoSql = () : ISqlDados => {
         WHERE 
         pessoa.ativo = 'A' AND
         pessoa.tipo_pessoa = 'J'
+        ORDER BY pessoa.nome
         `,
         'valores' : null
     }
@@ -171,9 +173,10 @@ export const buscarPessoaIdSql = (lista:any) : ISqlDados => {
         pessoa.ativo,
         pessoa.id_vinculo
         FROM
-        tb_pessoa_victor as pessoa
+        tb_pessoas_victor as pessoa
         WHERE 
         pessoa.id_pessoa = $1
+        ORDER BY pessoa.nome
         `,
         'valores':[lista.id_pessoa]
     }
@@ -183,7 +186,8 @@ export const buscarEnderecosIdPessoaSql = (lista:any) : ISqlDados => {
     return {
         'sql': 
         `
-        SELECT 
+        SELECT
+        endereco.id_endereco, 
         endereco.cep,
         endereco.logradouro,
         endereco.numero,
@@ -191,11 +195,12 @@ export const buscarEnderecosIdPessoaSql = (lista:any) : ISqlDados => {
         endereco.cidade,
         endereco.estado,
         endereco.ativo,
-        endereco.tipo_endereco,
+        endereco.tipo_endereco
         FROM
         tb_enderecos_pessoas_victor as endereco
         WHERE
         endereco.id_pessoa = $1
+        ORDER BY tipo_endereco
         `,
         'valores':
         [lista.id_pessoa]
@@ -221,7 +226,7 @@ export const buscarEnderecosIdSql = (lista:any) : ISqlDados => {
         [lista.id_endereco]
     }
 }
-export const buscarPessoaSql = () : ISqlDados => {
+export const buscarPessoaSql = (lista:any) : ISqlDados => {
     return {
         'sql':
         `
@@ -234,10 +239,16 @@ export const buscarPessoaSql = () : ISqlDados => {
         pessoa.documento_federal,
         pessoa.documento_estadual,
         pessoa.ativo,
-        pessoa.id_vinculo
+        pessoa.id_vinculo,
+        (SELECT endereco.id_endereco FROM tb_enderecos_pessoas_victor endereco WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'M') as id_moradia,
+        (SELECT endereco.id_endereco FROM tb_enderecos_pessoas_victor endereco WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'C') as id_cobranca,
+        (SELECT endereco.id_endereco FROM tb_enderecos_pessoas_victor endereco WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'E') as id_entrega
         FROM
-        tb_pessoa_victor as pessoa
+        tb_pessoas_victor as pessoa
+        WHERE 
+        pessoa.tipo_pessoa ILIKE '%' || 'F' || '%'
+        ORDER BY pessoa.nome
         `,
-        'valores':null
+        'valores':[lista.tipo_pessoa]
     }
 }

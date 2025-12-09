@@ -3,6 +3,9 @@ import { responseInternalServerError,processarDadosEmpty,responseAPI } from "../
 import { IResultadoAPI } from "../../../interfaces/resultado_api";
 import { 
     servicoAtualizar,
+    servicoBuscar,
+    servicoBuscarEnderecos,
+    servicoBuscarVinculos,
     servicoCriar,
     servicoInativar 
 } from "./pessoas_servico";
@@ -12,7 +15,7 @@ let resultado : IResultadoAPI;
 
 export const criar = async(req:Request,res:Response) => {
     const parametros = bodyMapeado(req);
-    const validacao = validarPessoa(parametros.enderecos);
+    const validacao = validarPessoa(parametros);
 
     if(validacao != '') {
         resultado = processarDadosEmpty(validacao);
@@ -24,7 +27,7 @@ export const criar = async(req:Request,res:Response) => {
 }
 export const atualizar = async(req:Request,res:Response) => {
     const parametros = bodyMapeado(req);
-    const validacao = validarPessoa(parametros.enderecos);
+    const validacao = validarPessoa(parametros);
 
     if(validacao != ''){
         resultado = processarDadosEmpty(validacao);
@@ -40,5 +43,26 @@ export const inativar = async(req:Request,res:Response) => {
     }
     resultado = await servicoInativar(parametros);
 
+    responseAPI(res,resultado);
+}
+export const buscar = async(req:Request,res:Response) => {
+    let parametros: any = {};
+    if(req.params != undefined && req.params.id) {
+        parametros['id_pessoa'] = req.params.id
+    } else if (req.query) {
+        parametros['tipo_pessoa'] = req.body.tipo_pessoa
+    }
+    resultado = await servicoBuscar(parametros);
+    responseAPI(res,resultado);
+}
+export const buscarVinculos = async(req:Request,res:Response) => {
+    resultado = await servicoBuscarVinculos();
+    responseAPI(res,resultado);
+}
+export const buscarEnderecos = async(req:Request,res:Response) => {
+    const parametros = {
+        id_endereco: req.params.id ? req.params.id : req.body.id_pessoa
+    }
+    resultado = await servicoBuscarEnderecos(parametros);
     responseAPI(res,resultado);
 }

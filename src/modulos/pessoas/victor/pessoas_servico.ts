@@ -65,7 +65,7 @@ export const servicoAtualizar = async(lista:any) => {
     try{
         await cliente.query('BEGIN');
         let sql_pessoa = atualizarPessoaSql(lista);
-        const resultado_update_pessoa = await executarQuery(cliente,sql_pessoa);
+        await executarQuery(cliente,sql_pessoa);
         let id_pessoa = lista.id_pessoa
 
         for(let i = 0; i<lista.enderecos.length ; i++){
@@ -144,14 +144,14 @@ export const servicoBuscar = async(lista:any) => {
             sql_buscar = buscarEnderecosIdPessoaSql(lista);
 
             const resultado_select_endereco = await executarQuery(cliente,sql_buscar);
-
+            
             const info_endereco = (resultado_select_endereco.rowCount || 0) > 0 ? resultado_select_endereco.rows : {};
             resultado = processarDados(()=>{
                 info_pessoa['enderecos'] = info_endereco;
                 return info_pessoa;
             });
         } else {
-            sql_buscar = buscarPessoaSql();
+            sql_buscar = buscarPessoaSql(lista);
             const resultado_select = await executarQuery(cliente,sql_buscar);
 
             resultado = processarDados(()=>{

@@ -11,7 +11,7 @@ export const validarEnderecos = (lista_enderecos: any) => {
     }
 
     let validMoradia = lista_enderecos.filter((item: any) => {
-        return item.tipoEndereco == 'M' && item.ativo == 'A'
+        return item.tipo_endereco == 'M' && item.ativo == 'A'
     })
 
     if (validMoradia.length > 1) {
@@ -25,7 +25,7 @@ export const validarEnderecos = (lista_enderecos: any) => {
     for (let index = 0; index < lista_enderecos.length; index++) {
         const endereco = lista_enderecos[index];
 
-        if (['M', 'C', 'E'].includes(endereco.tipoEndereco) == false) {
+        if (['M', 'C', 'E'].includes(endereco.tipo_endereco) == false) {
             return 'Os tipos permitidos para endereço são: Moradia, Cobrança e Entrega'
         }
 
@@ -39,11 +39,11 @@ export const validarEnderecos = (lista_enderecos: any) => {
 
 export const validarPessoa = (lista: any) => {
 
-    if (['J', 'F'].includes(lista.tipoPessoa) == false) {
+    if (['J', 'F'].includes(lista.tipo_pessoa) == false) {
         return 'Os tipos permitidos para pessoa são: Física e Jurídica'
     }
 
-    if (lista.tipoPessoa == 'F') {
+    if (lista.tipo_pessoa == 'F') {
         if (lista.data_nascimento == undefined || lista.data_nascimento.trim() == '') {
             return 'Data de Nascimento não informada para Pessoa Física.'
         }
@@ -62,11 +62,10 @@ export const validarPessoa = (lista: any) => {
             newDate.getDate() === day) == false) {
             return 'O Campo tem data inválida'
         }
-
         if (regex_doc_federal_pf.test(lista.documento_federal) == false) {
             return 'CPF inválido.'
         }
-
+        
         if (regex_doc_estadual_pf.test(lista.documento_estadual) == false) {
             return 'RG inválido.'
         }
@@ -116,11 +115,10 @@ export const bodyMapeado = (req: Request) => {
         sexo: req.body.sexo,
         data_nascimento: req.body.data_nascimento,
         documento_estadual: req.body.documento_estadual,
-        documento_federal: req.body.documento_federeal,
+        documento_federal: req.body.documento_federal,
         id_vinculo: req.body.id_vinculo,
         ativo: req.body.ativo,
         enderecos: dados_endereco
     }
-
     return dados
 }
