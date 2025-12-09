@@ -12,6 +12,7 @@ import {
     buscarEnderecosIdPessoaSql,
     buscarPessoaSql,
     buscarEnderecosIdSql,
+    buscarPessoaFiltroSql
 } from "./pesssoas_sql";
 import { ERROR_MESSAGES } from "../../../utils/error_messages";
 import { ISqlDados } from "../../../interfaces/sql_filtro";
@@ -151,6 +152,13 @@ export const servicoBuscar = async(lista:any) => {
                 return info_pessoa;
             });
         } else {
+            if(lista.filtro) {
+                sql_buscar = buscarPessoaFiltroSql(lista);
+                const resultado_select_filtro = await executarQuery(cliente,sql_buscar);
+                resultado = processarDados(()=>{
+                    return (resultado_select_filtro.rowCount || 0) > 0 ? resultado_select_filtro.rows : {}
+                })
+            }
             sql_buscar = buscarPessoaSql(lista);
             const resultado_select = await executarQuery(cliente,sql_buscar);
             resultado = processarDados(()=>{
@@ -158,6 +166,7 @@ export const servicoBuscar = async(lista:any) => {
             })
         }
     } catch(erro: any){
+        console.log(erro)
         resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
     } finally {
         cliente.end();

@@ -48,8 +48,9 @@ export const inativar = async(req:Request,res:Response) => {
 export const buscar = async(req:Request,res:Response) => {
     let parametros: any = {};
     if(req.params != undefined && req.params.id) {
-    } else if (req.query != undefined && req.query.esp) {
+    } else if (req.query != undefined && req.query.filtro) {
         parametros['tipo_pessoa'] = req.query.esp;
+        parametros['filtro'] = req.query.filtro;
     } else {
         parametros['tipo_pessoa'] = req.query.esp;
     }

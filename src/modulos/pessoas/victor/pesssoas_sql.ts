@@ -252,3 +252,37 @@ export const buscarPessoaSql = (lista:any) : ISqlDados => {
         'valores':[lista.tipo_pessoa]
     }
 }
+
+export const buscarPessoaFiltroSql = (lista:any) : ISqlDados =>  {
+    return {
+        'sql': `
+        SELECT 
+            pessoa.id_pessoa,
+            pessoa.nome,
+            pessoa.apelido,
+            pessoa.tipo_pessoa,
+            pessoa.sexo,
+            pessoa.data_nascimento,
+            pessoa.documento_estadual,
+            pessoa.documento_federeal,
+            pessoa.id_vinculo,
+            pessoa.ativo,
+            tb_vinculo.nome as nome_vinculo,
+            (SELECT endereco.id FROM tb_enderecos_pessoas_victor tb_end WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'M') as id_moradia,
+            (SELECT endereco.id FROM tb_enderecos_pessoas_victor tb_end WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'C') as id_cobranca,
+            (SELECT endereco.id FROM tb_enderecos_pessoas_victor tb_end WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'E') as id_entrega
+        FROM tb_pessoas_victor as pessoa
+        LEFT JOIN tb_pessoas_victor tb_vinculo on tb_vinculo.id = pessoa.id_vinculo
+        WHERE pessoa.tipo_pessoa=$1
+        AND (lower(pessoa.nome) LIKE lower(concat('%', $2::text, '%'))
+        OR lower(pessoa.apelido) LIKE lower(concat('%', $2::text, '%'))
+        OR lower(pessoa.documento_estadual) LIKE lower(concat('%', $2::text, '%'))
+        OR lower(pessoa.documento_federeal) LIKE lower(concat('%', $2::text, '%'))
+        OR ((SELECT lower(endereco.cep || endereco.logradouro || endereco.numero || endereco.bairro || endereco.cidade || endereco.estado) FROM tb_enderecos_pessoas_victor tb_end WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'M') LIKE lower(concat('%', $2::text, '%'))
+        OR (SELECT lower(endereco.cep || endereco.logradouro || endereco.numero || endereco.bairro || endereco.cidade || endereco.estado) FROM tb_enderecos_pessoas_victor tb_end WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'C') LIKE lower(concat('%', $2::text, '%'))
+        OR (SELECT lower(endereco.cep || endereco.logradouro || endereco.numero || endereco.bairro || endereco.cidade || endereco.estado) FROM tb_enderecos_pessoas_victor tb_end WHERE endereco.id_pessoa = pessoa.id_pessoa and endereco.tipo_endereco = 'E') LIKE lower(concat('%', $2::text, '%'))))
+        ORDER BY pessoa.nome
+        `,
+        'valores' : [lista.tipo_pessoa,lista.filtro]
+    }
+}
