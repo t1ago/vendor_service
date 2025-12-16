@@ -1,11 +1,12 @@
-import { db_cliente } from "../../../../commons/banco_dados";
-import { IResultadoAPI } from "../../../interfaces/resultado_api"
+import { dbCliente, dbPool, executarQuery } from "../../../utils/banco_dados"
+import { IResultadoAPI } from "../../../interfaces/resultado_api";
+import { ISqlDados } from "../../../interfaces/sql_filtro";
 
 // Pessoa Física
 
 export const service_insert = async (pessoas: any) => {
 
-    const cliente = db_cliente()
+    const cliente = dbCliente()
     const resultado: IResultadoAPI = { executado: false, mensagem: "", data: [] };
 
     try {
@@ -33,8 +34,8 @@ export const service_insert = async (pessoas: any) => {
 }
 
 export const service_update = async (pessoa: any) => {
-    const cliente = db_cliente()
-    const resultado: Resultado = { executado: false, mensagem: "", data: {} };
+    const cliente = dbCliente()
+    const resultado: IResultadoAPI = { executado: false, mensagem: "", data: {} };
 
     try {
         await cliente.connect()
@@ -59,8 +60,8 @@ export const service_update = async (pessoa: any) => {
 }
 
 export const service_inativar = async (pessoa: any) => {
-    const cliente = db_cliente()
-    const resultado: Resultado = { executado: false, mensagem: "", data: {} };
+    const cliente = dbCliente()
+    const resultado: IResultadoAPI = { executado: false, mensagem: "", data: {} };
 
     try {
         await cliente.connect();
@@ -84,7 +85,7 @@ export const service_inativar = async (pessoa: any) => {
 }
 
 export const service_get = async (parametros: any) => {
-    const cliente = db_cliente()
+    const cliente = dbCliente()
 
     try {
         await cliente.connect()
