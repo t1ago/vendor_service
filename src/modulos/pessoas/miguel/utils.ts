@@ -1,19 +1,21 @@
 import { ISqlDados } from "../../../interfaces/sql_filtro"
 
+
 export const criarPessoa = (pessoa: any): ISqlDados => {
 
-    let data_nascimento = null;
+    let data_nascimento = null; 
+
 
     if (pessoa.data_nascimento) {
-        const [dia, mes, ano] = pessoa.data_nascimento.split("/");
-        data_nascimento = `${ano}-${mes}-${dia} 00:00:00`;
+
+        data_nascimento = `${pessoa.data_nascimento} 00:00:00`;
     }
 
     return {
         sql: `
             INSERT INTO tb_pessoa_miguel
             (nome, apelido, tipo_pessoa, sexo, data_nascimento, documento_estadual, documento_federal, id_vinculo, ativo)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) 
             RETURNING id
         `,
         valores: [
@@ -21,7 +23,7 @@ export const criarPessoa = (pessoa: any): ISqlDados => {
             pessoa.apelido,
             pessoa.tipo_pessoa,
             pessoa.sexo,
-            data_nascimento,
+            data_nascimento, 
             pessoa.documento_estadual,
             pessoa.documento_federal,
             pessoa.id_vinculo,
@@ -29,7 +31,6 @@ export const criarPessoa = (pessoa: any): ISqlDados => {
         ]
     }
 }
-
 
 export const criarEndereco = (endereco: any, idPessoa: number): ISqlDados => {
     return {
@@ -54,20 +55,18 @@ export const criarEndereco = (endereco: any, idPessoa: number): ISqlDados => {
     };
 }
 
+// utils.ts
+
 export const alterarPessoa = (pessoa: any): ISqlDados => {
 
-    let data_nascimento = undefined
+    let data_nascimento = null; 
 
-    if (pessoa.dataInicio != undefined) {
-        let data_info = pessoa.dataInicio
-        let resultado_data = data_info.split("/");
 
-        const day = resultado_data[0].padStart(2, '0');
-        const month = resultado_data[1].padStart(2, '0');
-        const year = resultado_data[2];
-
-        data_nascimento = `${year}-${month}-${day} 00:00:00`
+    if (pessoa.data_nascimento) {
+        // CORREÇÃO: Usamos o formato AAAA-MM-DD enviado pelo Frontend
+        data_nascimento = `${pessoa.data_nascimento} 00:00:00`;
     }
+
     return {
         sql:
             `UPDATE tb_pessoa_miguel SET
@@ -89,7 +88,7 @@ export const alterarPessoa = (pessoa: any): ISqlDados => {
             pessoa.apelido,
             pessoa.tipo_pessoa,
             pessoa.sexo,
-            data_nascimento,
+            data_nascimento, 
             pessoa.documento_estadual,
             pessoa.documento_federal,
             pessoa.id_vinculo,
@@ -99,7 +98,6 @@ export const alterarPessoa = (pessoa: any): ISqlDados => {
     }
 
 }
-
 export const inativarPessoa = (pessoa: any): ISqlDados => {
 
     return {
@@ -155,9 +153,17 @@ export const buscarId = (pessoa: any): ISqlDados => {
     }
 }
 
-// Arquivo: pessoa_miguel_utils.ts (CÓDIGO COMPLETO DA FUNÇÃO BuscarTodos)
+
+// utils.ts
 
 export const BuscarTodos = (parametros: { tipo_pessoa: string, filtro?: string }): ISqlDados => {
+
+    const valores: (string | number)[] = [parametros.tipo_pessoa];
+    let filtroSql = '';
+
+    if (parametros.filtro) {
+    }
+
     let sql = `
         SELECT 
             pessoa.id,
@@ -171,45 +177,30 @@ export const BuscarTodos = (parametros: { tipo_pessoa: string, filtro?: string }
             pessoa.id_vinculo,
             pessoa.ativo,
             vinculo.nome AS nome_vinculo,
+            
+            -- CAMPOS CHAVE: Retorna o ID do endereço ATIVO por tipo
             (SELECT ender.id FROM tb_endereco_pessoa_miguel ender WHERE ender.id_pessoa = pessoa.id AND ender.tipo_endereco = 'M' AND ender.ativo = 'A') AS id_moradia,
             (SELECT ender.id FROM tb_endereco_pessoa_miguel ender WHERE ender.id_pessoa = pessoa.id AND ender.tipo_endereco = 'C' AND ender.ativo = 'A') AS id_cobranca,
             (SELECT ender.id FROM tb_endereco_pessoa_miguel ender WHERE ender.id_pessoa = pessoa.id AND ender.tipo_endereco = 'E' AND ender.ativo = 'A') AS id_entrega
         FROM tb_pessoa_miguel pessoa
         LEFT JOIN tb_pessoa_miguel vinculo ON vinculo.id = pessoa.id_vinculo
-        
-        -- NOVO: JOIN para poder buscar nos endereços
         LEFT JOIN tb_endereco_pessoa_miguel endereco_busca ON endereco_busca.id_pessoa = pessoa.id
         
+        -- A condição WHERE usa o primeiro parâmetro ($1)
         WHERE pessoa.tipo_pessoa = $1
-    `;
+        ${filtroSql}
 
-    const valores: (string | number)[] = [parametros.tipo_pessoa];
-    let index = 2; // O próximo $ no SQL será $2
-
-    // NOVO: Adiciona a condição de filtro (Nome, Apelido, Documento ou Endereço)
-    if (parametros.filtro) {
-        const termoBusca = `%${parametros.filtro}%`;
-        sql += ` AND (
-             pessoa.nome ILIKE $${index} 
-             OR pessoa.apelido ILIKE $${index}
-             OR pessoa.documento_federal ILIKE $${index}
-             OR endereco_busca.cep ILIKE $${index}
-             OR endereco_busca.logradouro ILIKE $${index}
-             OR endereco_busca.cidade ILIKE $${index}
-             OR endereco_busca.bairro ILIKE $${index}
-        )`;
-        valores.push(termoBusca);
-        index++;
-    }
-
-    // O GROUP BY é necessário por causa do LEFT JOIN extra com a tabela de endereços (endereco_busca)
-    sql += `
         GROUP BY pessoa.id, vinculo.nome
         ORDER BY pessoa.nome
     `;
 
-    return { sql, valores };
+    return {
+        sql,
+        valores 
+    };
 }
+
+
 export const EnderecosId_Pessoa = (pessoa: any) => {
 
     return {

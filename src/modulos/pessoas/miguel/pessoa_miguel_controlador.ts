@@ -32,8 +32,6 @@ export const control_inativar = async (req: Request, res: Response) => {
     res.status(resultado.executado ? 200 : 500).json(resultado);
 }
 
-// Arquivo: controlador.ts
-// NOVO CÓDIGO PARA control_get
 
 export const control_get = async (req: Request, res: Response) => {
 

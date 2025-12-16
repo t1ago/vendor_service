@@ -108,16 +108,13 @@ export const service_inativar = async (pessoa: any) => {
     return resultado;
 };
 
-// Exemplo de adaptação no service_get (se você tiver uma separação por service)
 
-// Dentro de pessoa_miguel_servico.ts
-// ARQUIVO: pessoa_miguel_servico.ts
 export const service_get = async (parametros: { id?: string, tipo_pessoa?: string, filtro?: string }): Promise<IResultadoAPI> => {
     let resultado: IResultadoAPI = { executado: false, mensagem: "", data: [] };
-    const client = dbCliente(); // NÃO É NECESSÁRIO O AWAIT AQUI
+    const client = dbCliente(); 
 
     try {
-        await client.connect(); // <--- CRÍTICO: Abre a conexão
+        await client.connect(); 
 
         let sqlDados: ISqlDados;
 
