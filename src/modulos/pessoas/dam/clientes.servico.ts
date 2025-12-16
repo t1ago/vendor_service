@@ -173,8 +173,8 @@ export async function pesquisarPorNome(termoBusca: string): Promise<PessoaDam[]>
         return resultado.rows;
 
     } catch (erro) {
-        console.error('Erro ao pesquisar por nome:', erro);
-        throw new Error('Falha na pesquisa de pessoas por nome.');
+        console.error('Erro na pesquisa:', erro);
+        throw new Error('Falha ao pesquisar clientes.');
     } finally {
         cliente.release();
     }
@@ -188,6 +188,22 @@ export async function apagarPessoa(id: number): Promise<boolean> {
         const res = await executarQuery(cliente, sql);
         if (res.rowCount === 0) throw new Error('Pessoa não encontrada.');
         return true;
+    } finally {
+        cliente.release();
+    }
+}
+
+export async function alternarSituacao(id: number, novoStatus: boolean): Promise<void> {
+    const pool = dbPool();
+    const cliente = await pool.connect();
+
+    try {
+        const sql = sqlConstants.sqlAlternarSituacaoPessoa(id, novoStatus);
+        const res = await executarQuery(cliente, sql);
+
+        if (res.rowCount === 0) {
+            throw new Error('Pessoa não encontrada para atualização de status.');
+        }
     } finally {
         cliente.release();
     }

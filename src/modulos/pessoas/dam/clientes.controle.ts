@@ -107,3 +107,35 @@ export async function deletarPessoa(req: Request, res: Response): Promise<void> 
         }
     }
 }
+
+export async function alternarSituacaoPessoa(req: Request, res: Response): Promise<void> {
+    try {
+        const id = parseInt(req.params.id, 10);
+        const { ativo } = req.body; // Esperamos { "ativo": true } ou { "ativo": false }
+
+        if (isNaN(id)) {
+            res.status(400).json({ mensagem: 'ID inválido.' });
+            return;
+        }
+
+        // Validação estrita de booleano
+        if (typeof ativo !== 'boolean') {
+            res.status(400).json({ mensagem: 'O campo "ativo" deve ser verdadeiro ou falso.' });
+            return;
+        }
+
+        await servicoClientes.alternarSituacao(id, ativo);
+
+        const textoAcao = ativo ? 'reativada' : 'inativada';
+        res.status(200).json({ mensagem: `Pessoa ${textoAcao} com sucesso.` });
+
+    } catch (error) {
+        if (error instanceof Error && error.message.includes('não encontrada')) {
+            res.status(404).json({ mensagem: error.message });
+        } else {
+            res.status(500).json({ 
+                mensagem: error instanceof Error ? error.message : 'Erro ao alterar situação da pessoa.' 
+            });
+        }
+    }
+}

@@ -13,6 +13,8 @@ router.get('/nome', controleClientes.pesquisarComNome);
 
 router.put('/id/:id', controleClientes.atualizarPessoa);
 
+router.patch('/situacao/:id', controleClientes.alternarSituacaoPessoa);
+
 router.delete('/id/:id', controleClientes.deletarPessoa);
 
 export default router;

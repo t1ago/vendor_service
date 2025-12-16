@@ -107,38 +107,27 @@ export const sqlBuscarPorId = (id: number): ISqlDados => {
     };
 }
 
-export const sqlBuscarPorTermo = (parametros: any) => {
+export const sqlBuscarPorTermo = (termo: string) => {
+    const termoLike = `%${termo}%`; 
+
     return {
         sql: `
             SELECT 
-                tb_pessoa.id,
-                tb_pessoa.nome,
-                tb_pessoa.apelido,
-                tb_pessoa.tipo_pessoa,
-                tb_pessoa.sexo,
-                tb_pessoa.data_inicio,
-                tb_pessoa.documento_estadual,
-                tb_pessoa.documento_federeal,
-                tb_pessoa.id_vinculo,
-                tb_pessoa.ativo,
-                tb_vinculo.nome as nome_vinculo,
-                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'M') as id_moradia,
-                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'C') as id_cobranca,
-                (SELECT tb_end.id FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'E') as id_entrega
-            FROM tb_pessoa_tiago tb_pessoa
-            LEFT JOIN tb_pessoa_tiago tb_vinculo on tb_vinculo.id = tb_pessoa.id_vinculo
-            WHERE tb_pessoa.tipo_pessoa=$1
-            AND (lower(tb_pessoa.nome) LIKE lower(concat('%', $2::text, '%'))
-            OR lower(tb_pessoa.apelido) LIKE lower(concat('%', $2::text, '%'))
-            OR lower(tb_pessoa.documento_estadual) LIKE lower(concat('%', $2::text, '%'))
-            OR lower(tb_pessoa.documento_federeal) LIKE lower(concat('%', $2::text, '%'))
-            OR ((SELECT lower(tb_end.cep || tb_end.logradouro || tb_end.numero || tb_end.bairro || tb_end.cidade || tb_end.estado) FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'M') LIKE lower(concat('%', $2::text, '%'))
-            OR (SELECT lower(tb_end.cep || tb_end.logradouro || tb_end.numero || tb_end.bairro || tb_end.cidade || tb_end.estado) FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'C') LIKE lower(concat('%', $2::text, '%'))
-            OR (SELECT lower(tb_end.cep || tb_end.logradouro || tb_end.numero || tb_end.bairro || tb_end.cidade || tb_end.estado) FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'E') LIKE lower(concat('%', $2::text, '%'))))
-            ORDER BY tb_pessoa.nome
+                id, tipo_pessoa, ativo, nome, apelido, 
+                cpf, rg, cnpj, inscricao_estadual,
+                sexo, data_nascimento, id_pessoa_juridica
+            FROM tb_pessoas_dam
+            WHERE 
+                nome ILIKE $1 OR 
+                apelido ILIKE $1 OR
+                cpf ILIKE $1 OR
+                rg ILIKE $1 OR
+                cnpj ILIKE $1 OR
+                inscricao_estadual ILIKE $1
+            ORDER BY nome ASC
         `,
-        valores: [parametros.tipo_pessoa, parametros.termo]
-    }
+        valores: [termoLike]
+    };
 }
 
 export const sqlBuscarEnderecosPorPessoa = (idPessoa: number): ISqlDados => {
@@ -159,5 +148,16 @@ export const sqlDeletarEndereco = (id: number): ISqlDados => {
     return {
         sql: 'DELETE FROM tb_enderecos_dam WHERE id = $1;',
         valores: [id]
+    };
+}
+
+export const sqlAlternarSituacaoPessoa = (id: number, ativo: boolean): ISqlDados => {
+    return {
+        sql: `
+            UPDATE tb_pessoas_dam 
+            SET ativo = $1, data_atualizacao = CURRENT_TIMESTAMP
+            WHERE id = $2
+        `,
+        valores: [ativo, id]
     };
 }
