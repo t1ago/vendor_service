@@ -12,6 +12,7 @@ import rotasCategorias from "./src/modulos/produtos/categorias/categorias_rotas"
 import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rotas"
 import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas"
+import rotasLoginTiago from "./src/modulos/credencial/tiago/login_rotas"
 
 /** Constantes do Servidor*/
 const app = express()
@@ -51,6 +52,7 @@ app.use("/categorias", rotasCategorias)
 app.use("/produtos/tiago", rotasProdutoTiago)
 app.use("/enderecos/tiago", rotasEnderecoTiago)
 app.use("/pessoas/tiago", rotasPessoasTiago)
+app.use("/login/tiago", rotasLoginTiago)
 
 
 /** Inicia o Servidor */

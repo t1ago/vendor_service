@@ -17,6 +17,10 @@ export const responseInternalServerError = (res: Response, data: IResultadoAPI) 
     res.status(HttpStatusCode.InternalServerError).json(data);
 }
 
+export const responseUnauthorizedError = (res: Response) => {
+    res.status(HttpStatusCode.Unauthorized).end();
+}
+
 export const responseAPI = (res: Response, data: IResultadoAPI) => {
     if (data.mensagem.trim() == '') {
         responseOK(res, data);
