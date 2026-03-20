@@ -79,6 +79,7 @@ export const autenticadorInterceptador = (
   next: NextFunction,
 ) => {
   const auth = req.headers.authorization;
+  const SECRET_KEY = process.env.SECRET_KEY || "";
 
   if (auth == undefined) {
     responseUnauthorizedError(res);
@@ -87,7 +88,7 @@ export const autenticadorInterceptador = (
   const [, token] = auth!.split(" ");
 
   try {
-    const dadosUsuario = jwt.verify(token, "ABOBRINHA");
+    const dadosUsuario = jwt.verify(token, SECRET_KEY);
 
     (req as any).user = dadosUsuario;
 

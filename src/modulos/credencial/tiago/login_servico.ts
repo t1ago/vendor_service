@@ -37,7 +37,7 @@ export const validarLoginCredencial = async (parametros: any) => {
 };
 
 const gerarToken = (dadosUsuario: any) => {
-  const SECRET_KEY = "ABOBRINHA";
+  const SECRET_KEY = process.env.SECRET_KEY || "";
 
   const token = jwt.sign(dadosUsuario, SECRET_KEY, {
     expiresIn: "1h",
