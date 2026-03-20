@@ -1,35 +1,47 @@
-
-import axios from "axios"
+import axios from "axios";
 import { dbCliente, executarQuery } from "../../../utils/banco_dados";
 import { IResultadoAPI } from "../../../interfaces/resultado_api";
 import { sqlValidarLoginCredencial } from "./login_sql_constants";
 import { processarDados, processarDadosEmpty } from "../../../utils/utils";
 import { ERROR_MESSAGES } from "../../../utils/error_messages";
+import rotasPessoasTiago from "../../pessoas/tiago/pessoas_rotas";
+import jwt from "jsonwebtoken";
 
 export const validarLoginCredencial = async (parametros: any) => {
-    const cliente = dbCliente();
-    let resultado: IResultadoAPI;
+  const cliente = dbCliente();
+  let resultado: IResultadoAPI;
 
-    try {
-        cliente.connect();
+  try {
+    cliente.connect();
 
-        const sqlDados = sqlValidarLoginCredencial(parametros);
-        const queryResultado = await executarQuery(cliente, sqlDados);
+    const sqlDados = sqlValidarLoginCredencial(parametros);
 
-        if (queryResultado.rows.length == 0) {
-            resultado = processarDadosEmpty(ERROR_MESSAGES.CREDENCIAL_INVALIDA);
-        } else {
-            resultado = processarDados(() => {
-                return queryResultado.rows
-            });
-        }
+    const queryResultado = await executarQuery(cliente, sqlDados);
 
-    } catch (erro: any) {
-        resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
-    } finally {
-        await cliente.end();
+    if (queryResultado.rows.length == 0) {
+      resultado = processarDadosEmpty(ERROR_MESSAGES.CREDENCIAL_INVALIDA);
+    } else {
+      resultado = processarDados(() => {
+        return gerarToken(queryResultado.rows[0]);
+      });
     }
+  } catch (erro: any) {
+    resultado = processarDadosEmpty(
+      ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace("{error}", erro),
+    );
+  } finally {
+    await cliente.end();
+  }
 
-    return resultado;
-}
+  return resultado;
+};
 
+const gerarToken = (dadosUsuario: any) => {
+  const SECRET_KEY = "ABOBRINHA";
+
+  const token = jwt.sign(dadosUsuario, SECRET_KEY, {
+    expiresIn: "1h",
+  });
+
+  return token;
+};
