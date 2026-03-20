@@ -8,7 +8,7 @@ import {
   buscarTodasMedidas,
   buscarPorId,
   atualizarMedida,
-  apagarMedida
+  apagarMedida,
 } from "./medidas_servico";
 
 export const criarMedida = async (req: Request, res: Response) => {
@@ -23,19 +23,17 @@ export const listarMedidas = async (req: Request, res: Response) => {
 };
 
 export const buscarMedida = async (req: Request, res: Response) => {
- 
   try {
-    const id = parseInt(req.params.id);
-    
+    const id = parseInt(String(req.params.id));
+
     const resultado = await buscarPorId(id);
     res.json(resultado);
-
   } catch (e) {
     res.status(400).json({
       executado: false,
       mensagem: "Erro ao buscar a medida, verifique o ID e tente novamente.",
-      data: {}
-    })
+      data: {},
+    });
   }
 };
 
@@ -46,15 +44,14 @@ export const alterarMedida = async (req: Request, res: Response) => {
 
     const resultado = await atualizarMedida(id, nome);
     res.json(resultado);
-
   } catch (erro) {
     res.status(400).json({
       executado: false,
       mensagem: "Erro ao atualizar a medida. Verifique o ID e o nome.",
-      data: {}
-    })
+      data: {},
+    });
   }
-}
+};
 
 export const removerMedida = async (req: Request, res: Response) => {
   try {
@@ -62,12 +59,11 @@ export const removerMedida = async (req: Request, res: Response) => {
 
     const resultado = await apagarMedida(id);
     res.json(resultado);
-
   } catch (erro) {
     res.status(400).json({
       executado: false,
       mensagem: "Erro ao atualizar a medida. Verifique o ID e o nome.",
-      data: {}
-    })
+      data: {},
+    });
   }
-}
+};
