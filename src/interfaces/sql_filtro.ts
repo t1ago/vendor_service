@@ -1,4 +1,4 @@
 export interface ISqlDados {
-    sql: string;
-    valores?: any;
+  sql: string;
+  valores?: any;
 }

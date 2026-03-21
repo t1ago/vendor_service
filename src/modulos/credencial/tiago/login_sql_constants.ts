@@ -1,12 +1,11 @@
-import { ISqlDados } from "../../../interfaces/sql_filtro"
+import { ISqlDados } from "../../../interfaces/sql_filtro";
 
 export const sqlValidarLoginCredencial = (parametros: any): ISqlDados => {
+  const email = parametros.username;
+  const pwd = btoa(parametros.pwd);
 
-    const email = parametros.username
-    const pwd = btoa(parametros.pwd)
-
-    return {
-        sql: `
+  return {
+    sql: `
                 select 
                     tc.id as idCredencial,
                     tc.name as nomeCredencial,
@@ -17,9 +16,6 @@ export const sqlValidarLoginCredencial = (parametros: any): ISqlDados => {
                 inner join tb_perfil tp on tc.id_profile = tp.id
                 where tc.email=$1::text and tc.password = $2::text
             `,
-        valores: [
-            email,
-            pwd
-        ]
-    }
-}
+    valores: [email, pwd],
+  };
+};

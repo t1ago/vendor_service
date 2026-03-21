@@ -86,12 +86,10 @@ export const atualizarMedida = async (id: number, nome: string) => {
     resultado.data = { id, nome };
 
     return resultado;
-
   } catch (erro) {
     resultado.executado = false;
     resultado.mensagem = `Erro ao atualizar medida. MSG: ${erro}`;
     return resultado;
-
   } finally {
     await cliente.end();
   }
@@ -111,13 +109,11 @@ export const apagarMedida = async (id: number) => {
     resultado.data = resultadoBanco.rows;
     resultado.data = { id };
 
-
     resultado.data = { id };
   } catch (erro) {
     resultado.executado = false;
     resultado.mensagem = `Erro ao apagar medida. MSG: ${erro}`;
     return resultado;
-
   } finally {
     await cliente.end();
   }

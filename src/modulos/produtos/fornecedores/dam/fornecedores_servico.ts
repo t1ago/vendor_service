@@ -2,33 +2,33 @@ import { IResultadoAPI } from "../../../../interfaces/resultado_api";
 import { executarQuery } from "./fornecedores_utils";
 
 const resultado: IResultadoAPI = {
-    executado: false,
-    mensagem: "",
-    data: {}
-}
+  executado: false,
+  mensagem: "",
+  data: {},
+};
 
 const limparResultado = () => {
-    resultado.executado = false;
-    resultado.mensagem = "";
-    resultado.data = {};
-}
+  resultado.executado = false;
+  resultado.mensagem = "";
+  resultado.data = {};
+};
 
 // INSERIR
 export const inserirFornecedor = async (
-    nome: string,
-    descricao: string,
-    id_categoria: number,
-    id_moeda: number,
-    id_grupo: number,
-    id_unidade_medida: number,
-    id_cor: number,
-    id_marca: number,
-    preco_compra: number,
-    preco_venda: number
+  nome: string,
+  descricao: string,
+  id_categoria: number,
+  id_moeda: number,
+  id_grupo: number,
+  id_unidade_medida: number,
+  id_cor: number,
+  id_marca: number,
+  preco_compra: number,
+  preco_venda: number,
 ) => {
-    limparResultado();
+  limparResultado();
 
-    const sql = `
+  const sql = `
         INSERT INTO tb_fornecedor_dam 
         (nome, descricao, id_categoria, id_moeda, id_grupo,
         id_unidade_medida,id_cor, id_marca, preco_compra, preco_venda)
@@ -36,38 +36,46 @@ export const inserirFornecedor = async (
         RETURNING id;
     `;
 
-    const parametros = [
-        nome, descricao, id_categoria, id_moeda, id_grupo,
-        id_unidade_medida, id_cor, id_marca, preco_compra, preco_venda
-    ];
-    console.log(parametros)
-    const resultado = await executarQuery(sql, parametros);
+  const parametros = [
+    nome,
+    descricao,
+    id_categoria,
+    id_moeda,
+    id_grupo,
+    id_unidade_medida,
+    id_cor,
+    id_marca,
+    preco_compra,
+    preco_venda,
+  ];
+  console.log(parametros);
+  const resultado = await executarQuery(sql, parametros);
 
-    if (resultado.executado && resultado.data.length > 0) {
-        const id = resultado.data[0].id;
-        resultado.mensagem = "Fornecedor inserido com sucesso!";
-        resultado.data = {
-            nome,
-            descricao,
-            id_categoria,
-            id_moeda,
-            id_grupo,
-            id_unidade_medida,
-            id_cor,
-            id_marca,
-            preco_compra,
-            preco_venda
-        };
-    } else {
-        resultado.mensagem = "Erro ao inserir fornecedor.";
-    }
+  if (resultado.executado && resultado.data.length > 0) {
+    const id = resultado.data[0].id;
+    resultado.mensagem = "Fornecedor inserido com sucesso!";
+    resultado.data = {
+      nome,
+      descricao,
+      id_categoria,
+      id_moeda,
+      id_grupo,
+      id_unidade_medida,
+      id_cor,
+      id_marca,
+      preco_compra,
+      preco_venda,
+    };
+  } else {
+    resultado.mensagem = "Erro ao inserir fornecedor.";
+  }
 
-    return resultado;
-}
+  return resultado;
+};
 
 // LISTAR TODOS
 export const buscarFornecedor = async () => {
-    const sql = `
+  const sql = `
         SELECT
             f.id,
             f.nome,
@@ -109,22 +117,22 @@ export const buscarFornecedor = async () => {
         ORDER BY f.nome;
     `;
 
-    const resultado = await executarQuery(sql);
+  const resultado = await executarQuery(sql);
 
-    if (resultado.executado) {
-        resultado.mensagem = "Fornecedores encontrados.";
-    } else {
-        resultado.mensagem = "Erro ao buscar fornecedores.";
-    }
+  if (resultado.executado) {
+    resultado.mensagem = "Fornecedores encontrados.";
+  } else {
+    resultado.mensagem = "Erro ao buscar fornecedores.";
+  }
 
-    return resultado;
+  return resultado;
 };
 
 // BUSCAR POR ID
 export const buscarFornecedorId = async (id: number) => {
-    limparResultado();
+  limparResultado();
 
-    const sql = `
+  const sql = `
         SELECT
             f.id,
             f.nome,
@@ -154,36 +162,35 @@ export const buscarFornecedorId = async (id: number) => {
         WHERE f.id = $1;
     `;
 
-    const parametros = [id];
-    const resultado = await executarQuery(sql, parametros);
+  const parametros = [id];
+  const resultado = await executarQuery(sql, parametros);
 
-    if (resultado.executado && resultado.data.length > 0) {
-        resultado.mensagem = "Fornecedor encontrado!";
-    } else {
-        resultado.mensagem = "Nenhum fornecedor encontrado para este ID.";
-    }
+  if (resultado.executado && resultado.data.length > 0) {
+    resultado.mensagem = "Fornecedor encontrado!";
+  } else {
+    resultado.mensagem = "Nenhum fornecedor encontrado para este ID.";
+  }
 
-    return resultado;
+  return resultado;
 };
-
 
 // ATUALIZAR
 export const atualizarFornecedor = async (
-    id: number,
-    nome: string,
-    descricao: string,
-    id_categoria: number,
-    id_moeda: number,
-    id_grupo: number,
-    id_unidade_medida: number,
-    id_cor: number,
-    id_marca: number,
-    preco_compra: number,
-    preco_venda: number
+  id: number,
+  nome: string,
+  descricao: string,
+  id_categoria: number,
+  id_moeda: number,
+  id_grupo: number,
+  id_unidade_medida: number,
+  id_cor: number,
+  id_marca: number,
+  preco_compra: number,
+  preco_venda: number,
 ) => {
-    limparResultado();
+  limparResultado();
 
-    const sql = `
+  const sql = `
         UPDATE tb_fornecedor_dam 
         SET
             nome = $1,
@@ -199,64 +206,64 @@ export const atualizarFornecedor = async (
         WHERE id = $11;
     `;
 
-    const parametros = [
-        nome,
-        descricao,
-        id_categoria,
-        id_moeda,
-        id_grupo,
-        id_unidade_medida,
-        id_cor,
-        id_marca,
-        preco_compra,
-        preco_venda,
-        id
-    ];
-    const resultado = await executarQuery(sql, parametros);
+  const parametros = [
+    nome,
+    descricao,
+    id_categoria,
+    id_moeda,
+    id_grupo,
+    id_unidade_medida,
+    id_cor,
+    id_marca,
+    preco_compra,
+    preco_venda,
+    id,
+  ];
+  const resultado = await executarQuery(sql, parametros);
 
-    if (resultado.executado) {
-        resultado.mensagem = "Fornecedor atualizado com sucesso!";
-        resultado.data = {
-            id,
-            nome,
-            descricao,
-            id_categoria,
-            id_moeda,
-            id_grupo,
-            id_unidade_medida,
-            id_cor,
-            id_marca,
-            preco_compra,
-            preco_venda
-        };
-    } else {
-        resultado.mensagem = "Erro ao atualizar fornecedor!";
-    }
+  if (resultado.executado) {
+    resultado.mensagem = "Fornecedor atualizado com sucesso!";
+    resultado.data = {
+      id,
+      nome,
+      descricao,
+      id_categoria,
+      id_moeda,
+      id_grupo,
+      id_unidade_medida,
+      id_cor,
+      id_marca,
+      preco_compra,
+      preco_venda,
+    };
+  } else {
+    resultado.mensagem = "Erro ao atualizar fornecedor!";
+  }
 
-    return resultado;
-}
+  return resultado;
+};
 
 // APAGAR
 export const apagarFornecedor = async (id: number) => {
-    limparResultado();
-    const sql = "DELETE FROM tb_fornecedor_dam WHERE id = $1;";
-    const parametros = [id];
-    const resultado = await executarQuery(sql, parametros);
+  limparResultado();
+  const sql = "DELETE FROM tb_fornecedor_dam WHERE id = $1;";
+  const parametros = [id];
+  const resultado = await executarQuery(sql, parametros);
 
-    if (resultado.executado) {
-        resultado.mensagem = "Fornecedor apagado com sucesso!";
-    } else {
-        resultado.mensagem = "Erro ao apagar fornecedor!";
-    }
+  if (resultado.executado) {
+    resultado.mensagem = "Fornecedor apagado com sucesso!";
+  } else {
+    resultado.mensagem = "Erro ao apagar fornecedor!";
+  }
 
-    return resultado;
-}
+  return resultado;
+};
 
 // BUSCA GENÉRICA
 export const buscarGenerico = async (parametro: string) => {
-    limparResultado();
+  limparResultado();
 
-    const sql = `
+  const sql = `
         SELECT
             f.id,
             f.nome,
@@ -277,14 +284,14 @@ export const buscarGenerico = async (parametro: string) => {
             OR c.nome ILIKE $1
         ORDER BY f.nome;
     `;
-    const parametros = [`%${parametro}%`];
-    const resultado = await executarQuery(sql, parametros);
+  const parametros = [`%${parametro}%`];
+  const resultado = await executarQuery(sql, parametros);
 
-    if (resultado.executado) {
-        resultado.mensagem = "Busca concluída com sucesso!";
-    } else {
-        resultado.mensagem = "Erro na busca.";
-    }
+  if (resultado.executado) {
+    resultado.mensagem = "Busca concluída com sucesso!";
+  } else {
+    resultado.mensagem = "Erro na busca.";
+  }
 
-    return resultado;
-}
+  return resultado;
+};

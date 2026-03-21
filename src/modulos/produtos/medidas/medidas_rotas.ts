@@ -4,7 +4,7 @@ import {
   listarMedidas,
   buscarMedida,
   alterarMedida,
-  removerMedida
+  removerMedida,
 } from "./medidas_controlador";
 
 const rotasMedidas = express.Router();

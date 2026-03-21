@@ -1,8 +1,8 @@
-import express from "express"
+import express from "express";
 import { validarLogin } from "./login_controlador";
 
 const rotasLoginTiago = express.Router();
 
-rotasLoginTiago.post('/', validarLogin);
+rotasLoginTiago.post("/", validarLogin);
 
 export = rotasLoginTiago;
