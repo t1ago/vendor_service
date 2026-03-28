@@ -48,10 +48,10 @@ app.use('/medidas', rotasMedidas);
 app.use('/fornecedoresDam', rotasFornecedoresDam);
 
 /**Tiago */
-app.use('/tiago/categorias', rotasTiagoCategoria);
-app.use('/tiago/produtos', rotasTiagoProduto);
-app.use('/tiago/enderecos', rotasTiagoEndereco);
-app.use('/tiago/pessoas', rotasTiagoPessoa);
+app.use('/tiago/categoria', rotasTiagoCategoria);
+app.use('/tiago/produto', rotasTiagoProduto);
+app.use('/tiago/endereco', rotasTiagoEndereco);
+app.use('/tiago/pessoa', rotasTiagoPessoa);
 app.use('/tiago/credencial', rotasCredencialTiago);
 
 /** Inicia o Servidor */
