@@ -5,15 +5,15 @@ import {
   alterarCategoria,
   criarCategoria,
   removerCategoria,
-} from "./categorias_controlador";
+} from "./categoria_controlador";
 import { autenticadorInterceptador } from "../../../utils/utils";
 
 const rotasCategorias = express.Router();
 
 rotasCategorias.get("/", autenticadorInterceptador, buscarCategorias);
-rotasCategorias.get("/:id", buscarCategoria);
-rotasCategorias.post("/", criarCategoria);
-rotasCategorias.put("/:id", alterarCategoria);
-rotasCategorias.delete("/:id", removerCategoria);
+rotasCategorias.get("/:id", autenticadorInterceptador, buscarCategoria);
+rotasCategorias.post("/", autenticadorInterceptador, criarCategoria);
+rotasCategorias.put("/:id", autenticadorInterceptador, alterarCategoria);
+rotasCategorias.delete("/:id", autenticadorInterceptador, removerCategoria);
 
 export = rotasCategorias;

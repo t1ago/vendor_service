@@ -4,8 +4,10 @@ import { IResultadoAPI } from "../../../interfaces/resultado_api";
 import { sqlValidarLoginCredencial } from "./login_sql_constants";
 import { processarDados, processarDadosEmpty } from "../../../utils/utils";
 import { ERROR_MESSAGES } from "../../../utils/error_messages";
-import rotasPessoasTiago from "../../pessoas/tiago/pessoas_rotas";
+import rotasPessoasTiago from "../pessoa/pessoas_rotas";
 import jwt from "jsonwebtoken";
+
+const HOUR_IN_SECOND = 3600;
 
 export const validarLoginCredencial = async (parametros: any) => {
   const cliente = dbCliente();
@@ -38,10 +40,14 @@ export const validarLoginCredencial = async (parametros: any) => {
 
 const gerarToken = (dadosUsuario: any) => {
   const SECRET_KEY = process.env.SECRET_KEY || "";
+  const EXPIRES_IN = (process.env.EXPIRES_IN || 3600) as number;
 
   const token = jwt.sign(dadosUsuario, SECRET_KEY, {
-    expiresIn: "1h",
+    expiresIn: `${EXPIRES_IN / HOUR_IN_SECOND}h`,
   });
 
-  return token;
+  return {
+    token: token,
+    expiresIn: Number(EXPIRES_IN),
+  };
 };

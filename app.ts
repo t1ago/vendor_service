@@ -8,11 +8,11 @@ import { rotaProdutoVictor } from "./src/modulos/produtos/produto/victor/produto
 import rotasCores from "./src/modulos/produtos/cores/cores_rotas";
 import rotasMedidas from "./src/modulos/produtos/medidas/medidas_rotas";
 import rotasFornecedoresDam from "./src/modulos/produtos/fornecedores/dam/fornecedores_rotas";
-import rotasCategorias from "./src/modulos/produtos/categorias/categorias_rotas";
-import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rotas";
-import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas";
-import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas";
-import rotasLoginTiago from "./src/modulos/credencial/tiago/login_rotas";
+import rotasTiagoCategoria from "./src/modulos/tiago/categoria/categoria_rotas";
+import rotasTiagoEndereco from "./src/modulos/tiago/endereco/endereco_rotas";
+import rotasTiagoPessoa from "./src/modulos/tiago/pessoa/pessoas_rotas";
+import rotasTiagoProduto from "./src/modulos/tiago/produto/produto_rotas";
+import rotasTiagoLogin from "./src/modulos/tiago/login/login_rotas";
 
 /** Constantes do Servidor*/
 const app = express();
@@ -48,11 +48,11 @@ app.use("/medidas", rotasMedidas);
 app.use("/fornecedoresDam", rotasFornecedoresDam);
 
 /**Tiago */
-app.use("/categorias", rotasCategorias);
-app.use("/produtos/tiago", rotasProdutoTiago);
-app.use("/enderecos/tiago", rotasEnderecoTiago);
-app.use("/pessoas/tiago", rotasPessoasTiago);
-app.use("/login/tiago", rotasLoginTiago);
+app.use("/tiago/categorias", rotasTiagoCategoria);
+app.use("/tiago/produtos", rotasTiagoProduto);
+app.use("/tiago/enderecos", rotasTiagoEndereco);
+app.use("/tiago/pessoas", rotasTiagoPessoa);
+app.use("/tiago/login", rotasTiagoLogin);
 
 /** Inicia o Servidor */
 app.listen(port, () => {

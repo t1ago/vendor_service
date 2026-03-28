@@ -5,7 +5,7 @@ import {
   removerCategoriaServico,
   buscarCategoriaServico,
   buscarCategoriasServico,
-} from "./categorias_servico";
+} from "./categoria_servico";
 
 export const criarCategoria = async (req: Request, res: Response) => {
   const categoria = {

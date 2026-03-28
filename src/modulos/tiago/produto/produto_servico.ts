@@ -1,6 +1,6 @@
 import { QueryResult } from "pg";
-import { IResultadoAPI } from "../../../../interfaces/resultado_api";
-import { dbCliente } from "../../../../utils/banco_dados";
+import { IResultadoAPI } from "../../../interfaces/resultado_api";
+import { dbCliente } from "../../../utils/banco_dados";
 
 const resultado: IResultadoAPI = {
   executado: false,

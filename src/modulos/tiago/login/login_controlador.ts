@@ -1,9 +1,5 @@
 import { Request, Response } from "express";
-import {
-  responseAPI,
-  responseInternalServerError,
-  responseUnauthorizedError,
-} from "../../../utils/utils";
+import { responseAPI, responseUnauthorizedError } from "../../../utils/utils";
 import { validarLoginCredencial } from "./login_servico";
 import { ERROR_MESSAGES } from "../../../utils/error_messages";
 
