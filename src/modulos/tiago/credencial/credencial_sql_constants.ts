@@ -1,6 +1,6 @@
 import { ISqlDados } from '../../../interfaces/sql_filtro';
 
-export const sqlValidarLoginCredencial = (parametros: any): ISqlDados => {
+export const sqlValidarCredencial = (parametros: any): ISqlDados => {
     const email = parametros.username;
     const pwd = btoa(parametros.pwd);
 

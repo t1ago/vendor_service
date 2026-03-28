@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { dbCliente, executarQuery } from '../../../utils/banco_dados';
 import { IResultadoAPI } from '../../../interfaces/resultado_api';
-import { sqlValidarLoginCredencial } from './login_sql_constants';
+import { sqlValidarCredencial as sqlValidarCredencialLogin } from './credencial_sql_constants';
 import { processarDados, processarDadosEmpty } from '../../../utils/utils';
 import { ERROR_MESSAGES } from '../../../utils/error_messages';
-import rotasPessoasTiago from '../pessoa/pessoas_rotas';
 import jwt from 'jsonwebtoken';
 
 const HOUR_IN_SECOND = 3600;
@@ -16,7 +15,7 @@ export const validarLoginCredencial = async (parametros: any) => {
     try {
         cliente.connect();
 
-        const sqlDados = sqlValidarLoginCredencial(parametros);
+        const sqlDados = sqlValidarCredencialLogin(parametros);
 
         const queryResultado = await executarQuery(cliente, sqlDados);
 

@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { responseAPI, responseUnauthorizedError } from '../../../utils/utils';
-import { validarLoginCredencial } from './login_servico';
+import { validarLoginCredencial } from './credencial_servico';
 import { ERROR_MESSAGES } from '../../../utils/error_messages';
+import { IResultadoAPI } from '../../../interfaces/resultado_api';
 
 export const validarLogin = async (req: Request, res: Response) => {
     if (req.headers.authorization == undefined) {
@@ -23,4 +24,14 @@ export const validarLogin = async (req: Request, res: Response) => {
             responseAPI(res, resultado);
         }
     }
+};
+
+export const buscarUsuario = async (req: Request, res: Response) => {
+    const resultado: IResultadoAPI = {
+        data: (req as any).user,
+        executado: true,
+        mensagem: '',
+    };
+
+    responseAPI(res, resultado);
 };

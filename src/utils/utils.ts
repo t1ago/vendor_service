@@ -70,19 +70,17 @@ export const autenticadorInterceptador = (req: Request, res: Response, next: Nex
 
     if (auth == undefined) {
         responseUnauthorizedError(res);
-    }
+    } else {
+        const [, token] = auth!.split(' ');
 
-    const [, token] = auth!.split(' ');
+        try {
+            const dadosUsuario = jwt.verify(token, SECRET_KEY);
 
-    try {
-        const dadosUsuario = jwt.verify(token, SECRET_KEY);
+            (req as any).user = dadosUsuario;
 
-        (req as any).user = dadosUsuario;
-
-        console.log(dadosUsuario);
-
-        return next();
-    } catch (error) {
-        responseUnauthorizedError(res);
+            return next();
+        } catch (error) {
+            responseUnauthorizedError(res);
+        }
     }
 };

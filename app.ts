@@ -12,7 +12,7 @@ import rotasTiagoCategoria from './src/modulos/tiago/categoria/categoria_rotas';
 import rotasTiagoEndereco from './src/modulos/tiago/endereco/endereco_rotas';
 import rotasTiagoPessoa from './src/modulos/tiago/pessoa/pessoas_rotas';
 import rotasTiagoProduto from './src/modulos/tiago/produto/produto_rotas';
-import rotasTiagoLogin from './src/modulos/tiago/login/login_rotas';
+import rotasCredencialTiago from './src/modulos/tiago/credencial/credencial_rotas';
 
 /** Constantes do Servidor*/
 const app = express();
@@ -52,7 +52,7 @@ app.use('/tiago/categorias', rotasTiagoCategoria);
 app.use('/tiago/produtos', rotasTiagoProduto);
 app.use('/tiago/enderecos', rotasTiagoEndereco);
 app.use('/tiago/pessoas', rotasTiagoPessoa);
-app.use('/tiago/login', rotasTiagoLogin);
+app.use('/tiago/credencial', rotasCredencialTiago);
 
 /** Inicia o Servidor */
 app.listen(port, () => {
