@@ -1,21 +1,15 @@
-import express from "express";
-import {
-  buscarVinculos,
-  criar,
-  buscar,
-  inativar,
-  buscarEndereco,
-  alterar,
-} from "./pessoas_controlador";
+import express from 'express';
+import { buscarVinculos, criar, buscar, inativar, buscarEndereco, alterar } from './pessoas_controlador';
+import { autenticadorInterceptador } from '../../../utils/utils';
 
 const rotasPessoasTiago = express.Router();
 
-rotasPessoasTiago.get("/vinculos", buscarVinculos);
-rotasPessoasTiago.post("/", criar);
-rotasPessoasTiago.put("/:id", alterar);
-rotasPessoasTiago.put("/inativar/:id", inativar);
-rotasPessoasTiago.get("/", buscar);
-rotasPessoasTiago.get("/:id", buscar);
-rotasPessoasTiago.get("/enderecos/:id", buscarEndereco);
+rotasPessoasTiago.get('/vinculos', autenticadorInterceptador, buscarVinculos);
+rotasPessoasTiago.post('/', autenticadorInterceptador, criar);
+rotasPessoasTiago.put('/:id', autenticadorInterceptador, alterar);
+rotasPessoasTiago.put('/inativar/:id', autenticadorInterceptador, inativar);
+rotasPessoasTiago.get('/', autenticadorInterceptador, buscar);
+rotasPessoasTiago.get('/:id', autenticadorInterceptador, buscar);
+rotasPessoasTiago.get('/enderecos/:id', autenticadorInterceptador, buscarEndereco);
 
 export = rotasPessoasTiago;

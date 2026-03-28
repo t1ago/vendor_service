@@ -1,19 +1,19 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "type": "typescript",
-      "tsconfig": "tsconfig.json",
-      "problemMatcher": ["$tsc"],
-      "group": "build",
-      "label": "tsc: compilar – tsconfig.json"
-    },
-    {
-      "type": "npm",
-      "script": "local",
-      "problemMatcher": [],
-      "label": "npm: local",
-      "detail": "npm run ts && node --env-file=.local.env dist/app.js"
-    }
-  ]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "problemMatcher": ["$tsc"],
+            "group": "build",
+            "label": "tsc: compilar – tsconfig.json"
+        },
+        {
+            "type": "npm",
+            "script": "local",
+            "problemMatcher": [],
+            "label": "npm: local",
+            "detail": "npm run ts && node --env-file=.local.env dist/app.js"
+        }
+    ]
 }

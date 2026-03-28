@@ -1,32 +1,32 @@
-import { ISqlDados } from "../../../interfaces/sql_filtro";
+import { ISqlDados } from '../../../interfaces/sql_filtro';
 
 export const sqlBuscarVinculos = (): ISqlDados => {
-  return {
-    sql: `
+    return {
+        sql: `
                 SELECT tp.id, tp.nome 
                 FROM tb_pessoa_tiago tp 
                 WHERE tp.ativo = 'A' AND tp.tipo_pessoa = 'J'
             `,
-    valores: null,
-  };
+        valores: null,
+    };
 };
 
 export const sqlCriarPessoa = (parametros: any): ISqlDados => {
-  let dataInicio = undefined;
+    let dataInicio = undefined;
 
-  if (parametros.dataInicio != undefined) {
-    let dateInput = parametros.dataInicio;
-    let dateArray = dateInput.split("/");
+    if (parametros.dataInicio != undefined) {
+        let dateInput = parametros.dataInicio;
+        let dateArray = dateInput.split('/');
 
-    const day = dateArray[0].padStart(2, "0");
-    const month = dateArray[1].padStart(2, "0");
-    const year = dateArray[2];
+        const day = dateArray[0].padStart(2, '0');
+        const month = dateArray[1].padStart(2, '0');
+        const year = dateArray[2];
 
-    dataInicio = `${year}-${month}-${day} 00:00:00`;
-  }
+        dataInicio = `${year}-${month}-${day} 00:00:00`;
+    }
 
-  return {
-    sql: `
+    return {
+        sql: `
                 INSERT INTO tb_pessoa_tiago (
                     nome, 
                     apelido, 
@@ -41,23 +41,23 @@ export const sqlCriarPessoa = (parametros: any): ISqlDados => {
                     $1, $2, $3, $4, $5, $6, $7, $8, $9
                 ) RETURNING id;
             `,
-    valores: [
-      parametros.nome,
-      parametros.apelido,
-      parametros.tipoPessoa,
-      parametros.sexo,
-      dataInicio,
-      parametros.documentoEstadual,
-      parametros.documentoFedereal,
-      parametros.idVinculo,
-      parametros.ativo,
-    ],
-  };
+        valores: [
+            parametros.nome,
+            parametros.apelido,
+            parametros.tipoPessoa,
+            parametros.sexo,
+            dataInicio,
+            parametros.documentoEstadual,
+            parametros.documentoFedereal,
+            parametros.idVinculo,
+            parametros.ativo,
+        ],
+    };
 };
 
 export const sqlCriarEndereco = (parametros: any): ISqlDados => {
-  return {
-    sql: `
+    return {
+        sql: `
                 INSERT INTO tb_endereco_pessoa_tiago (
                     id_pessoa, 
                     cep, 
@@ -73,37 +73,37 @@ export const sqlCriarEndereco = (parametros: any): ISqlDados => {
                     $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
                 );
             `,
-    valores: [
-      parametros.idPessoa,
-      parametros.cep,
-      parametros.logradouro,
-      parametros.numero,
-      parametros.bairro,
-      parametros.cidade,
-      parametros.estado,
-      parametros.tipoEndereco,
-      parametros.buscadoPorCep ? "S" : "N",
-      parametros.ativo,
-    ],
-  };
+        valores: [
+            parametros.idPessoa,
+            parametros.cep,
+            parametros.logradouro,
+            parametros.numero,
+            parametros.bairro,
+            parametros.cidade,
+            parametros.estado,
+            parametros.tipoEndereco,
+            parametros.buscadoPorCep ? 'S' : 'N',
+            parametros.ativo,
+        ],
+    };
 };
 
 export const sqlAlterarPessoa = (parametros: any): ISqlDados => {
-  let dataInicio = undefined;
+    let dataInicio = undefined;
 
-  if (parametros.dataInicio != undefined) {
-    let dateInput = parametros.dataInicio;
-    let dateArray = dateInput.split("/");
+    if (parametros.dataInicio != undefined) {
+        let dateInput = parametros.dataInicio;
+        let dateArray = dateInput.split('/');
 
-    const day = dateArray[0].padStart(2, "0");
-    const month = dateArray[1].padStart(2, "0");
-    const year = dateArray[2];
+        const day = dateArray[0].padStart(2, '0');
+        const month = dateArray[1].padStart(2, '0');
+        const year = dateArray[2];
 
-    dataInicio = `${year}-${month}-${day} 00:00:00`;
-  }
+        dataInicio = `${year}-${month}-${day} 00:00:00`;
+    }
 
-  return {
-    sql: `
+    return {
+        sql: `
                 UPDATE tb_pessoa_tiago 
                     SET nome=$1, 
                         apelido=$2, 
@@ -116,24 +116,24 @@ export const sqlAlterarPessoa = (parametros: any): ISqlDados => {
                         ativo=$9
                 WHERE id=$10
             `,
-    valores: [
-      parametros.nome,
-      parametros.apelido,
-      parametros.tipoPessoa,
-      parametros.sexo,
-      dataInicio,
-      parametros.documentoEstadual,
-      parametros.documentoFedereal,
-      parametros.idVinculo,
-      parametros.ativo ? "A" : "I",
-      parametros.id,
-    ],
-  };
+        valores: [
+            parametros.nome,
+            parametros.apelido,
+            parametros.tipoPessoa,
+            parametros.sexo,
+            dataInicio,
+            parametros.documentoEstadual,
+            parametros.documentoFedereal,
+            parametros.idVinculo,
+            parametros.ativo ? 'A' : 'I',
+            parametros.id,
+        ],
+    };
 };
 
 export const sqlAlterarEndereco = (parametros: any): ISqlDados => {
-  return {
-    sql: `
+    return {
+        sql: `
                 UPDATE tb_endereco_pessoa_tiago
                     SET cep=$1, 
                         logradouro=$2, 
@@ -146,36 +146,36 @@ export const sqlAlterarEndereco = (parametros: any): ISqlDados => {
                         ativo=$9
                 WHERE id=$10 AND id_pessoa=$11
                 `,
-    valores: [
-      parametros.cep,
-      parametros.logradouro,
-      parametros.numero,
-      parametros.bairro,
-      parametros.cidade,
-      parametros.estado,
-      parametros.tipoEndereco,
-      parametros.buscadoPorCep ? "S" : "N",
-      parametros.ativo,
-      parametros.id,
-      parametros.idPessoa,
-    ],
-  };
+        valores: [
+            parametros.cep,
+            parametros.logradouro,
+            parametros.numero,
+            parametros.bairro,
+            parametros.cidade,
+            parametros.estado,
+            parametros.tipoEndereco,
+            parametros.buscadoPorCep ? 'S' : 'N',
+            parametros.ativo,
+            parametros.id,
+            parametros.idPessoa,
+        ],
+    };
 };
 
 export const sqlInativarPessoa = (parametros: any): ISqlDados => {
-  return {
-    sql: `
+    return {
+        sql: `
             UPDATE tb_pessoa_tiago 
                 SET ativo=$1
                 WHERE id=$2
         `,
-    valores: ["I", parametros.id],
-  };
+        valores: ['I', parametros.id],
+    };
 };
 
 export const sqlBuscarPorId = (parametros: any) => {
-  return {
-    sql: `
+    return {
+        sql: `
              SELECT 
                 tb_pessoa.id,
                 tb_pessoa.nome,
@@ -191,13 +191,13 @@ export const sqlBuscarPorId = (parametros: any) => {
             WHERE tb_pessoa.id=$1
             ORDER BY tb_pessoa.nome
         `,
-    valores: [parametros.id],
-  };
+        valores: [parametros.id],
+    };
 };
 
 export const sqlBuscarTodos = (parametros: any) => {
-  return {
-    sql: `
+    return {
+        sql: `
             SELECT 
                 tb_pessoa.id,
                 tb_pessoa.nome,
@@ -218,13 +218,13 @@ export const sqlBuscarTodos = (parametros: any) => {
             WHERE tb_pessoa.tipo_pessoa=$1
             ORDER BY tb_pessoa.nome
         `,
-    valores: [parametros.tipo_pessoa],
-  };
+        valores: [parametros.tipo_pessoa],
+    };
 };
 
 export const sqlBuscarPorTermo = (parametros: any) => {
-  return {
-    sql: `
+    return {
+        sql: `
             SELECT 
                 tb_pessoa.id,
                 tb_pessoa.nome,
@@ -252,13 +252,13 @@ export const sqlBuscarPorTermo = (parametros: any) => {
             OR (SELECT lower(tb_end.cep || tb_end.logradouro || tb_end.numero || tb_end.bairro || tb_end.cidade || tb_end.estado) FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'E') LIKE lower(concat('%', $2::text, '%'))))
             ORDER BY tb_pessoa.nome
         `,
-    valores: [parametros.tipo_pessoa, parametros.termo],
-  };
+        valores: [parametros.tipo_pessoa, parametros.termo],
+    };
 };
 
 export const sqlBuscarEnderecosPorIdPessoa = (parametros: any) => {
-  return {
-    sql: `
+    return {
+        sql: `
              SELECT 
                 tb_end.id,
                 tb_end.cep,
@@ -273,13 +273,13 @@ export const sqlBuscarEnderecosPorIdPessoa = (parametros: any) => {
             FROM tb_endereco_pessoa_tiago tb_end
             WHERE tb_end.id_pessoa=$1
         `,
-    valores: [parametros.id],
-  };
+        valores: [parametros.id],
+    };
 };
 
 export const sqlBuscarEnderecosPorId = (parametros: any) => {
-  return {
-    sql: `
+    return {
+        sql: `
             SELECT 
                 tb_end.cep,
                 tb_end.logradouro,
@@ -290,6 +290,6 @@ export const sqlBuscarEnderecosPorId = (parametros: any) => {
             FROM tb_endereco_pessoa_tiago tb_end
             WHERE tb_end.id=$1
         `,
-    valores: [parametros.id],
-  };
+        valores: [parametros.id],
+    };
 };
