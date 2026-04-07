@@ -2,9 +2,6 @@ import express, { Request, Response } from "express"
 import cors from "cors"
 import { rotas_moedas } from "./src/modulos/produtos/moedas/moedas_rotas"
 import rotasfornecedor_miguel from "./src/modulos/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
-import rota from "./src/modulos/produtos/marca/marca_rotas"
-import gruporota from "./src/modulos/produtos/grupo/grupo_rotas"
-import { rotaProdutoVictor } from "./src/modulos/produtos/produto/victor/produto_rotas"
 import rotasCores from "./src/modulos/produtos/cores/cores_rotas"
 import rotasMedidas from "./src/modulos/produtos/medidas/medidas_rotas"
 import rotasFornecedoresDam from "./src/modulos/produtos/fornecedores/dam/fornecedores_rotas"
@@ -12,6 +9,10 @@ import rotasCategorias from "./src/modulos/produtos/categorias/categorias_rotas"
 import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rotas"
 import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas"
+import rotaMarca from "./src/modulos/victor/marca/marca_rotas"
+import rotaGrupo from "./src/modulos/victor/grupo/grupo_rotas"
+import rotaCredencialVictor from "./src/modulos/victor/credencial/credencial_rotas"
+import rotaProdutoVictor from "./src/modulos/victor/produto/produto_rotas"
 
 /** Constantes do Servidor*/
 const app = express()
@@ -37,9 +38,10 @@ app.use("/moedas", rotas_moedas)
 app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 
 /**Victor */
-app.use("/marca", rota)
-app.use("/grupos", gruporota)
-app.use("/produto/victor", rotaProdutoVictor)
+app.use("/victor/marca", rotaMarca)
+app.use("/victor/grupo", rotaGrupo)
+app.use("/victor/produto", rotaProdutoVictor)
+app.use("/victor/credencial",rotaCredencialVictor)
 
 /**Danilo */
 app.use("/cores", rotasCores)
