@@ -6,13 +6,15 @@ import {
   alterarMedida,
   removerMedida
 } from "./medidas_controlador";
+import { authenticadorInteceptador } from "../../../utils/utils_Miguel";
 
 const rotasMedidas = express.Router();
 
-rotasMedidas.post("/", criarMedida);
-rotasMedidas.get("/", listarMedidas);
-rotasMedidas.get("/:id", buscarMedida);
-rotasMedidas.put("/:id", alterarMedida);
-rotasMedidas.delete("/:id", removerMedida);
+rotasMedidas.post("/", authenticadorInteceptador, criarMedida);
+rotasMedidas.get("/", authenticadorInteceptador, listarMedidas);
+rotasMedidas.get("/:id", authenticadorInteceptador, buscarMedida);
+rotasMedidas.put("/:id", authenticadorInteceptador, alterarMedida);
+rotasMedidas.delete("/:id", authenticadorInteceptador, removerMedida);
 
 export = rotasMedidas;
+

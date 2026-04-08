@@ -12,6 +12,8 @@ import rotasCategorias from "./src/modulos/produtos/categorias/categorias_rotas"
 import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rotas"
 import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas"
+import rotasCredencial_miguel from "./src/modulos/credencial/miguel/credencial_routes"
+
 
 /** Constantes do Servidor*/
 const app = express()
@@ -33,8 +35,9 @@ app.get("/", (req: Request, res: Response) => {
 
 
 /**Miguel */
-app.use("/moedas", rotas_moedas)
-app.use("/fornecedor/miguel", rotasfornecedor_miguel)
+app.use("/miguel/moedas", rotas_moedas)
+app.use("fornecedor/miguel", rotasfornecedor_miguel)
+app.use("/login/miguel", rotasCredencial_miguel)
 
 /**Victor */
 app.use("/marca", rota)

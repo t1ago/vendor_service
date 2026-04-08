@@ -41,7 +41,6 @@ export const moedaBuscar = async (moeda: any) => {
             parametros = [moeda.id]
         } else if (moeda.nome != null || moeda.moeda != null) {
             sql = 'SELECT * FROM tb_moeda WHERE nome ILIKE $1 OR moeda ILIKE $2'
-            // CORREÇÃO: Sintaxe correta para busca com LIKE
             parametros = [`%${moeda.nome}%`, `%${moeda.moeda}%`]
         } else {
             sql = "SELECT * FROM tb_moeda"
@@ -56,7 +55,7 @@ export const moedaBuscar = async (moeda: any) => {
             return resultado_sql
         }
     } catch (error) {
-       
+
     }
-}       
-    
+}
+
