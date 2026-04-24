@@ -1,61 +1,42 @@
 
-import { novogrupo, alterargruposervico, removergruposervico, buscargrupoServico, buscargruposServico} from "./grupo_servico"
+import { responseAPI } from "../../../utils/utils"
+import { inserirGrupoServico, alterarGrupoServico, removerGrupoServico, buscarGrupoServico, buscarGruposServico} from "./grupo_servico"
 import { Request, Response } from "express"
 
-export const inserirgrupo = async (req: Request, res: Response) => {
-    let parametros = {
+export const inserirGrupo = async (req: Request, res: Response) => {
+    const parametros = {
         nome: req.body.nome
     }
-    const resultado_insert = await novogrupo(parametros)
-    if(resultado_insert.executado) {
-        res.status(200).json(resultado_insert)
-    }else {
-        res.status(500).json(resultado_insert)
-    }
+    const resultado = await inserirGrupoServico(parametros);
+    responseAPI(res,resultado);
 }
 
-export const alterargrupo = async (req: Request, res: Response) => {
-    let parametros = {
+export const alterarGrupo = async (req: Request, res: Response) => {
+    const parametros = {
         nome: req.body.nome,
         id: req.params.id
     }
-    const resultado_atualizar = await alterargruposervico(parametros)
-    if(resultado_atualizar.executado) {
-        res.status(200).json(resultado_atualizar)
-    }else {
-        res.status(500).json(resultado_atualizar)
-    }
+    const resultado = await alterarGrupoServico(parametros);
+    responseAPI(res,resultado);
 }
 
-export const removergrupo = async (req: Request, res: Response) => {
-    let parametros = {
+export const removerGrupo = async (req: Request, res: Response) => {
+    const parametros = {
         id: req.params.id
     }
-    const resultado_deletar = await removergruposervico(parametros)
-    if(resultado_deletar.executado) {
-        res.status(200).json(resultado_deletar)
-    }else {
-        res.status(500).json(resultado_deletar)
-    }
+    const resultado = await removerGrupoServico(parametros);
+    responseAPI(res,resultado);
 }
 
-export const buscargrupo = async (req: Request, res: Response) => {
-    let parametros = {
+export const buscarGrupo = async (req: Request, res: Response) => {
+    const parametros = {
         id: req.params.id
     }
-    const resultado_unidade = await buscargrupoServico(parametros)
-    if(resultado_unidade.executado) {
-        res.status(200).json(resultado_unidade)
-    }else {
-        res.status(500).json(resultado_unidade)
-    }
+    const resultado = await buscarGrupoServico(parametros);
+    responseAPI(res,resultado);
 }
 
-export const buscargrupos = async (_: Request, res: Response) => {
-    const resultado_tudo = await buscargruposServico()
-    if(resultado_tudo.executado) {
-        res.status(200).json(resultado_tudo)
-    }else {
-        res.status(500).json(resultado_tudo)
-    }
+export const buscarGrupos = async (_: Request, res: Response) => {
+    const resultado = await buscarGruposServico()
+    responseAPI(res,resultado);
 }

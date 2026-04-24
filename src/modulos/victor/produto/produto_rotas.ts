@@ -1,11 +1,11 @@
 import express from "express";
-import { Produtonovo,buscarProduto, atualizarProduto, deletarProduto}from "./produto_controlador";
+import { inserirProduto,buscarProduto, alterarProduto, deletarProduto}from "./produto_controlador";
 
-const rotaProdutoVictor = express.Router()
-rotaProdutoVictor.post("/", Produtonovo)
-rotaProdutoVictor.get("/", buscarProduto)
-rotaProdutoVictor.get("/:id", buscarProduto)
-rotaProdutoVictor.put("/:id", atualizarProduto)
-rotaProdutoVictor.delete("/:id",deletarProduto)
+const rotasProdutoVictor = express.Router()
+rotasProdutoVictor.post("/", inserirProduto)
+rotasProdutoVictor.get("/", buscarProduto)
+rotasProdutoVictor.get("/:id", buscarProduto)
+rotasProdutoVictor.put("/:id", alterarProduto)
+rotasProdutoVictor.delete("/:id",deletarProduto)
 
-export = rotaProdutoVictor
+export = rotasProdutoVictor

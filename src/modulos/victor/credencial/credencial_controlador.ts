@@ -1,5 +1,7 @@
 import { Request , Response } from "express";
 import { buscar, validar } from "./credencial_servico";
+import { ERROR_MESSAGES } from "../../../utils/victor/error_messages";
+import { responseAPI } from "../../../utils/utils";
 
 
 export const validarCredencial = async (req: Request, res: Response) => {
@@ -15,19 +17,15 @@ export const validarCredencial = async (req: Request, res: Response) => {
         } 
 
         const results = await validar(parametros);
-        if(results.mensagem == "Não autorizada") {
+        if(results.mensagem == ERROR_MESSAGES.NOAUTHORIZED) {
             res.status(401).end();
         } else {
-            if(results.executado) {
-                res.json(results);
-            } else {
-                res.status(500).json(results);
-            }
+            responseAPI(res,results);
         }
     }
 }
 
 export const buscarUsuario = async (req : Request, res: Response) => {
     const results = await buscar(req);
-    res.status(200).json(results);
+    responseAPI(res,results);
 }

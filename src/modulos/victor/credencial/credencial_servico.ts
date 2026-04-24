@@ -1,8 +1,10 @@
 import { IResultadoAPI } from "../../../interfaces/resultado_api";
-import { dbCliente } from "../../../utils/banco_dados";
+import { dbCliente, executarQuery } from "../../../utils/banco_dados";
 import jwt from 'jsonwebtoken';
 import { Request } from "express";
 import { limparResultado } from "../../../utils/victor/utils";
+import { processarDados, processarDadosEmpty } from "../../../utils/utils";
+import { ERROR_MESSAGES } from "../../../utils/victor/error_messages";
 
 export const validar = async (parametros : any) => {
     const cliente = dbCliente();
@@ -24,17 +26,20 @@ export const validar = async (parametros : any) => {
         
         const params = [parametros.email,btoa(parametros.password)];
 
-        const results_select = await cliente.query(sql,params);
+        const results_select = await executarQuery(cliente, {sql : sql, valores : params})
         
         if(results_select.rows.length == 0) {
-            results.mensagem = "Não autorizada";
+            results = processarDadosEmpty(ERROR_MESSAGES.NOAUTHORIZED)
         } else {
-            results.executado = true;
-            results.mensagem = "Autorizada";
-            results.data = gerarToken(results_select.rows[0])
+            results = processarDados(() => {
+                return {
+                    token : gerarToken(results_select.rows[0]),
+                    expiresIn : 3600
+                }
+            })
         }
-    } catch (erro) {
-        results.mensagem = `${erro}`;
+    } catch (error) {
+        results = processarDadosEmpty(ERROR_MESSAGES.SERVICE.replace('{error}',`${error}`))
     } finally {
         cliente.end();
     }
@@ -56,16 +61,10 @@ export const buscar = async (req : Request) => {
     let results = limparResultado();
     try {
         cliente.connect();
-
-        results.executado = true;
-
-        results.mensagem = "Usuario retornado";
-
-        results.data = (req as any).user;
-
+        results = processarDados(() => (req as any).user );
     } 
-    catch (erro) {
-        results.mensagem = `${erro}`
+    catch (error) {
+        results = processarDadosEmpty(ERROR_MESSAGES.SERVICE.replace('{error}',`${error}`))
     }
     finally {
         cliente.end()

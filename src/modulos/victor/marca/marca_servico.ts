@@ -1,54 +1,37 @@
-import { resultado_all } from "./marca_resultado"
+import { servicoGenerico } from "../../../utils/victor/servico-generico"
+import { MARCA_SQL } from "./marca_sql";
 
-// Inserir
-export const inserir_marca = async(marca: any) => {
-    try {
-        const sql = "INSERT INTO tb_marca (nome) VALUES ($1) RETURNING id"
-        const parametros = [marca.nome]
-        const resultado_insert = await resultado_all(sql,parametros)
-        return resultado_insert
-    }
-    finally {}
+export const inserirMarcaServico = async(marca: any) => {
+    const parametros = [marca.nome]
+    return await servicoGenerico(MARCA_SQL.INSERT,parametros);
 }
-//Buscar marca (Id, nome e todos)
-export const buscar_marca = async(marca:any) => {
+
+export const buscarMarcaServico = async(marca:any) => {
     var sql : string = ''
     var parametro: any
     if (marca == null) {
-        sql = "SELECT * FROM tb_marca"
+        sql = MARCA_SQL.SELECT_ALL
         parametro = null
     } else if (marca.id != null) {
-        sql = "SELECT * FROM tb_marca WHERE id=$1"
+        sql = MARCA_SQL.SELECT_ID
         parametro = [marca.id]
     } else if (marca.nome !=null) {
-        sql = "SELECT * FROM tb_marca WHERE nome ILIKE $1"
+        sql = MARCA_SQL.SELECT_QUERY
         parametro = [`%${marca.nome}%`] 
     }
     if (parametro != null) {
-        const resultado_select = await resultado_all(sql,parametro)
-        return resultado_select
+        return await servicoGenerico(sql,parametro);
     } else {
-        const resultado_select = await resultado_all(sql)
-        return resultado_select
+        return await servicoGenerico(sql)
     }
 }
-//Alterar marca
-export const alterar_marca = async(marca: any) => {
-    try {
-        const sql = "UPDATE tb_marca SET nome=$1 WHERE id=$2"
-        const parametros = [marca.nome,marca.id]
-        const resultado_atualizar = await resultado_all(sql,parametros)
-        return resultado_atualizar
-    }
-    finally {}
+
+export const alterarMarcaServico = async(marca: any) => {
+    const parametros = [marca.nome,marca.id]
+    return await servicoGenerico(MARCA_SQL.UPDATE,parametros);
 }
-//Deletar marca
-export const deletar_marca = async(marca: any) => {
-    try {
-        const sql = "DELETE FROM tb_marca WHERE id=$1"
-        const parametros = [marca.id]
-        const resultado_deletar = await resultado_all(sql,parametros)
-        return resultado_deletar
-    }
-    finally {}
+
+export const deletarMarcaServico = async(marca: any) => {
+    const parametros = [marca.id]
+    return await servicoGenerico(MARCA_SQL.DELETE,parametros);
 }

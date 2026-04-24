@@ -9,10 +9,10 @@ import rotasCategorias from "./src/modulos/produtos/categorias/categorias_rotas"
 import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rotas"
 import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas"
-import rotaMarca from "./src/modulos/victor/marca/marca_rotas"
-import rotaGrupo from "./src/modulos/victor/grupo/grupo_rotas"
-import rotaCredencialVictor from "./src/modulos/victor/credencial/credencial_rotas"
-import rotaProdutoVictor from "./src/modulos/victor/produto/produto_rotas"
+import rotasMarca from "./src/modulos/victor/marca/marca_rotas"
+import rotasGrupo from "./src/modulos/victor/grupo/grupo_rotas"
+import rotasCredencialVictor from "./src/modulos/victor/credencial/credencial_rotas"
+import rotasProdutoVictor from "./src/modulos/victor/produto/produto_rotas"
 
 /** Constantes do Servidor*/
 const app = express()
@@ -38,10 +38,10 @@ app.use("/moedas", rotas_moedas)
 app.use("/fornecedor/miguel", rotasfornecedor_miguel)
 
 /**Victor */
-app.use("/victor/marca", rotaMarca)
-app.use("/victor/grupo", rotaGrupo)
-app.use("/victor/produto", rotaProdutoVictor)
-app.use("/victor/credencial",rotaCredencialVictor)
+app.use("/victor/marca", rotasMarca)
+app.use("/victor/grupo", rotasGrupo)
+app.use("/victor/produto", rotasProdutoVictor)
+app.use("/victor/credencial",rotasCredencialVictor)
 
 /**Danilo */
 app.use("/cores", rotasCores)

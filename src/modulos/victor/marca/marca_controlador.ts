@@ -1,61 +1,41 @@
 import { Request, Response } from "express";
-import { alterar_marca, buscar_marca, deletar_marca, inserir_marca } from "./marca_servico";
+import { alterarMarcaServico, buscarMarcaServico, deletarMarcaServico, inserirMarcaServico } from "./marca_servico";
+import { responseAPI } from "../../../utils/utils";
 
-//Controle do inserir
-export const control_inserir = async(req: Request, res: Response) => {
+export const inserirMarca = async(req: Request, res: Response) => {
     const parametro = {
         nome: req.body.nome
     }
-    const resultado_inserir = await inserir_marca(parametro)
-    if (resultado_inserir.mensagem === "") {
-        res.json(resultado_inserir)
-    } else {
-        res.status(500).json(resultado_inserir)
-    }
+    const resultado = await inserirMarcaServico(parametro);
+    responseAPI(res,resultado);
 }
-// Controle do buscar por id
-export const control_buscar_id = async(req:Request,res:Response) => {
+
+export const buscarMarcaId = async(req:Request,res:Response) => {
     const parametro = {
         id: req.params.id
     }
-    const resultado_select = await buscar_marca(parametro)
-    if(resultado_select.executado) {
-        res.json(resultado_select)
-    } else {
-        res.status(500).json(resultado_select)
-    }
+    const resultado = await buscarMarcaServico(parametro);
+    responseAPI(res,resultado);
 }
-//Controle do buscar por All
-export const control_buscar = async(req:Request,res:Response) => {
-    const resultado_select = await buscar_marca(null)
-    if(resultado_select.executado) {
-        res.json(resultado_select)
-    } else {
-        res.status(500).json(resultado_select)
-    }
+
+export const buscarMarca = async(_req:Request,res:Response) => {
+    const resultado = await buscarMarcaServico(null)
+    responseAPI(res,resultado);
 }
-//Controle do Atualizar marca
-export const control_update = async(req: Request, res: Response) => {
+
+export const alterarMarca = async(req: Request, res: Response) => {
     const parametro = {
         nome: req.body.nome,
         id: req.params.id
     }
-    const resultado_update = await alterar_marca(parametro)
-    if (resultado_update.mensagem === "") {
-        res.json(resultado_update)
-    } else {
-        res.status(500).json(resultado_update)
-    }
+    const resultado = await alterarMarcaServico(parametro)
+    responseAPI(res,resultado);
 }
-//Controle do deletar marca
-export const control_delete = async(req: Request, res: Response) => {
+
+export const deletarMarca = async(req: Request, res: Response) => {
     const parametro = {
         id: req.params.id
     }
-    const resultado_delete = await deletar_marca(parametro)
-    if (resultado_delete.mensagem === "") {
-        res.json(resultado_delete)
-    } else {
-        res.status(500).json(resultado_delete)
-    }
+    const resultado = await deletarMarcaServico(parametro)
+    responseAPI(res,resultado);
 }

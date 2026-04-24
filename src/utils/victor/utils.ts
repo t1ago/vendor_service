@@ -24,6 +24,6 @@ export const limparResultado = () => {
     return {
         executado : false,
         mensagem : "",
-        data : []
+        data : {}
     } as IResultadoAPI
 }

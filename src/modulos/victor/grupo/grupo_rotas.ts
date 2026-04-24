@@ -1,11 +1,11 @@
 import  express  from "express"
-import { alterargrupo, buscargrupo, buscargrupos, inserirgrupo, removergrupo } from "./grupo_controlador"
+import { alterarGrupo, buscarGrupo, buscarGrupos, inserirGrupo, removerGrupo } from "./grupo_controlador"
 import { autentificadorInterruptor } from "../../../utils/victor/utils"
 
-const rotaGrupo = express.Router() 
-rotaGrupo.post("/",autentificadorInterruptor, inserirgrupo)
-rotaGrupo.put("/:id",autentificadorInterruptor, alterargrupo)
-rotaGrupo.delete("/:id",autentificadorInterruptor, removergrupo)
-rotaGrupo.get("/:id",autentificadorInterruptor,buscargrupo)
-rotaGrupo.get("/",autentificadorInterruptor, buscargrupos)
-export = rotaGrupo
+const rotasGrupo = express.Router() 
+rotasGrupo.post("/",autentificadorInterruptor, inserirGrupo)
+rotasGrupo.put("/:id",autentificadorInterruptor, alterarGrupo)
+rotasGrupo.delete("/:id",autentificadorInterruptor, removerGrupo)
+rotasGrupo.get("/:id",autentificadorInterruptor,buscarGrupo)
+rotasGrupo.get("/",autentificadorInterruptor, buscarGrupos)
+export = rotasGrupo

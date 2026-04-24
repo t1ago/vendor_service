@@ -1,19 +1,20 @@
--- Active: 1751331196646@@ep-raspy-river-a8zxdh1m.eastus2.azure.neon.tech@5432@vendor_db_database
-alter table tb_fornecedor_victor alter COLUMN id_categoria TYPE INTEGER;
-alter table tb_fornecedor_victor add constraint fk_categoria FOREIGN KEY (id_categoria) REFERENCES tb_categoria (id);
-
-alter table tb_fornecedor_victor add COLUMN id_moeda INTEGER;
-alter table tb_fornecedor_victor add constraint fk_moeda FOREIGN KEY (id_moeda) REFERENCES tb_moeda (id);
-
-alter table tb_fornecedor_victor add COLUMN id_marca INTEGER;
-alter Table tb_fornecedor_victor add constraint fk_marca FOREIGN KEY (id_marca) REFERENCES tb_marca (id);
-
-alter table tb_fornecedor_victor add COLUMN id_cores INTEGER;
-alter Table tb_fornecedor_victor add constraint fk_cores FOREIGN KEY (id_cores) REFERENCES tb_cores (id);
-alter table tb_fornecedor_victor add COLUMN id_unidade_medida INTEGER;
-alter Table tb_fornecedor_victor add constraint fk_unidade_medida FOREIGN KEY (id_unidade_medida) REFERENCES tb_medida (id);
-alter table tb_fornecedor_victor add COLUMN id_grupo INTEGER;
-alter Table tb_fornecedor_victor add constraint fk_grupo FOREIGN KEY (id_grupo) REFERENCES tb_grupo (id);
-
-alter Table tb_fornecedor_victor add COLUMN preco_compra DECIMAL(12,2);
-alter Table tb_fornecedor_victor add COLUMN preco_venda DECIMAL(12,2);
+CREATE TABLE tb_fornecedor_victor(
+    id integer GENERATED ALWAYS AS IDENTITY NOT NULL,
+    nome varchar(64),
+    descricao varchar(128),
+    id_categoria integer,
+    id_moeda integer,
+    id_marca integer,
+    id_cores integer,
+    id_unidade_medida integer,
+    id_grupo integer,
+    preco_compra numeric(12,2),
+    preco_venda numeric(12,2),
+    PRIMARY KEY(id),
+    CONSTRAINT fk_categoria FOREIGN key(id_categoria) REFERENCES tb_categoria(id),
+    CONSTRAINT fk_moeda FOREIGN key(id_moeda) REFERENCES tb_moeda(id),
+    CONSTRAINT fk_marca FOREIGN key(id_marca) REFERENCES tb_marca(id),
+    CONSTRAINT fk_cores FOREIGN key(id_cores) REFERENCES tb_cores(id),
+    CONSTRAINT fk_unidade_medida FOREIGN key(id_unidade_medida) REFERENCES tb_medida(id),
+    CONSTRAINT fk_grupo FOREIGN key(id_grupo) REFERENCES tb_grupo(id)
+);
