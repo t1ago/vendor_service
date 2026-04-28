@@ -8,7 +8,7 @@ export const autentificadorInterruptor = (req: Request, res :Response, next : Ne
         const [,token] = auth.split(' ');
 
         try {
-            const dadosUsuario = jwt.verify(token, process.env.SECRET || '');
+            const dadosUsuario = jwt.verify(token, process.env.SECRET_KEY || '');
 
             (req as any).user = dadosUsuario;
             return next();

@@ -3,10 +3,10 @@ import { buscarMarca, buscarMarcaId, deletarMarca, inserirMarca, alterarMarca } 
 import { autentificadorInterruptor } from "../../../utils/victor/utils";
 
 
-const rotasMarca = express.Router()
-rotasMarca.post("/",autentificadorInterruptor,inserirMarca)
-rotasMarca.get("/",autentificadorInterruptor, buscarMarca)
-rotasMarca.get("/:id",autentificadorInterruptor,buscarMarcaId)
-rotasMarca.put("/:id",autentificadorInterruptor,alterarMarca)
-rotasMarca.delete("/:id",autentificadorInterruptor,deletarMarca)
-export = rotasMarca
+const rotasVictorMarca = express.Router()
+rotasVictorMarca.post("/",autentificadorInterruptor,inserirMarca)
+rotasVictorMarca.get("/",autentificadorInterruptor, buscarMarca)
+rotasVictorMarca.get("/:id",autentificadorInterruptor,buscarMarcaId)
+rotasVictorMarca.put("/:id",autentificadorInterruptor,alterarMarca)
+rotasVictorMarca.delete("/:id",autentificadorInterruptor,deletarMarca)
+export = rotasVictorMarca

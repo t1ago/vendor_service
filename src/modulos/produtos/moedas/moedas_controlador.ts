@@ -1,56 +1,56 @@
-import { Request, Response } from "express"
-import { moedaBuscar, moedaDelete, moedainsert, moedaUpdate } from "./moedas_servico"
+import { Request, Response } from 'express';
+import { moedaBuscar, moedaDelete, moedainsert, moedaUpdate } from './moedas_servico';
 
 export const inserir = async (req: Request, res: Response) => {
     let parametros = {
         nome: req.body?.nome,
-        moeda: req.body?.moeda
-    }
-    const resultado_insert = await moedainsert(parametros)
+        moeda: req.body?.moeda,
+    };
+    const resultado_insert = await moedainsert(parametros);
     if (resultado_insert.executado) {
-        res.status(200).json(resultado_insert)
+        res.status(200).json(resultado_insert);
     } else {
-        res.status(500).json(resultado_insert)
+        res.status(500).json(resultado_insert);
     }
-}
+};
 
 // CORREÇÃO: O ID deve ser pego dos parâmetros da rota (req.params)
 export const update = async (req: Request, res: Response) => {
     let parametros = {
-        "id": req.params.id, // CORRIGIDO: Pega o ID da URL
-        "nome": req.body?.nome,
-        "moeda": req.body?.moeda
-    }
-    const resultado_insert = await moedaUpdate(parametros)
+        id: req.params.id, // CORRIGIDO: Pega o ID da URL
+        nome: req.body?.nome,
+        moeda: req.body?.moeda,
+    };
+    const resultado_insert = await moedaUpdate(parametros);
     if (resultado_insert.executado) {
-        res.status(200).json(resultado_insert)
+        res.status(200).json(resultado_insert);
     } else {
-        res.status(500).json(resultado_insert)
+        res.status(500).json(resultado_insert);
     }
-}
+};
 export const delet = async (req: Request, res: Response) => {
     let parametros = {
-        id: req.params?.id
-    }
-    const resultado_insert = await moedaDelete(parametros)
+        id: req.params?.id,
+    };
+    const resultado_insert = await moedaDelete(parametros);
     if (resultado_insert.executado) {
-        res.status(200).json(resultado_insert)
+        res.status(200).json(resultado_insert);
     } else {
-        res.status(500).json(resultado_insert)
+        res.status(500).json(resultado_insert);
     }
-}
+};
 
 export const buscar = async (req: Request, res: Response) => {
     // CORREÇÃO: agora pega os parâmetros de busca da URL (GET)
     const parametros = {
-        'id': req.query?.id,
-        'nome': req.query?.nome,
-        'moeda': req.query?.moeda
+        id: req.query?.id,
+        nome: req.query?.nome,
+        moeda: req.query?.moeda,
     };
-    const resultado_busca = await moedaBuscar(parametros)
+    const resultado_busca = await moedaBuscar(parametros);
     if (resultado_busca && resultado_busca.executado) {
-        res.status(200).json(resultado_busca)
+        res.status(200).json(resultado_busca);
     } else {
-        res.status(500).json(resultado_busca)
+        res.status(500).json(resultado_busca);
     }
-}
+};

@@ -1,11 +1,15 @@
-import { QueryResult } from "pg"
-import { dbCliente } from "../../../../utils/banco_dados";
+import { QueryResult } from 'pg';
+import { dbCliente } from '../../../../utils/banco_dados';
 
 // A função 'resultado' deve ser criada dentro de cada método para evitar problemas de concorrência
-const criarResultado = (): { executado: boolean; mensagem: string; data: any } => ({
+const criarResultado = (): {
+    executado: boolean;
+    mensagem: string;
+    data: any;
+} => ({
     executado: false,
-    mensagem: "",
-    data: []
+    mensagem: '',
+    data: [],
 });
 
 export const MicroservicoInsert = async (fornecedor: any) => {
@@ -14,22 +18,34 @@ export const MicroservicoInsert = async (fornecedor: any) => {
     try {
         await cliente.connect();
 
-        const sql = "INSERT INTO tb_fornecedor_miguel (nome, descricao, id_categoria, id_cor, id_marca, id_grupo, id_moeda, id_unidade_medida, preco_compra, preco_venda) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id";
-        const parametros = [fornecedor.nome, fornecedor.descricao, fornecedor.id_categoria, fornecedor.id_cor, fornecedor.id_marca, fornecedor.id_grupo, fornecedor.id_moeda, fornecedor.id_unidade_medida, fornecedor.preco_compra, fornecedor.preco_venda];
+        const sql =
+            'INSERT INTO tb_fornecedor_miguel (nome, descricao, id_categoria, id_cor, id_marca, id_grupo, id_moeda, id_unidade_medida, preco_compra, preco_venda) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id';
+        const parametros = [
+            fornecedor.nome,
+            fornecedor.descricao,
+            fornecedor.id_categoria,
+            fornecedor.id_cor,
+            fornecedor.id_marca,
+            fornecedor.id_grupo,
+            fornecedor.id_moeda,
+            fornecedor.id_unidade_medida,
+            fornecedor.preco_compra,
+            fornecedor.preco_venda,
+        ];
         const resultado_insert = await cliente.query(sql, parametros);
 
         resultado.executado = true;
-        resultado.mensagem = "";
+        resultado.mensagem = '';
         resultado.data = resultado_insert.rows[0].id;
     } catch (erro) {
         resultado.executado = false;
-        resultado.mensagem = "erro" + erro;
+        resultado.mensagem = 'erro' + erro;
         resultado.data = {};
     } finally {
         await cliente.end();
     }
     return resultado;
-}
+};
 
 export const MicroservicoUpdate = async (fornecedor: any) => {
     const cliente = dbCliente();
@@ -37,47 +53,59 @@ export const MicroservicoUpdate = async (fornecedor: any) => {
     try {
         await cliente.connect();
 
-        const sql = "UPDATE tb_fornecedor_miguel SET nome=$1, descricao=$2, id_categoria=$3, id_cor=$4, id_marca=$5, id_grupo=$6, id_moeda=$7, id_unidade_medida=$8, preco_compra=$9, preco_venda=$10 WHERE id=$11";
-        const parametros = [fornecedor.nome, fornecedor.descricao, fornecedor.id_categoria, fornecedor.id_cor, fornecedor.id_marca, fornecedor.id_grupo, fornecedor.id_moeda, fornecedor.id_unidade_medida, fornecedor.preco_compra, fornecedor.preco_venda, fornecedor.id];
+        const sql =
+            'UPDATE tb_fornecedor_miguel SET nome=$1, descricao=$2, id_categoria=$3, id_cor=$4, id_marca=$5, id_grupo=$6, id_moeda=$7, id_unidade_medida=$8, preco_compra=$9, preco_venda=$10 WHERE id=$11';
+        const parametros = [
+            fornecedor.nome,
+            fornecedor.descricao,
+            fornecedor.id_categoria,
+            fornecedor.id_cor,
+            fornecedor.id_marca,
+            fornecedor.id_grupo,
+            fornecedor.id_moeda,
+            fornecedor.id_unidade_medida,
+            fornecedor.preco_compra,
+            fornecedor.preco_venda,
+            fornecedor.id,
+        ];
         const resultado_update = await cliente.query(sql, parametros);
 
         resultado.executado = true;
-        resultado.mensagem = "";
+        resultado.mensagem = '';
         resultado.data = resultado_update.rows;
     } catch (erro) {
         resultado.executado = false;
-        resultado.mensagem = "erro" + erro;
+        resultado.mensagem = 'erro' + erro;
         resultado.data = {};
     } finally {
         await cliente.end();
     }
     return resultado;
-}
+};
 
 export const MicroservicoDelete = async (fornecedor: any) => {
     const cliente = dbCliente();
     const resultado = criarResultado();
     try {
-        await cliente.connect()
+        await cliente.connect();
 
         // CORREÇÃO: o DELETE não se usa into, e sim o FROM (dia 04)
-        const sql = "DELETE FROM tb_fornecedor_miguel WHERE id=$1";
+        const sql = 'DELETE FROM tb_fornecedor_miguel WHERE id=$1';
         const parametros = [fornecedor.id];
         const resultado_delete = await cliente.query(sql, parametros);
 
         resultado.executado = true;
-        resultado.mensagem = "";
+        resultado.mensagem = '';
         resultado.data = resultado_delete.rows;
     } catch (erro) {
         resultado.executado = false;
-        resultado.mensagem = "erro" + erro;
+        resultado.mensagem = 'erro' + erro;
         resultado.data = {};
     } finally {
         await cliente.end();
     }
     return resultado;
-}
-
+};
 
 // tentativas de fazer funcionar e nada / buscar por id failed 17:59 (dia 05)
 
@@ -89,8 +117,7 @@ export const buscar = async (fornecedor: any) => {
         await cliente.connect();
         let parametros_busca: any;
         // novo import feito, para o retorno certo  - dia 08/09
-        let resultado_banco: QueryResult<any>
-
+        let resultado_banco: QueryResult<any>;
 
         // teste logico incluindo todos os tipos de pesquisa ( so o id por enquanto ) - dia 08/09
         if (fornecedor.id != null) {
@@ -102,27 +129,25 @@ export const buscar = async (fornecedor: any) => {
         }
 
         if (parametros_busca.valores !== null) {
-            resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores)
-        }
-        else {
+            resultado_banco = await cliente.query(parametros_busca.sql, parametros_busca.valores);
+        } else {
             resultado_banco = await cliente.query(parametros_busca.sql);
         }
 
-        const executado = (resultado_banco.rowCount || 0) > 0
+        const executado = (resultado_banco.rowCount || 0) > 0;
 
         resultado.executado = true;
-        resultado.mensagem = "";
-        resultado.data = executado ? resultado_banco.rows : []
-
+        resultado.mensagem = '';
+        resultado.data = executado ? resultado_banco.rows : [];
     } catch (erro) {
         resultado.executado = false;
-        resultado.mensagem = "erro" + erro;
+        resultado.mensagem = 'erro' + erro;
         resultado.data = {};
     } finally {
         await cliente.end();
     }
     return resultado;
-}
+};
 
 // arrumado  o SQL, tomar cuidado com o erro de ortografia, estava me dando vazio por este motivo ( feito )
 export const buscar_id = async (fornecedor: any) => {
@@ -157,9 +182,9 @@ export const buscar_id = async (fornecedor: any) => {
             LEFT JOIN tb_medida tb_med ON tb_forn_mig.id_unidade_medida = tb_med.id
             WHERE tb_forn_mig.id = $1;
         `,
-        valores: [fornecedor.id]
-    }
-}
+        valores: [fornecedor.id],
+    };
+};
 
 export const buscar_nome = async (fornecedor: any) => {
     return {
@@ -201,10 +226,9 @@ export const buscar_nome = async (fornecedor: any) => {
             OR tb_forn_mig.id_marca::text LIKE concat('%', $1::text, '%')
             OR lower(tb_forn_mig.descricao) LIKE lower(concat('%', $1::text, '%'))
         `,
-        valores: [fornecedor.nome]
-    }
-}
-
+        valores: [fornecedor.nome],
+    };
+};
 
 export const buscar_tudo = async () => {
     return {
@@ -235,6 +259,6 @@ export const buscar_tudo = async () => {
         INNER JOIN tb_marca tb_mar on tb_forn_mig.id_marca = tb_mar.id
         INNER JOIN tb_medida tb_med on tb_forn_mig.id_unidade_medida = tb_med.id
         `,
-        valores: null
-    }
-}
+        valores: null,
+    };
+};

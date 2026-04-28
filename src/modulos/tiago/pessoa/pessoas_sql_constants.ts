@@ -1,4 +1,4 @@
-import { ISqlDados } from "../../../interfaces/sql_filtro"
+import { ISqlDados } from '../../../interfaces/sql_filtro';
 
 export const sqlBuscarVinculos = (): ISqlDados => {
     return {
@@ -7,22 +7,22 @@ export const sqlBuscarVinculos = (): ISqlDados => {
                 FROM tb_pessoa_tiago tp 
                 WHERE tp.ativo = 'A' AND tp.tipo_pessoa = 'J'
             `,
-        valores: null
-    }
-}
+        valores: null,
+    };
+};
 
 export const sqlCriarPessoa = (parametros: any): ISqlDados => {
-    let dataInicio = undefined
+    let dataInicio = undefined;
 
     if (parametros.dataInicio != undefined) {
-        let dateInput = parametros.dataInicio
-        let dateArray = dateInput.split("/");
+        let dateInput = parametros.dataInicio;
+        let dateArray = dateInput.split('/');
 
         const day = dateArray[0].padStart(2, '0');
         const month = dateArray[1].padStart(2, '0');
         const year = dateArray[2];
 
-        dataInicio = `${year}-${month}-${day} 00:00:00`
+        dataInicio = `${year}-${month}-${day} 00:00:00`;
     }
 
     return {
@@ -50,12 +50,12 @@ export const sqlCriarPessoa = (parametros: any): ISqlDados => {
             parametros.documentoEstadual,
             parametros.documentoFedereal,
             parametros.idVinculo,
-            parametros.ativo]
-    }
-}
+            parametros.ativo,
+        ],
+    };
+};
 
 export const sqlCriarEndereco = (parametros: any): ISqlDados => {
-
     return {
         sql: `
                 INSERT INTO tb_endereco_pessoa_tiago (
@@ -83,22 +83,23 @@ export const sqlCriarEndereco = (parametros: any): ISqlDados => {
             parametros.estado,
             parametros.tipoEndereco,
             parametros.buscadoPorCep ? 'S' : 'N',
-            parametros.ativo]
-    }
-}
+            parametros.ativo,
+        ],
+    };
+};
 
 export const sqlAlterarPessoa = (parametros: any): ISqlDados => {
-    let dataInicio = undefined
+    let dataInicio = undefined;
 
     if (parametros.dataInicio != undefined) {
-        let dateInput = parametros.dataInicio
-        let dateArray = dateInput.split("/");
+        let dateInput = parametros.dataInicio;
+        let dateArray = dateInput.split('/');
 
         const day = dateArray[0].padStart(2, '0');
         const month = dateArray[1].padStart(2, '0');
         const year = dateArray[2];
 
-        dataInicio = `${year}-${month}-${day} 00:00:00`
+        dataInicio = `${year}-${month}-${day} 00:00:00`;
     }
 
     return {
@@ -125,12 +126,12 @@ export const sqlAlterarPessoa = (parametros: any): ISqlDados => {
             parametros.documentoFedereal,
             parametros.idVinculo,
             parametros.ativo ? 'A' : 'I',
-            parametros.id]
-    }
-}
+            parametros.id,
+        ],
+    };
+};
 
 export const sqlAlterarEndereco = (parametros: any): ISqlDados => {
-
     return {
         sql: `
                 UPDATE tb_endereco_pessoa_tiago
@@ -156,21 +157,21 @@ export const sqlAlterarEndereco = (parametros: any): ISqlDados => {
             parametros.buscadoPorCep ? 'S' : 'N',
             parametros.ativo,
             parametros.id,
-            parametros.idPessoa]
-    }
-}
+            parametros.idPessoa,
+        ],
+    };
+};
 
 export const sqlInativarPessoa = (parametros: any): ISqlDados => {
-
     return {
         sql: `
             UPDATE tb_pessoa_tiago 
                 SET ativo=$1
                 WHERE id=$2
         `,
-        valores: ['I', parametros.id]
-    }
-}
+        valores: ['I', parametros.id],
+    };
+};
 
 export const sqlBuscarPorId = (parametros: any) => {
     return {
@@ -190,9 +191,9 @@ export const sqlBuscarPorId = (parametros: any) => {
             WHERE tb_pessoa.id=$1
             ORDER BY tb_pessoa.nome
         `,
-        valores: [parametros.id]
-    }
-}
+        valores: [parametros.id],
+    };
+};
 
 export const sqlBuscarTodos = (parametros: any) => {
     return {
@@ -217,9 +218,9 @@ export const sqlBuscarTodos = (parametros: any) => {
             WHERE tb_pessoa.tipo_pessoa=$1
             ORDER BY tb_pessoa.nome
         `,
-        valores: [parametros.tipo_pessoa]
-    }
-}
+        valores: [parametros.tipo_pessoa],
+    };
+};
 
 export const sqlBuscarPorTermo = (parametros: any) => {
     return {
@@ -251,9 +252,9 @@ export const sqlBuscarPorTermo = (parametros: any) => {
             OR (SELECT lower(tb_end.cep || tb_end.logradouro || tb_end.numero || tb_end.bairro || tb_end.cidade || tb_end.estado) FROM tb_endereco_pessoa_tiago tb_end WHERE tb_end.id_pessoa = tb_pessoa.id and tb_end.tipo_endereco = 'E') LIKE lower(concat('%', $2::text, '%'))))
             ORDER BY tb_pessoa.nome
         `,
-        valores: [parametros.tipo_pessoa, parametros.termo]
-    }
-}
+        valores: [parametros.tipo_pessoa, parametros.termo],
+    };
+};
 
 export const sqlBuscarEnderecosPorIdPessoa = (parametros: any) => {
     return {
@@ -272,9 +273,9 @@ export const sqlBuscarEnderecosPorIdPessoa = (parametros: any) => {
             FROM tb_endereco_pessoa_tiago tb_end
             WHERE tb_end.id_pessoa=$1
         `,
-        valores: [parametros.id]
-    }
-}
+        valores: [parametros.id],
+    };
+};
 
 export const sqlBuscarEnderecosPorId = (parametros: any) => {
     return {
@@ -289,6 +290,6 @@ export const sqlBuscarEnderecosPorId = (parametros: any) => {
             FROM tb_endereco_pessoa_tiago tb_end
             WHERE tb_end.id=$1
         `,
-        valores: [parametros.id]
-    }
-}
+        valores: [parametros.id],
+    };
+};

@@ -1,35 +1,36 @@
 {
-  "name": "vendor_service",
-  "version": "1.0.0",
-  "description": "Projeto de Estudos (API Rest)",
-  "main": "app.js",
-  "scripts": {
-    "ts": "npx tsc",
-    "local": "npm run ts && node --env-file=.local.env dist/app.js",
-    "prod": "npm run ts && node --env-file=.prod.env dist/app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/t1ago/vendor_service.git"
-  },
-  "author": "Tiago",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/t1ago/vendor_service/issues"
-  },
-  "homepage": "https://github.com/t1ago/vendor_service#readme",
-  "dependencies": {
-    "axios": "^1.12.2",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.3"
-  },
-  "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.1",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/pg": "^8.11.14",
-    "cors": "^2.8.5",
-    "pg": "^8.15.5",
-    "typescript": "^5.8.3"
-  }
+    "name": "vendor_service",
+    "version": "1.0.0",
+    "description": "Projeto de Estudos (API Rest)",
+    "main": "app.js",
+    "scripts": {
+        "ts": "npx tsc",
+        "local": "npm run ts && node --env-file=.local.env dist/app.js",
+        "prod": "npm run ts && node --env-file=.prod.env dist/app.js",
+        "format": "npx prettier --write ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/t1ago/vendor_service.git"
+    },
+    "author": "Tiago",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/t1ago/vendor_service/issues"
+    },
+    "homepage": "https://github.com/t1ago/vendor_service#readme",
+    "dependencies": {
+        "axios": "^1.12.2",
+        "express": "^5.1.0",
+        "jsonwebtoken": "^9.0.3"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.1",
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/pg": "^8.11.14",
+        "cors": "^2.8.5",
+        "pg": "^8.15.5",
+        "typescript": "^5.8.3"
+    }
 }

@@ -51,7 +51,7 @@ export const alterarProduto = async(req:Request,res:Response) => {
     responseAPI(res,resultado);
 }
 
-export const deletarProduto = async(req:Request,res:Response) => {
+export const deletarProduto = async (req: Request, res: Response) => {
     const parametros = {
         id: req.params.id
     }

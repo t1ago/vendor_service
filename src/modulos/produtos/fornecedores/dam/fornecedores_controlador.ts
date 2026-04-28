@@ -1,40 +1,39 @@
-import { Request, Response } from "express";
-import { 
-    inserirFornecedor, 
-    buscarFornecedor, 
-    buscarFornecedorId, 
-    atualizarFornecedor, 
-    apagarFornecedor, 
-    buscarGenerico 
-} from "./fornecedores_servico";
+import { Request, Response } from 'express';
+import {
+    inserirFornecedor,
+    buscarFornecedor,
+    buscarFornecedorId,
+    atualizarFornecedor,
+    apagarFornecedor,
+    buscarGenerico,
+} from './fornecedores_servico';
 
 // LISTAR TODOS
-export const listarFornecedor = async (req: Request, res: Response) =>{
-    try{
+export const listarFornecedor = async (req: Request, res: Response) => {
+    try {
         const resultado = await buscarFornecedor();
         res.json(resultado);
     } catch (erro) {
-        console.error("Erro ao listar fornecedores:", erro);
-        res.status(500).json({ mensagem: "Erro no servidor", erro });
+        console.error('Erro ao listar fornecedores:', erro);
+        res.status(500).json({ mensagem: 'Erro no servidor', erro });
     }
-}
+};
 
 // SALVAR (cria ou altera)
 export const salvar = async (req: Request, res: Response) => {
     try {
+        const id = req.body.id;
+        const nome = req.body.nome;
+        const descricao = req.body.descricao;
+        const id_categoria = req.body.id_categoria;
+        const id_moeda = req.body.id_moeda;
+        const id_grupo = req.body.id_grupo;
+        const id_unidade_medida = req.body.id_unidade_medida;
+        const id_cor = req.body.id_cor;
+        const id_marca = req.body.id_marca;
+        const preco_compra = req.body.preco_compra;
+        const preco_venda = req.body.preco_venda;
 
-        const id = req.body.id
-        const nome = req.body.nome
-        const descricao = req.body.descricao
-        const id_categoria = req.body.id_categoria
-        const id_moeda = req.body.id_moeda
-        const id_grupo = req.body.id_grupo
-        const id_unidade_medida = req.body.id_unidade_medida
-        const id_cor = req.body.id_cor
-        const id_marca = req.body.id_marca
-        const preco_compra = req.body.preco_compra
-        const preco_venda = req.body.preco_venda
-        
         let resultado;
         if (!id) {
             resultado = await inserirFornecedor(
@@ -47,8 +46,8 @@ export const salvar = async (req: Request, res: Response) => {
                 id_cor,
                 id_marca,
                 preco_compra,
-                preco_venda     
-        );
+                preco_venda
+            );
         } else {
             resultado = await atualizarFornecedor(
                 id,
@@ -61,15 +60,15 @@ export const salvar = async (req: Request, res: Response) => {
                 id_cor,
                 id_marca,
                 preco_compra,
-                preco_venda  
+                preco_venda
             );
         }
 
         res.json(resultado);
     } catch (erro) {
-        res.status(500).json({ mensagem: "Erro no servidor", erro });
+        res.status(500).json({ mensagem: 'Erro no servidor', erro });
     }
-}
+};
 
 // REMOVER
 export const remover = async (req: Request, res: Response) => {
@@ -77,13 +76,13 @@ export const remover = async (req: Request, res: Response) => {
         const idParam = req.params?.id;
         const idBody = req.body?.id;
         const id = Number(idParam ?? idBody);
-        
+
         const resultado = await apagarFornecedor(id);
         res.json(resultado);
     } catch (erro) {
-        res.status(500).json({ mensagem: "Erro no servidor", erro });
+        res.status(500).json({ mensagem: 'Erro no servidor', erro });
     }
-}
+};
 
 // BUSCAR POR ID
 export const buscarid = async (req: Request, res: Response) => {
@@ -92,9 +91,9 @@ export const buscarid = async (req: Request, res: Response) => {
         const resultado = await buscarFornecedorId(Number(id));
         res.json(resultado);
     } catch (erro) {
-        res.status(500).json({ mensagem: "Erro no servidor", erro });
+        res.status(500).json({ mensagem: 'Erro no servidor', erro });
     }
-}
+};
 
 // BUSCAR GENÉRICO
 export const buscarTudo = async (req: Request, res: Response) => {
@@ -103,6 +102,6 @@ export const buscarTudo = async (req: Request, res: Response) => {
         const resultado = await buscarGenerico(termo as string);
         res.json(resultado);
     } catch (erro) {
-        res.status(500).json({ erro: "Erro ao buscar fornecedor", detalhe: erro })
+        res.status(500).json({ erro: 'Erro ao buscar fornecedor', detalhe: erro });
     }
-}
+};

@@ -1,6 +1,6 @@
-import { PoolClient, QueryResult } from "pg"
-import { dbCliente, dbPool, executarQuery } from "../../../utils/banco_dados"
-import { IResultadoAPI } from "../../../interfaces/resultado_api"
+import { PoolClient, QueryResult } from 'pg';
+import { dbCliente, dbPool, executarQuery } from '../../../utils/banco_dados';
+import { IResultadoAPI } from '../../../interfaces/resultado_api';
 import {
     sqlAlterarEndereco,
     sqlAlterarPessoa,
@@ -12,11 +12,11 @@ import {
     sqlBuscarVinculos,
     sqlCriarEndereco,
     sqlCriarPessoa,
-    sqlInativarPessoa
-} from "./pessoas_sql_constants"
-import { processarDados, processarDadosEmpty } from "../../../utils/utils"
-import { ERROR_MESSAGES } from "../../../utils/error_messages"
-import { ISqlDados } from "../../../interfaces/sql_filtro"
+    sqlInativarPessoa,
+} from './pessoas_sql_constants';
+import { processarDados, processarDadosEmpty } from '../../../utils/utils';
+import { ERROR_MESSAGES } from '../../../utils/error_messages';
+import { ISqlDados } from '../../../interfaces/sql_filtro';
 
 export const buscarVinculosServico = async () => {
     const cliente = dbCliente();
@@ -29,7 +29,7 @@ export const buscarVinculosServico = async () => {
         const queryResultado = await executarQuery(cliente, sqlDados);
 
         resultado = processarDados(() => {
-            return queryResultado.rows
+            return queryResultado.rows;
         });
     } catch (erro: any) {
         resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
@@ -38,7 +38,7 @@ export const buscarVinculosServico = async () => {
     }
 
     return resultado;
-}
+};
 
 export const criarServico = async (parametros: any) => {
     const pool = dbPool();
@@ -68,20 +68,18 @@ export const criarServico = async (parametros: any) => {
 
         resultado = processarDados(() => {
             return {
-                id: idPessoa
-            }
+                id: idPessoa,
+            };
         });
-
     } catch (erro: any) {
         await cliente.query('ROLLBACK');
         resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
-
     } finally {
         cliente.release();
     }
 
     return resultado;
-}
+};
 
 export const alterarServico = async (parametros: any) => {
     const pool = dbPool();
@@ -115,20 +113,18 @@ export const alterarServico = async (parametros: any) => {
 
         resultado = processarDados(() => {
             return {
-                id: idPessoa
-            }
+                id: idPessoa,
+            };
         });
-
     } catch (erro: any) {
         await cliente.query('ROLLBACK');
         resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
-
     } finally {
         cliente.release();
     }
 
     return resultado;
-}
+};
 
 export const inativarServico = async (parametros: any) => {
     const cliente = dbCliente();
@@ -141,7 +137,7 @@ export const inativarServico = async (parametros: any) => {
         await executarQuery(cliente, sqlDados);
 
         resultado = processarDados(() => {
-            return parametros
+            return parametros;
         });
     } catch (erro: any) {
         resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
@@ -150,7 +146,7 @@ export const inativarServico = async (parametros: any) => {
     }
 
     return resultado;
-}
+};
 
 export const buscarServico = async (parametros: any) => {
     const cliente = dbCliente();
@@ -173,27 +169,24 @@ export const buscarServico = async (parametros: any) => {
             const dataEnderecos = (queryResultado.rowCount || 0) > 0 ? queryResultado.rows : [];
 
             resultado = processarDados(() => {
-                dataPessoa['enderecos'] = dataEnderecos
-                return dataPessoa
+                dataPessoa['enderecos'] = dataEnderecos;
+                return dataPessoa;
             });
-
         } else if (parametros.termo != null) {
             sqlDados = sqlBuscarPorTermo(parametros);
             queryResultado = await executarQuery(cliente, sqlDados);
 
             resultado = processarDados(() => {
-                return (queryResultado.rowCount || 0) > 0 ? queryResultado.rows : []
+                return (queryResultado.rowCount || 0) > 0 ? queryResultado.rows : [];
             });
-
         } else {
             sqlDados = sqlBuscarTodos(parametros);
             queryResultado = await executarQuery(cliente, sqlDados);
 
             resultado = processarDados(() => {
-                return (queryResultado.rowCount || 0) > 0 ? queryResultado.rows : []
+                return (queryResultado.rowCount || 0) > 0 ? queryResultado.rows : [];
             });
         }
-
     } catch (erro: any) {
         resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
     } finally {
@@ -201,7 +194,7 @@ export const buscarServico = async (parametros: any) => {
     }
 
     return resultado;
-}
+};
 
 export const buscarEnderecoServico = async (parametros: any) => {
     const cliente = dbCliente();
@@ -210,7 +203,7 @@ export const buscarEnderecoServico = async (parametros: any) => {
     try {
         cliente.connect();
 
-        const sqlDados = sqlBuscarEnderecosPorId(parametros)
+        const sqlDados = sqlBuscarEnderecosPorId(parametros);
         const queryResultado = await executarQuery(cliente, sqlDados);
 
         resultado = processarDados(() => {
@@ -223,9 +216,4 @@ export const buscarEnderecoServico = async (parametros: any) => {
     }
 
     return resultado;
-}
-
-
-
-
-
+};

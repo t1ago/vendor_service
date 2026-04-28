@@ -1,17 +1,17 @@
-import { IResultadoAPI } from "../../../../interfaces/resultado_api";
-import { executarQuery } from "./fornecedores_utils";
+import { IResultadoAPI } from '../../../../interfaces/resultado_api';
+import { executarQuery } from './fornecedores_utils';
 
 const resultado: IResultadoAPI = {
     executado: false,
-    mensagem: "",
-    data: {}
-}
+    mensagem: '',
+    data: {},
+};
 
 const limparResultado = () => {
     resultado.executado = false;
-    resultado.mensagem = "";
+    resultado.mensagem = '';
     resultado.data = {};
-}
+};
 
 // INSERIR
 export const inserirFornecedor = async (
@@ -37,15 +37,23 @@ export const inserirFornecedor = async (
     `;
 
     const parametros = [
-        nome, descricao, id_categoria, id_moeda, id_grupo,
-        id_unidade_medida, id_cor, id_marca, preco_compra, preco_venda
+        nome,
+        descricao,
+        id_categoria,
+        id_moeda,
+        id_grupo,
+        id_unidade_medida,
+        id_cor,
+        id_marca,
+        preco_compra,
+        preco_venda,
     ];
-    console.log(parametros)
+    console.log(parametros);
     const resultado = await executarQuery(sql, parametros);
 
     if (resultado.executado && resultado.data.length > 0) {
         const id = resultado.data[0].id;
-        resultado.mensagem = "Fornecedor inserido com sucesso!";
+        resultado.mensagem = 'Fornecedor inserido com sucesso!';
         resultado.data = {
             nome,
             descricao,
@@ -56,14 +64,14 @@ export const inserirFornecedor = async (
             id_cor,
             id_marca,
             preco_compra,
-            preco_venda
+            preco_venda,
         };
     } else {
-        resultado.mensagem = "Erro ao inserir fornecedor.";
+        resultado.mensagem = 'Erro ao inserir fornecedor.';
     }
 
     return resultado;
-}
+};
 
 // LISTAR TODOS
 export const buscarFornecedor = async () => {
@@ -112,9 +120,9 @@ export const buscarFornecedor = async () => {
     const resultado = await executarQuery(sql);
 
     if (resultado.executado) {
-        resultado.mensagem = "Fornecedores encontrados.";
+        resultado.mensagem = 'Fornecedores encontrados.';
     } else {
-        resultado.mensagem = "Erro ao buscar fornecedores.";
+        resultado.mensagem = 'Erro ao buscar fornecedores.';
     }
 
     return resultado;
@@ -158,14 +166,13 @@ export const buscarFornecedorId = async (id: number) => {
     const resultado = await executarQuery(sql, parametros);
 
     if (resultado.executado && resultado.data.length > 0) {
-        resultado.mensagem = "Fornecedor encontrado!";
+        resultado.mensagem = 'Fornecedor encontrado!';
     } else {
-        resultado.mensagem = "Nenhum fornecedor encontrado para este ID.";
+        resultado.mensagem = 'Nenhum fornecedor encontrado para este ID.';
     }
 
     return resultado;
 };
-
 
 // ATUALIZAR
 export const atualizarFornecedor = async (
@@ -210,12 +217,12 @@ export const atualizarFornecedor = async (
         id_marca,
         preco_compra,
         preco_venda,
-        id
+        id,
     ];
     const resultado = await executarQuery(sql, parametros);
 
     if (resultado.executado) {
-        resultado.mensagem = "Fornecedor atualizado com sucesso!";
+        resultado.mensagem = 'Fornecedor atualizado com sucesso!';
         resultado.data = {
             id,
             nome,
@@ -227,30 +234,30 @@ export const atualizarFornecedor = async (
             id_cor,
             id_marca,
             preco_compra,
-            preco_venda
+            preco_venda,
         };
     } else {
-        resultado.mensagem = "Erro ao atualizar fornecedor!";
+        resultado.mensagem = 'Erro ao atualizar fornecedor!';
     }
 
     return resultado;
-}
+};
 
 // APAGAR
 export const apagarFornecedor = async (id: number) => {
     limparResultado();
-    const sql = "DELETE FROM tb_fornecedor_dam WHERE id = $1;";
+    const sql = 'DELETE FROM tb_fornecedor_dam WHERE id = $1;';
     const parametros = [id];
     const resultado = await executarQuery(sql, parametros);
 
     if (resultado.executado) {
-        resultado.mensagem = "Fornecedor apagado com sucesso!";
+        resultado.mensagem = 'Fornecedor apagado com sucesso!';
     } else {
-        resultado.mensagem = "Erro ao apagar fornecedor!";
+        resultado.mensagem = 'Erro ao apagar fornecedor!';
     }
 
     return resultado;
-}
+};
 
 // BUSCA GENÉRICA
 export const buscarGenerico = async (parametro: string) => {
@@ -281,10 +288,10 @@ export const buscarGenerico = async (parametro: string) => {
     const resultado = await executarQuery(sql, parametros);
 
     if (resultado.executado) {
-        resultado.mensagem = "Busca concluída com sucesso!";
+        resultado.mensagem = 'Busca concluída com sucesso!';
     } else {
-        resultado.mensagem = "Erro na busca.";
+        resultado.mensagem = 'Erro na busca.';
     }
 
     return resultado;
-}
+};

@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { Request, Response } from 'express';
 import {
     buscarVinculosServico,
     criarServico,
@@ -6,17 +6,16 @@ import {
     inativarServico,
     buscarEnderecoServico,
     alterarServico,
-
-} from "./pessoas_servico"
-import { IResultadoAPI } from "../../../interfaces/resultado_api"
-import { processarDadosEmpty, responseAPI, responseInternalServerError } from "../../../utils/utils"
-import { mapear_body, validar_regras_pessoa } from "./pessoas_validacoes"
-import { ERROR_MESSAGES } from "../../../utils/error_messages"
+} from './pessoas_servico';
+import { IResultadoAPI } from '../../../interfaces/resultado_api';
+import { processarDadosEmpty, responseAPI, responseInternalServerError } from '../../../utils/utils';
+import { mapear_body, validar_regras_pessoa } from './pessoas_validacoes';
+import { ERROR_MESSAGES } from '../../../utils/error_messages';
 
 export const buscarVinculos = async (req: Request, res: Response) => {
     const resultado = await buscarVinculosServico();
     responseAPI(res, resultado);
-}
+};
 
 export const criar = async (req: Request, res: Response) => {
     let resultado: IResultadoAPI;
@@ -31,7 +30,7 @@ export const criar = async (req: Request, res: Response) => {
         resultado = await criarServico(parametros);
         responseAPI(res, resultado);
     }
-}
+};
 
 export const alterar = async (req: Request, res: Response) => {
     let resultado: IResultadoAPI;
@@ -46,14 +45,14 @@ export const alterar = async (req: Request, res: Response) => {
         resultado = await alterarServico(parametros);
         responseAPI(res, resultado);
     }
-}
+};
 
 export const inativar = async (req: Request, res: Response) => {
     const parametros = { id: req.params.id };
     const resultado = await inativarServico(parametros);
 
     responseAPI(res, resultado);
-}
+};
 
 export const buscar = async (req: Request, res: Response) => {
     let parametros: any = {};
@@ -75,11 +74,11 @@ export const buscar = async (req: Request, res: Response) => {
         resultado = await buscarServico(parametros);
         responseAPI(res, resultado);
     }
-}
+};
 
 export const buscarEndereco = async (req: Request, res: Response) => {
     const parametros = { id: req.params.id };
     const resultado = await buscarEnderecoServico(parametros);
 
     responseAPI(res, resultado);
-}
+};
