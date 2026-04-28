@@ -39,13 +39,3 @@ export const deletarMarcaServico = async(marca: any) => {
     const parametros = [marca.id]
     return await servicoGenerico(MARCA_SQL.DELETE,parametros);
 }
-
-
-// if (marca == null) {
-//         sql = MARCA_SQL.SELECT_ALL
-//         parametro = null
-//     } else if (marca.id != null) {
-//         
-//     } else if (marca.nome !=null) {
-//         
-//     }
