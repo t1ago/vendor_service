@@ -1,15 +1,15 @@
-import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { rotas_moedas } from './src/modulos/produtos/moedas/moedas_rotas';
 import rotasfornecedor_miguel from './src/modulos/produtos/fornecedores/miguel/fornecedor_miguel_rotas';
+import express, { Request, Response } from 'express';
 import rotasCores from './src/modulos/produtos/cores/cores_rotas';
-import rotasMedidas from './src/modulos/produtos/medidas/medidas_rotas';
 import rotasFornecedoresDam from './src/modulos/produtos/fornecedores/dam/fornecedores_rotas';
+import rotasMedidas from './src/modulos/produtos/medidas/medidas_rotas';
 import rotasTiagoCategoria from './src/modulos/tiago/categoria/categoria_rotas';
+import rotasTiagoCredencial from './src/modulos/tiago/credencial/credencial_rotas';
 import rotasTiagoEndereco from './src/modulos/tiago/endereco/endereco_rotas';
 import rotasTiagoPessoa from './src/modulos/tiago/pessoa/pessoas_rotas';
 import rotasTiagoProduto from './src/modulos/tiago/produto/produto_rotas';
-import rotasCredencialTiago from './src/modulos/tiago/credencial/credencial_rotas';
 import rotasVictorMarca from './src/modulos/victor/marca/marca_rotas';
 import rotasVictorGrupo from './src/modulos/victor/grupo/grupo_rotas';
 import rotasVictorProduto from './src/modulos/victor/produto/produto_rotas';
@@ -54,7 +54,7 @@ app.use('/tiago/categoria', rotasTiagoCategoria);
 app.use('/tiago/produto', rotasTiagoProduto);
 app.use('/tiago/endereco', rotasTiagoEndereco);
 app.use('/tiago/pessoa', rotasTiagoPessoa);
-app.use('/tiago/credencial', rotasCredencialTiago);
+app.use('/tiago/credencial', rotasTiagoCredencial);
 
 /** Inicia o Servidor */
 app.listen(port, () => {
