@@ -18,8 +18,14 @@ export const buscarMarcaId = async(req:Request,res:Response) => {
     responseAPI(res,resultado);
 }
 
-export const buscarMarca = async(_req:Request,res:Response) => {
-    const resultado = await buscarMarcaServico(null)
+export const buscarMarca = async(req:Request,res:Response) => {
+    var parametro : any = null
+    if(req.body) {
+        parametro = {
+            nome : req.body.nome
+        }
+    }
+    const resultado = await buscarMarcaServico(parametro)
     responseAPI(res,resultado);
 }
 

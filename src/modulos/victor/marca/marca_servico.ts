@@ -8,16 +8,20 @@ export const inserirMarcaServico = async(marca: any) => {
 
 export const buscarMarcaServico = async(marca:any) => {
     var sql : string = ''
-    var parametro: any
-    if (marca == null) {
+    var parametro: any = null
+    if(marca == null) {
+        console.log("foi sem parametros")
         sql = MARCA_SQL.SELECT_ALL
-        parametro = null
-    } else if (marca.id != null) {
-        sql = MARCA_SQL.SELECT_ID
-        parametro = [marca.id]
-    } else if (marca.nome !=null) {
-        sql = MARCA_SQL.SELECT_QUERY
-        parametro = [`%${marca.nome}%`] 
+    } else {
+        if(marca.id) {
+            console.log("Foi por id")
+            sql = MARCA_SQL.SELECT_ID;
+            parametro = [marca.id];
+        } else {
+            console.log("Foi por query")
+            sql = MARCA_SQL.SELECT_QUERY;
+            parametro = [`%${marca.nome}%`];
+        } 
     }
     if (parametro != null) {
         return await servicoGenerico(sql,parametro);
@@ -35,3 +39,13 @@ export const deletarMarcaServico = async(marca: any) => {
     const parametros = [marca.id]
     return await servicoGenerico(MARCA_SQL.DELETE,parametros);
 }
+
+
+// if (marca == null) {
+//         sql = MARCA_SQL.SELECT_ALL
+//         parametro = null
+//     } else if (marca.id != null) {
+//         
+//     } else if (marca.nome !=null) {
+//         
+//     }
