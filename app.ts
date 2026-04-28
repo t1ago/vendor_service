@@ -1,18 +1,19 @@
 import cors from 'cors';
+import { rotas_moedas } from './src/modulos/produtos/moedas/moedas_rotas';
+import rotasfornecedor_miguel from './src/modulos/produtos/fornecedores/miguel/fornecedor_miguel_rotas';
 import express, { Request, Response } from 'express';
 import rotasCores from './src/modulos/produtos/cores/cores_rotas';
 import rotasFornecedoresDam from './src/modulos/produtos/fornecedores/dam/fornecedores_rotas';
-import rotasfornecedor_miguel from './src/modulos/produtos/fornecedores/miguel/fornecedor_miguel_rotas';
-import gruporota from './src/modulos/produtos/grupo/grupo_rotas';
-import rota from './src/modulos/produtos/marca/marca_rotas';
 import rotasMedidas from './src/modulos/produtos/medidas/medidas_rotas';
-import { rotas_moedas } from './src/modulos/produtos/moedas/moedas_rotas';
-import { rotaProdutoVictor } from './src/modulos/produtos/produto/victor/produto_rotas';
 import rotasTiagoCategoria from './src/modulos/tiago/categoria/categoria_rotas';
 import rotasTiagoCredencial from './src/modulos/tiago/credencial/credencial_rotas';
 import rotasTiagoEndereco from './src/modulos/tiago/endereco/endereco_rotas';
 import rotasTiagoPessoa from './src/modulos/tiago/pessoa/pessoas_rotas';
 import rotasTiagoProduto from './src/modulos/tiago/produto/produto_rotas';
+import rotasVictorMarca from './src/modulos/victor/marca/marca_rotas';
+import rotasVictorGrupo from './src/modulos/victor/grupo/grupo_rotas';
+import rotasVictorProduto from './src/modulos/victor/produto/produto_rotas';
+import rotasVictorCredencial from './src/modulos/victor/credencial/credencial_rotas';
 
 /** Constantes do Servidor*/
 const app = express();
@@ -38,9 +39,10 @@ app.use('/moedas', rotas_moedas);
 app.use('/fornecedor/miguel', rotasfornecedor_miguel);
 
 /**Victor */
-app.use('/marca', rota);
-app.use('/grupos', gruporota);
-app.use('/produto/victor', rotaProdutoVictor);
+app.use("/victor/marca", rotasVictorMarca)
+app.use("/victor/grupo", rotasVictorGrupo)
+app.use("/victor/produto", rotasVictorProduto)
+app.use("/victor/credencial", rotasVictorCredencial)
 
 /**Danilo */
 app.use('/cores', rotasCores);
