@@ -1,4 +1,3 @@
-
 import { IResultadoAPI } from "../../../interfaces/resultado_api"
 import { dbCliente } from "../../../utils/banco_dados"
 import jwt from "jsonwebtoken";

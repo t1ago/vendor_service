@@ -12,7 +12,7 @@ export const moedainsert = async (moeda: any) => {
 }
 export const moedaUpdate = async (moeda: any) => {
     try {
-        // CORREÇÃO: A ordem dos parâmetros foi ajustada para corresponder ao SQL
+
         const sql = 'UPDATE tb_moeda SET nome=$1, moeda=$2 WHERE id=$3'
         const parametros = [moeda.nome, moeda.moeda, moeda.id]
         const resultado_insert = await Resultado_all(sql, parametros)

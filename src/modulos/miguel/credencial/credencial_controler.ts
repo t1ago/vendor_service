@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import { IResultadoAPI } from "../../../interfaces/resultado_api";
 import { credencial_Select } from "./credencial_service";
-
 
 export const credencial_selected = async (req: Request, res: Response) => {
 
@@ -28,3 +28,16 @@ export const credencial_selected = async (req: Request, res: Response) => {
 
     }
 }
+
+export const getUsuario = async (req: Request, res: Response) => {
+
+    const dadosUser = (req as any).user
+
+    const resultado: IResultadoAPI = {
+        executado: true,
+        mensagem: '',
+        data: dadosUser,
+    };
+
+    return res.json(resultado)
+};

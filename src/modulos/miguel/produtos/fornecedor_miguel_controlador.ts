@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { buscar, MicroservicoDelete, MicroservicoInsert, MicroservicoUpdate } from "./fornecedor_miguel_servico";
+import { MicroservicoUpdate, MicroservicoInsert, MicroservicoDelete, buscar } from "./fornecedor_miguel_servico";
+
 
 export const NovoPost = async (req: Request, res: Response) => {
     let parametros = {
@@ -49,7 +50,6 @@ export const NovoUpdate = async (req: Request, res: Response) => {
 
 export const NovoDelete = async (req: Request, res: Response) => {
     let parametros = {
-        // CORREÇÃO: O ID para o DELETE deve vir da URL, assim como o PUT.
         id: req.params.id
     }
     const resultado_Delete = await MicroservicoDelete(parametros)
@@ -86,8 +86,6 @@ export const buscar_new = async (req: Request, res: Response) => {
     }
 };
 
-// ...existing code...
-
 export const buscar_por_id = async (req: Request, res: Response) => {
     const parametros = {
         id: req.params.id
@@ -106,7 +104,7 @@ export const buscar_todos = async (req: Request, res: Response) => {
     const parametros: any = {};
 
     if (req.query.name) {
-        parametros.nome = req.query.name; // agora usa buscar_nome
+        parametros.nome = req.query.name;
     }
 
     const resultado_new = await buscar(parametros);

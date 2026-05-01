@@ -1,18 +1,20 @@
 import express, { Request, Response } from "express"
 import cors from "cors"
-import { rotas_moedas } from "./src/modulos/produtos/moedas/moedas_rotas"
-import rotasfornecedor_miguel from "./src/modulos/produtos/fornecedores/miguel/fornecedor_miguel_rotas"
+
+
 import rota from "./src/modulos/produtos/marca/marca_rotas"
 import gruporota from "./src/modulos/produtos/grupo/grupo_rotas"
 import { rotaProdutoVictor } from "./src/modulos/produtos/produto/victor/produto_rotas"
 import rotasCores from "./src/modulos/produtos/cores/cores_rotas"
-import rotasMedidas from "./src/modulos/produtos/medidas/medidas_rotas"
 import rotasFornecedoresDam from "./src/modulos/produtos/fornecedores/dam/fornecedores_rotas"
 import rotasCategorias from "./src/modulos/produtos/categorias/categorias_rotas"
 import rotasProdutoTiago from "./src/modulos/produtos/produto/tiago/produto_rotas"
 import rotasEnderecoTiago from "./src/modulos/enderecos/tiago/endereco_rotas"
 import rotasPessoasTiago from "./src/modulos/pessoas/tiago/pessoas_rotas"
-import rotasCredencial_miguel from "./src/modulos/credencial/miguel/credencial_routes"
+import miguel_fornecedor from "./src/modulos/miguel/produtos/fornecedor_miguel_rotas"
+import miguel_credencial from "./src/modulos/miguel/credencial/credencial_routes"
+import miguel_medidas from "./src/modulos/miguel/medidas/medidas_rotas"
+import miguel_moedas from "./src/modulos/miguel/moedas/moedas_rotas"
 
 
 /** Constantes do Servidor*/
@@ -35,9 +37,10 @@ app.get("/", (req: Request, res: Response) => {
 
 
 /**Miguel */
-app.use("/miguel/moedas", rotas_moedas)
-app.use("fornecedor/miguel", rotasfornecedor_miguel)
-app.use("/login/miguel", rotasCredencial_miguel)
+app.use("/miguel/moeda", miguel_moedas)
+app.use("/miguel/fornecedor", miguel_fornecedor)
+app.use("/miguel/login", miguel_credencial)
+app.use("/miguel/medida", miguel_medidas)
 
 /**Victor */
 app.use("/marca", rota)
@@ -46,7 +49,7 @@ app.use("/produto/victor", rotaProdutoVictor)
 
 /**Danilo */
 app.use("/cores", rotasCores)
-app.use("/medidas", rotasMedidas)
+
 app.use("/fornecedoresDam", rotasFornecedoresDam);
 
 /**Tiago */

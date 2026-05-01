@@ -1,16 +1,12 @@
-import { QueryResult } from "pg"
-import { dbCliente } from "../../../../utils/banco_dados";
+import { PoolClient, QueryResult } from "pg"
+import { dbCliente, dbPool } from "../../../utils/banco_dados";
+import { IResultadoAPI } from "../../../interfaces/resultado_api"
+import { processarDados, processarDadosEmpty } from "../../../utils/utils";
 
-// A função 'resultado' deve ser criada dentro de cada método para evitar problemas de concorrência
-const criarResultado = (): { executado: boolean; mensagem: string; data: any } => ({
-    executado: false,
-    mensagem: "",
-    data: []
-});
 
 export const MicroservicoInsert = async (fornecedor: any) => {
     const cliente = dbCliente();
-    const resultado = criarResultado();
+    let resultado: IResultadoAPI;
     try {
         await cliente.connect();
 
@@ -18,13 +14,12 @@ export const MicroservicoInsert = async (fornecedor: any) => {
         const parametros = [fornecedor.nome, fornecedor.descricao, fornecedor.id_categoria, fornecedor.id_cor, fornecedor.id_marca, fornecedor.id_grupo, fornecedor.id_moeda, fornecedor.id_unidade_medida, fornecedor.preco_compra, fornecedor.preco_venda];
         const resultado_insert = await cliente.query(sql, parametros);
 
-        resultado.executado = true;
-        resultado.mensagem = "";
-        resultado.data = resultado_insert.rows[0].id;
-    } catch (erro) {
-        resultado.executado = false;
-        resultado.mensagem = "erro" + erro;
-        resultado.data = {};
+        resultado = processarDados(() => {
+            return resultado_insert.rows
+        })
+
+    } catch (erro: any) {
+        resultado = processarDadosEmpty(erro)
     } finally {
         await cliente.end();
     }
@@ -32,48 +27,54 @@ export const MicroservicoInsert = async (fornecedor: any) => {
 }
 
 export const MicroservicoUpdate = async (fornecedor: any) => {
-    const cliente = dbCliente();
-    const resultado = criarResultado();
+    const pool = dbPool();
+
+    let cliente: PoolClient = await pool.connect();
+    let resultado: IResultadoAPI;
+
     try {
-        await cliente.connect();
+        await cliente.query('BEGIN')
 
         const sql = "UPDATE tb_fornecedor_miguel SET nome=$1, descricao=$2, id_categoria=$3, id_cor=$4, id_marca=$5, id_grupo=$6, id_moeda=$7, id_unidade_medida=$8, preco_compra=$9, preco_venda=$10 WHERE id=$11";
         const parametros = [fornecedor.nome, fornecedor.descricao, fornecedor.id_categoria, fornecedor.id_cor, fornecedor.id_marca, fornecedor.id_grupo, fornecedor.id_moeda, fornecedor.id_unidade_medida, fornecedor.preco_compra, fornecedor.preco_venda, fornecedor.id];
         const resultado_update = await cliente.query(sql, parametros);
 
-        resultado.executado = true;
-        resultado.mensagem = "";
-        resultado.data = resultado_update.rows;
-    } catch (erro) {
-        resultado.executado = false;
-        resultado.mensagem = "erro" + erro;
-        resultado.data = {};
+        await cliente.query('COMMIT')
+
+        resultado = processarDados(() => {
+            return resultado_update.rows
+        })
+    } catch (erro: any) {
+        await cliente.query('ROLLBACK')
+        resultado = processarDadosEmpty(erro)
     } finally {
-        await cliente.end();
+        await cliente.release();
     }
     return resultado;
 }
 
 export const MicroservicoDelete = async (fornecedor: any) => {
-    const cliente = dbCliente();
-    const resultado = criarResultado();
-    try {
-        await cliente.connect()
+    const pool = dbPool();
 
-        // CORREÇÃO: o DELETE não se usa into, e sim o FROM (dia 04)
+    let cliente: PoolClient = await pool.connect();
+    let resultado: IResultadoAPI;
+    try {
+        await cliente.query('BEGIN')
+
+
         const sql = "DELETE FROM tb_fornecedor_miguel WHERE id=$1";
         const parametros = [fornecedor.id];
         const resultado_delete = await cliente.query(sql, parametros);
 
-        resultado.executado = true;
-        resultado.mensagem = "";
-        resultado.data = resultado_delete.rows;
-    } catch (erro) {
-        resultado.executado = false;
-        resultado.mensagem = "erro" + erro;
-        resultado.data = {};
+        resultado = processarDados(() => {
+            return resultado_delete.rows
+        })
+
+    } catch (erro: any) {
+        await cliente.query('ROLLBACK')
+        resultado = processarDadosEmpty(erro)
     } finally {
-        await cliente.end();
+        await cliente.release();
     }
     return resultado;
 }
