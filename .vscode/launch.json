@@ -8,29 +8,21 @@
             "type": "node",
             "request": "launch",
             "name": "Iniciar o Programa (Local)",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
+            "skipFiles": ["<node_internals>/**"],
             "envFile": "${workspaceFolder}/.local.env",
             "program": "${workspaceFolder}/app.ts",
             "preLaunchTask": "tsc: compilar - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
+            "outFiles": ["${workspaceFolder}/**/*.js"]
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Iniciar o Programa (Prod)",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
+            "skipFiles": ["<node_internals>/**"],
             "envFile": "${workspaceFolder}/.prod.env",
             "program": "${workspaceFolder}/app.ts",
             "preLaunchTask": "tsc: compilar - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
+            "outFiles": ["${workspaceFolder}/**/*.js"]
         }
     ]
 }

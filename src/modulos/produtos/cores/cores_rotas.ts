@@ -1,6 +1,7 @@
 import express from "express"
 import { alterarCor, criarCor, listarCor, listarCorId, romverCor } from "./cores_controlador"
-import { authenticadorInteceptador } from "../../../utils/utils_Miguel"
+import { authenticadorInteceptador } from "../../../utils/miguel/utils"
+
 
 const rotasCores = express.Router()
 rotasCores.post('/', authenticadorInteceptador, criarCor)
@@ -9,4 +10,4 @@ rotasCores.get('/:id', authenticadorInteceptador, listarCorId)
 rotasCores.put('/:id', authenticadorInteceptador, alterarCor)
 rotasCores.delete('/:id', authenticadorInteceptador, romverCor)
 
-export = rotasCores
+export = rotasCores;

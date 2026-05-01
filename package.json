@@ -6,7 +6,8 @@
   "scripts": {
     "ts": "npx tsc",
     "local": "npm run ts && node --env-file=.local.env dist/app.js",
-    "prod": "npm run ts && node --env-file=.prod.env dist/app.js"
+    "prod": "npm run ts && node --env-file=.prod.env dist/app.js",
+    "format": "npx prettier --write ."
   },
   "repository": {
     "type": "git",
