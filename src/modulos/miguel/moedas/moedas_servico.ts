@@ -12,11 +12,11 @@ export const moedainsert = async (moeda: any) => {
 };
 export const moedaUpdate = async (moeda: any) => {
     try {
-        // CORREÇÃO: A ordem dos parâmetros foi ajustada para corresponder ao SQL
-        const sql = 'UPDATE tb_moeda SET nome=$1, moeda=$2 WHERE id=$3';
-        const parametros = [moeda.nome, moeda.moeda, moeda.id];
-        const resultado_insert = await Resultado_all(sql, parametros);
-        return resultado_insert;
+
+        const sql = 'UPDATE tb_moeda SET nome=$1, moeda=$2 WHERE id=$3'
+        const parametros = [moeda.nome, moeda.moeda, moeda.id]
+        const resultado_insert = await Resultado_all(sql, parametros)
+        return resultado_insert
     } catch (error) {
         throw error;
     }
@@ -40,9 +40,8 @@ export const moedaBuscar = async (moeda: any) => {
             sql = 'SELECT * FROM tb_moeda WHERE id=$1';
             parametros = [moeda.id];
         } else if (moeda.nome != null || moeda.moeda != null) {
-            sql = 'SELECT * FROM tb_moeda WHERE nome ILIKE $1 OR moeda ILIKE $2';
-            // CORREÇÃO: Sintaxe correta para busca com LIKE
-            parametros = [`%${moeda.nome}%`, `%${moeda.moeda}%`];
+            sql = 'SELECT * FROM tb_moeda WHERE nome ILIKE $1 OR moeda ILIKE $2'
+            parametros = [`%${moeda.nome}%`, `%${moeda.moeda}%`]
         } else {
             sql = 'SELECT * FROM tb_moeda';
             parametros = null;
@@ -55,5 +54,8 @@ export const moedaBuscar = async (moeda: any) => {
             const resultado_sql = await Resultado_all(sql);
             return resultado_sql;
         }
-    } catch (error) {}
-};
+    } catch (error) {
+
+    }
+}
+

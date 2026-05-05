@@ -1,5 +1,5 @@
-import { IResultadoAPI } from '../../../../interfaces/resultado_api';
-import { dbCliente } from '../../../../utils/banco_dados';
+import { IResultadoAPI } from "../../../interfaces/resultado_api";
+import { dbCliente } from "../../../utils/banco_dados";
 
 export const executandoquery = async (sql: string, parametros?: any[]): Promise<IResultadoAPI> => {
     const cliente = dbCliente();

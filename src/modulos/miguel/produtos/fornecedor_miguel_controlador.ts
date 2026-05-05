@@ -47,69 +47,71 @@ export const NovoUpdate = async (req: Request, res: Response) => {
 
 export const NovoDelete = async (req: Request, res: Response) => {
     let parametros = {
-        // CORREÇÃO: O ID para o DELETE deve vir da URL, assim como o PUT.
-        id: req.params.id,
-    };
-    const resultado_Delete = await MicroservicoDelete(parametros);
+        id: req.params.id
+    }
+    const resultado_Delete = await MicroservicoDelete(parametros)
     if (resultado_Delete.executado) {
         res.status(200).json(resultado_Delete);
     } else {
         res.status(500).json(resultado_Delete);
     }
-};
+}
 
 export const buscar_new = async (req: Request, res: Response) => {
+
     const parametros = {
-        id: req.params.id ? Number(req.params.id) : null,
-        nome: req.query.nome,
-        id_categoria: req.query.id_categoria,
-        id_cor: req.query.id_cor,
-        id_unidade_medida: req.query.id_unidade_medida,
-        id_grupo: req.query.id_grupo,
-        id_moeda: req.query.id_moeda,
-        descricao: req.query.descricao,
-        preco_venda: req.query.preco_venda,
-        preco_compra: req.query.preco_compra,
-        id_marca: req.query.id_marca,
+        'id': req.params.id ? Number(req.params.id) : null,
+        'nome': req.query.nome,
+        'id_categoria': req.query.id_categoria,
+        'id_cor': req.query.id_cor,
+        'id_unidade_medida': req.query.id_unidade_medida,
+        'id_grupo': req.query.id_grupo,
+        'id_moeda': req.query.id_moeda,
+        'descricao': req.query.descricao,
+        'preco_venda': req.query.preco_venda,
+        'preco_compra': req.query.preco_compra,
+        'id_marca': req.query.id_marca
     };
 
-    const resultado_new = await buscar(parametros);
+    const buscar_new = async (req: Request, res: Response) => {
+        let parametros: any;
 
-    if (resultado_new.executado) {
-        res.status(200).json(resultado_new);
-    } else {
-        res.status(500).json(resultado_new);
-    }
-};
+        const resultado_new = await buscar(parametros);
 
-// ...existing code...
-
-export const buscar_por_id = async (req: Request, res: Response) => {
-    const parametros = {
-        id: req.params.id,
+        if (resultado_new.mensagem == '') {
+            res.status(200).json(resultado_new);
+        } else {
+            res.status(500).json(resultado_new);
+        }
     };
 
-    const resultado = await buscar(parametros);
+    const buscar_por_id = async (req: Request, res: Response) => {
+        const parametros = {
+            id: req.params.id,
+        };
 
-    if (resultado.executado) {
-        res.status(200).json(resultado);
-    } else {
-        res.status(500).json(resultado);
-    }
-};
+        const resultado = await buscar(parametros);
 
-export const buscar_todos = async (req: Request, res: Response) => {
-    const parametros: any = {};
+        if (resultado.executado) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(500).json(resultado);
+        }
+    };
 
-    if (req.query.name) {
-        parametros.nome = req.query.name; // agora usa buscar_nome
-    }
+    const buscarTodos = async (req: Request, res: Response) => {
+        const parametros: any = {};
 
-    const resultado_new = await buscar(parametros);
+        if (req.query.name) {
+            parametros.nome = req.query.name;
+        }
 
-    if (resultado_new.executado) {
-        res.status(200).json(resultado_new);
-    } else {
-        res.status(500).json(resultado_new);
-    }
-};
+        const resultado_new = await buscar(parametros);
+
+        if (resultado_new.executado) {
+            res.status(200).json(resultado_new);
+        } else {
+            res.status(500).json(resultado_new);
+        }
+    };
+}

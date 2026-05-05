@@ -14,14 +14,14 @@ export const inserir = async (req: Request, res: Response) => {
     }
 };
 
-// CORREÇÃO: O ID deve ser pego dos parâmetros da rota (req.params)
+
 export const update = async (req: Request, res: Response) => {
     let parametros = {
-        id: req.params.id, // CORRIGIDO: Pega o ID da URL
-        nome: req.body?.nome,
-        moeda: req.body?.moeda,
-    };
-    const resultado_insert = await moedaUpdate(parametros);
+        "id": req.params.id,
+        "nome": req.body?.nome,
+        "moeda": req.body?.moeda
+    }
+    const resultado_insert = await moedaUpdate(parametros)
     if (resultado_insert.executado) {
         res.status(200).json(resultado_insert);
     } else {
@@ -41,7 +41,7 @@ export const delet = async (req: Request, res: Response) => {
 };
 
 export const buscar = async (req: Request, res: Response) => {
-    // CORREÇÃO: agora pega os parâmetros de busca da URL (GET)
+
     const parametros = {
         id: req.query?.id,
         nome: req.query?.nome,

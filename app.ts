@@ -1,10 +1,12 @@
-import cors from 'cors';
-import { rotas_moedas } from './src/modulos/produtos/moedas/moedas_rotas';
-import rotasfornecedor_miguel from './src/modulos/produtos/fornecedores/miguel/fornecedor_miguel_rotas';
-import express, { Request, Response } from 'express';
+import express, { Request, Response } from "express"
+import cors from "cors"
+
+import miguel_fornecedor from "./src/modulos/miguel/produtos/fornecedor_miguel_rotas"
+import miguel_credencial from "./src/modulos/miguel/credencial/credencial_routes"
+import miguel_medidas from "./src/modulos/miguel/medidas/medidas_rotas"
+import miguel_moedas from "./src/modulos/miguel/moedas/moedas_rotas"
 import rotasCores from './src/modulos/produtos/cores/cores_rotas';
 import rotasFornecedoresDam from './src/modulos/produtos/fornecedores/dam/fornecedores_rotas';
-import rotasMedidas from './src/modulos/produtos/medidas/medidas_rotas';
 import rotasTiagoCategoria from './src/modulos/tiago/categoria/categoria_rotas';
 import rotasTiagoCredencial from './src/modulos/tiago/credencial/credencial_rotas';
 import rotasTiagoEndereco from './src/modulos/tiago/endereco/endereco_rotas';
@@ -35,8 +37,10 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 /**Miguel */
-app.use('/moedas', rotas_moedas);
-app.use('/fornecedor/miguel', rotasfornecedor_miguel);
+app.use("/miguel/moeda", miguel_moedas)
+app.use("/miguel/fornecedor", miguel_fornecedor)
+app.use("/miguel/login", miguel_credencial)
+app.use("/miguel/medida", miguel_medidas)
 
 /**Victor */
 app.use("/victor/marca", rotasVictorMarca)
@@ -46,7 +50,6 @@ app.use("/victor/credencial", rotasVictorCredencial)
 
 /**Danilo */
 app.use('/cores', rotasCores);
-app.use('/medidas', rotasMedidas);
 app.use('/fornecedoresDam', rotasFornecedoresDam);
 
 /**Tiago */
