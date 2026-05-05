@@ -2,7 +2,13 @@ import { PoolClient, QueryResult } from "pg"
 import { dbCliente, dbPool } from "../../../utils/banco_dados";
 import { IResultadoAPI } from "../../../interfaces/resultado_api"
 import { processarDados, processarDadosEmpty } from "../../../utils/utils";
+import { limparResultado } from "../../../utils/victor/utils";
 
+const resultado: IResultadoAPI = {
+    executado: false,
+    mensagem: '',
+    data: {},
+};
 
 export const MicroservicoInsert = async (fornecedor: any) => {
     const cliente = dbCliente();
@@ -104,14 +110,14 @@ export const MicroservicoDelete = async (fornecedor: any) => {
     return resultado;
 };
 
-// TODO: Resolver aqui o Resultado, para busca dia 01/05
+
 export const buscar = async (fornecedor: any) => {
     const cliente = dbCliente();
-    let resultado: IResultadoAPI;
+    limparResultado();
+
     try {
         await cliente.connect();
         let parametros_busca: any;
-
         let resultado_banco: QueryResult<any>;
 
 
@@ -131,6 +137,9 @@ export const buscar = async (fornecedor: any) => {
 
         const executado = (resultado_banco.rowCount || 0) > 0;
 
+        resultado.executado = true;
+        resultado.mensagem = '';
+        resultado.data = executado ? resultado_banco.rows : [];
 
     } catch (erro) {
 
@@ -138,6 +147,7 @@ export const buscar = async (fornecedor: any) => {
         await cliente.end();
     }
 
+    return resultado
 };
 
 // arrumado  o SQL, tomar cuidado com o erro de ortografia, estava me dando vazio por este motivo ( feito )

@@ -74,23 +74,11 @@ export const buscar_new = async (req: Request, res: Response) => {
     };
 
     const buscar_new = async (req: Request, res: Response) => {
-        const parametros = {
-            id: req.params.id ? Number(req.params.id) : null,
-            nome: req.query.nome,
-            id_categoria: req.query.id_categoria,
-            id_cor: req.query.id_cor,
-            id_unidade_medida: req.query.id_unidade_medida,
-            id_grupo: req.query.id_grupo,
-            id_moeda: req.query.id_moeda,
-            descricao: req.query.descricao,
-            preco_venda: req.query.preco_venda,
-            preco_compra: req.query.preco_compra,
-            id_marca: req.query.id_marca,
-        };
+        let parametros: any;
 
         const resultado_new = await buscar(parametros);
 
-        if (resultado_new.executado) {
+        if (resultado_new.mensagem == '') {
             res.status(200).json(resultado_new);
         } else {
             res.status(500).json(resultado_new);
@@ -111,7 +99,7 @@ export const buscar_new = async (req: Request, res: Response) => {
         }
     };
 
-    const buscar_todos = async (req: Request, res: Response) => {
+    const buscarTodos = async (req: Request, res: Response) => {
         const parametros: any = {};
 
         if (req.query.name) {

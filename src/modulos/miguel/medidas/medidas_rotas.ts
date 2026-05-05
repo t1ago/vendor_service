@@ -6,7 +6,8 @@ import {
   alterarMedida,
   removerMedida
 } from "./medidas_controlador";
-import { authenticadorInteceptador } from "../../../utils/utils_Miguel";
+import { authenticadorInteceptador } from "../../../utils/miguel/utils";
+
 
 const miguel_medidas = express.Router();
 

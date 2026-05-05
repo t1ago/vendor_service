@@ -1,6 +1,6 @@
 import express from "express"
 import { buscar, delet, inserir, update } from "./moedas_controlador"
-import { authenticadorInteceptador } from "../../../utils/utils_Miguel"
+import { authenticadorInteceptador } from "../../../utils/miguel/utils"
 
 const miguel_moedas = express.Router()
 

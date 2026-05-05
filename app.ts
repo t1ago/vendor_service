@@ -7,7 +7,6 @@ import miguel_medidas from "./src/modulos/miguel/medidas/medidas_rotas"
 import miguel_moedas from "./src/modulos/miguel/moedas/moedas_rotas"
 import rotasCores from './src/modulos/produtos/cores/cores_rotas';
 import rotasFornecedoresDam from './src/modulos/produtos/fornecedores/dam/fornecedores_rotas';
-import rotasMedidas from './src/modulos/produtos/medidas/medidas_rotas';
 import rotasTiagoCategoria from './src/modulos/tiago/categoria/categoria_rotas';
 import rotasTiagoCredencial from './src/modulos/tiago/credencial/credencial_rotas';
 import rotasTiagoEndereco from './src/modulos/tiago/endereco/endereco_rotas';
@@ -51,7 +50,6 @@ app.use("/victor/credencial", rotasVictorCredencial)
 
 /**Danilo */
 app.use('/cores', rotasCores);
-app.use('/medidas', rotasMedidas);
 app.use('/fornecedoresDam', rotasFornecedoresDam);
 
 /**Tiago */

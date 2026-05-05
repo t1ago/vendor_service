@@ -1,14 +1,14 @@
 import express from "express";
-import { NovoDelete, NovoPost, NovoUpdate, buscar_todos, buscar_por_id } from "./fornecedor_miguel_controlador";
+import { buscar_new, NovoDelete, NovoPost, NovoUpdate, } from "./fornecedor_miguel_controlador";
 
 const miguel_fornecedor = express.Router();
 
 // Buscar todos
-miguel_fornecedor.get("/", buscar_todos);
+miguel_fornecedor.get("/", buscar_new);
 
 // Buscar por ID
 
-miguel_fornecedor.get("/:id", buscar_por_id);
+miguel_fornecedor.get("/:id", buscar_new);
 
 
 // Inserir novo
