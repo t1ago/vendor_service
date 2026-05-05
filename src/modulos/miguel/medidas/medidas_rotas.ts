@@ -17,5 +17,5 @@ miguel_medidas.get("/:id", authenticadorInteceptador, buscarMedida);
 miguel_medidas.put("/:id", authenticadorInteceptador, alterarMedida);
 miguel_medidas.delete("/:id", authenticadorInteceptador, removerMedida);
 
-export = miguel_medidas;
+export default miguel_medidas;
 

@@ -9,4 +9,4 @@ miguel_moedas.post("/", authenticadorInteceptador, inserir)
 miguel_moedas.put("/:id", authenticadorInteceptador, update)
 miguel_moedas.delete("/:id", authenticadorInteceptador, delet)
 
-export = miguel_moedas
+export default miguel_moedas

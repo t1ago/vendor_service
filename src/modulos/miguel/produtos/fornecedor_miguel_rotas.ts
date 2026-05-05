@@ -20,4 +20,4 @@ miguel_fornecedor.put("/:id", NovoUpdate);
 // Deletar
 miguel_fornecedor.delete("/:id", NovoDelete);
 
-export = miguel_fornecedor;
+export default miguel_fornecedor;
