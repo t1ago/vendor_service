@@ -1,11 +1,10 @@
-import express from "express";
-import { salvar, buscarid, buscarTudo, listarFornecedor, remover } from "./fornecedores_controlador";
+import express from 'express';
+import { salvar, buscarid, buscarTudo, listarFornecedor, remover } from './fornecedores_controlador';
 
 const rotasFornecedoresDam = express.Router();
 
-
 rotasFornecedoresDam.get('/teste', (req, res) => {
-  res.json({ executado: true, mensagem: "Rota funcionando!" });
+    res.json({ executado: true, mensagem: 'Rota funcionando!' });
 });
 
 // Listar todos
