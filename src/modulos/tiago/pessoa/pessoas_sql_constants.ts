@@ -288,8 +288,9 @@ export const sqlBuscarEnderecosPorId = (parametros: any) => {
                 tb_end.cidade,
                 tb_end.estado
             FROM tb_endereco_pessoa_tiago tb_end
-            WHERE tb_end.id=$1
+            WHERE tb_end.id_pessoa=$1 
+            AND tb_end.id=$2
         `,
-        valores: [parametros.id],
+        valores: [parametros.id, parametros.id_endereco],
     };
 };

@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
+import { IResultadoAPI } from '../../../interfaces/resultado_api';
+import { ERROR_MESSAGES } from '../../../utils/error_messages';
+import { processarDadosEmpty, responseAPI, responseInternalServerError } from '../../../utils/utils';
 import {
+    alterarServico,
+    buscarEnderecoServico,
+    buscarServico,
     buscarVinculosServico,
     criarServico,
-    buscarServico,
     inativarServico,
-    buscarEnderecoServico,
-    alterarServico,
 } from './pessoas_servico';
-import { IResultadoAPI } from '../../../interfaces/resultado_api';
-import { processarDadosEmpty, responseAPI, responseInternalServerError } from '../../../utils/utils';
 import { mapear_body, validar_regras_pessoa } from './pessoas_validacoes';
-import { ERROR_MESSAGES } from '../../../utils/error_messages';
 
 export const buscarVinculos = async (req: Request, res: Response) => {
     const resultado = await buscarVinculosServico();
@@ -77,7 +77,7 @@ export const buscar = async (req: Request, res: Response) => {
 };
 
 export const buscarEndereco = async (req: Request, res: Response) => {
-    const parametros = { id: req.params.id };
+    const parametros = { id: req.params.id, id_endereco: req.params.id_endereco };
     const resultado = await buscarEnderecoServico(parametros);
 
     responseAPI(res, resultado);
