@@ -125,7 +125,7 @@ export const sqlAlterarPessoa = (parametros: any): ISqlDados => {
             parametros.documentoEstadual,
             parametros.documentoFedereal,
             parametros.idVinculo,
-            parametros.ativo ? 'A' : 'I',
+            parametros.ativo,
             parametros.id,
         ],
     };
@@ -286,7 +286,8 @@ export const sqlBuscarEnderecosPorId = (parametros: any) => {
                 tb_end.numero,
                 tb_end.bairro,
                 tb_end.cidade,
-                tb_end.estado
+                tb_end.estado,
+                tb_end.ativo
             FROM tb_endereco_pessoa_tiago tb_end
             WHERE tb_end.id_pessoa=$1 
             AND tb_end.id=$2
