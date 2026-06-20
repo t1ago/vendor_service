@@ -82,7 +82,7 @@ export const sqlCriarEndereco = (parametros: any): ISqlDados => {
             parametros.cidade,
             parametros.estado,
             parametros.tipoEndereco,
-            parametros.buscadoPorCep ? 'S' : 'N',
+            parametros.buscadoPorCep,
             parametros.ativo,
         ],
     };
@@ -154,7 +154,7 @@ export const sqlAlterarEndereco = (parametros: any): ISqlDados => {
             parametros.cidade,
             parametros.estado,
             parametros.tipoEndereco,
-            parametros.buscadoPorCep ? 'S' : 'N',
+            parametros.buscadoPorCep,
             parametros.ativo,
             parametros.id,
             parametros.idPessoa,
@@ -173,7 +173,7 @@ export const sqlInativarPessoa = (parametros: any): ISqlDados => {
     };
 };
 
-export const sqlBuscarPorId = (parametros: any) => {
+export const sqlBuscarPorId = (parametros: any): ISqlDados => {
     return {
         sql: `
              SELECT 
@@ -195,7 +195,7 @@ export const sqlBuscarPorId = (parametros: any) => {
     };
 };
 
-export const sqlBuscarTodos = (parametros: any) => {
+export const sqlBuscarTodos = (parametros: any): ISqlDados => {
     return {
         sql: `
             SELECT 
@@ -222,7 +222,7 @@ export const sqlBuscarTodos = (parametros: any) => {
     };
 };
 
-export const sqlBuscarPorTermo = (parametros: any) => {
+export const sqlBuscarPorTermo = (parametros: any): ISqlDados => {
     return {
         sql: `
             SELECT 
@@ -256,7 +256,7 @@ export const sqlBuscarPorTermo = (parametros: any) => {
     };
 };
 
-export const sqlBuscarEnderecosPorIdPessoa = (parametros: any) => {
+export const sqlBuscarEnderecosPorIdPessoa = (parametros: any): ISqlDados => {
     return {
         sql: `
              SELECT 
@@ -277,7 +277,7 @@ export const sqlBuscarEnderecosPorIdPessoa = (parametros: any) => {
     };
 };
 
-export const sqlBuscarEnderecosPorId = (parametros: any) => {
+export const sqlBuscarEnderecosPorId = (parametros: any): ISqlDados => {
     return {
         sql: `
             SELECT 

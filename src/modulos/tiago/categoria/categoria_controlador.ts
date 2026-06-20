@@ -1,66 +1,32 @@
 import { Request, Response } from 'express';
-import {
-    criarCategoriaServico,
-    alterarCategoriaServico,
-    removerCategoriaServico,
-    buscarCategoriaServico,
-    buscarCategoriasServico,
-} from './categoria_servico';
+import { responseAPI } from '../../../utils/utils';
+import { criarServico, alterarServico, buscarServico, buscarTodosServico, removerServico } from './categoria_servico';
 
-export const criarCategoria = async (req: Request, res: Response) => {
-    const categoria = {
-        nome: req.body.nome,
-    };
-    const resultado = await criarCategoriaServico(categoria);
-    if (resultado.mensagem == '') {
-        res.json(resultado);
-    } else {
-        res.status(500).json(resultado);
-    }
+export const criar = async (req: Request, res: Response) => {
+    const parametros = { nome: req.body.nome };
+    const resultado = await criarServico(parametros);
+    responseAPI(res, resultado);
 };
 
-export const alterarCategoria = async (req: Request, res: Response) => {
-    const categoria = {
-        id: req.params.id,
-        nome: req.body.nome,
-    };
-    const resultado = await alterarCategoriaServico(categoria);
-    if (resultado.mensagem == '') {
-        res.json(resultado);
-    } else {
-        res.status(500).json(resultado);
-    }
+export const alterar = async (req: Request, res: Response) => {
+    const parametros = { id: req.params.id, nome: req.body.nome };
+    const resultado = await alterarServico(parametros);
+    responseAPI(res, resultado);
 };
 
-export const removerCategoria = async (req: Request, res: Response) => {
-    const categoria = {
-        id: req.params.id,
-    };
-    const resultado = await removerCategoriaServico(categoria);
-    if (resultado.mensagem == '') {
-        res.json(resultado);
-    } else {
-        res.status(500).json(resultado);
-    }
+export const buscar = async (req: Request, res: Response) => {
+    const parametros = { id: req.params.id };
+    const resultado = await buscarServico(parametros);
+    responseAPI(res, resultado);
 };
 
-export const buscarCategoria = async (req: Request, res: Response) => {
-    const categoria = {
-        id: req.params.id,
-    };
-    const resultado = await buscarCategoriaServico(categoria);
-    if (resultado.mensagem == '') {
-        res.json(resultado);
-    } else {
-        res.status(500).json(resultado);
-    }
+export const buscarTodos = async (req: Request, res: Response) => {
+    const resultado = await buscarTodosServico();
+    responseAPI(res, resultado);
 };
 
-export const buscarCategorias = async (req: Request, res: Response) => {
-    const resultado = await buscarCategoriasServico();
-    if (resultado.mensagem == '') {
-        res.json(resultado);
-    } else {
-        res.status(500).json(resultado);
-    }
+export const remover = async (req: Request, res: Response) => {
+    const parametros = { id: req.params.id };
+    const resultado = await removerServico(parametros);
+    responseAPI(res, resultado);
 };

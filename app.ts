@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express"
 import cors from "cors"
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSpec } from './src/utils/swagger'
 
 import miguel_fornecedor from "./src/modulos/miguel/produtos/fornecedor_miguel_rotas"
 import miguel_credencial from "./src/modulos/miguel/credencial/credencial_routes"
@@ -35,6 +37,14 @@ app.use(
 app.get('/', (req: Request, res: Response) => {
     res.json({ status: 'OK' });
 });
+
+/** Swagger — apenas em ambiente local */
+if (process.env.SWAGGER_ENABLED === 'true') {
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    app.get('/api-spec', (req: Request, res: Response) => {
+        res.json(swaggerSpec);
+    });
+}
 
 /**Miguel */
 app.use("/miguel/moeda", miguel_moedas)
