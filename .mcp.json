@@ -1,8 +1,8 @@
 {
     "mcpServers": {
         "postgres": {
-            "command": "npx",
-            "args": ["-y", "@modelcontextprotocol/server-postgres", "${CONNECTION_STRING}"]
+            "command": "sh",
+            "args": ["-c", "npx -y @modelcontextprotocol/server-postgres $CONNECTION_STRING"]
         }
     }
 }

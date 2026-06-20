@@ -50,10 +50,29 @@ export const pessoaSchemas = {
             { type: 'object', properties: { data: { $ref: '#/components/schemas/Pessoa' } } },
         ],
     },
+    PessoaLista: {
+        type: 'object',
+        properties: {
+            id: { type: 'integer' },
+            nome: { type: 'string' },
+            apelido: { type: 'string' },
+            tipo_pessoa: { type: 'string', enum: ['F', 'J'] },
+            sexo: { type: 'string', enum: ['M', 'F'] },
+            data_inicio: { type: 'string' },
+            documento_estadual: { type: 'string' },
+            documento_federeal: { type: 'string' },
+            id_vinculo: { type: 'integer' },
+            nome_vinculo: { type: 'string' },
+            ativo: { type: 'string', enum: ['A', 'I'] },
+            id_moradia: { type: 'integer' },
+            id_cobranca: { type: 'integer' },
+            id_entrega: { type: 'integer' },
+        },
+    },
     PessoaListaResponse: {
         allOf: [
             { $ref: '#/components/schemas/ResultadoAPI' },
-            { type: 'object', properties: { data: { type: 'array', items: { $ref: '#/components/schemas/Pessoa' } } } },
+            { type: 'object', properties: { data: { type: 'array', items: { $ref: '#/components/schemas/PessoaLista' } } } },
         ],
     },
     PessoaVinculoListaResponse: {

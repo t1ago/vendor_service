@@ -29,7 +29,14 @@ When new files were created or imports changed:
 
 When a SQL constants file, service, or controller was touched (or for any new module):
 
-1. Query the table structure via MCP:
+The source of truth is the **database itself**. For each endpoint:
+
+**Step A — Identify the SQL**
+Find the corresponding function(s) in `*_sql_constants.ts`. Note which table(s) are touched (including JOINs and subqueries). For endpoints that call external APIs, note the source and skip Steps B–C.
+
+**Step B — Query the actual table schema via MCP**
+For each table involved, run:
+
 ```sql
 SELECT column_name, data_type, is_nullable
 FROM information_schema.columns
@@ -37,15 +44,17 @@ WHERE table_name = 'tb_{entity}'
 ORDER BY ordinal_position;
 ```
 
-2. Compare each column against the SQL constants and service parameters:
+**Step C — Compare SQL SELECT vs DB columns**
+Every column referenced in the SQL SELECT must exist in the DB table. Flag any column the SQL references but that does not exist in the table, or any column the SQL omits that is semantically required by the endpoint's purpose.
 
-| Coluna DB | Tipo DB | Nullable | Campo SQL ($n) | Campo Serviço | Mapeamento |
-|---|---|---|---|---|---|
-| ... | ... | ... | ... | ... | ✅ / ❌ |
+**Step D — Output the result table**
 
-3. Report:
-   - ✅ if every column maps correctly with no divergence.
-   - If any mismatch exists, show the table with the problem row highlighted and fix before proceeding.
+| endpoint | table(s) | status | description |
+|---|---|---|---|
+| `VERB /path` | `tb_entity` | ✅ | |
+| `VERB /path` | `tb_entity`, `tb_other` | ❌ | SQL references column `x` which does not exist in `tb_entity` |
+
+Report one row per endpoint. If all columns are valid, leave description empty. If any column is missing or wrong, name it and the table it belongs to.
 
 ---
 

@@ -280,7 +280,7 @@ export const sqlBuscarEnderecosPorIdPessoa = (parametros: any): ISqlDados => {
 export const sqlBuscarEnderecosPorId = (parametros: any): ISqlDados => {
     return {
         sql: `
-            SELECT 
+            SELECT
                 tb_end.cep,
                 tb_end.logradouro,
                 tb_end.numero,
@@ -289,7 +289,7 @@ export const sqlBuscarEnderecosPorId = (parametros: any): ISqlDados => {
                 tb_end.estado,
                 tb_end.ativo
             FROM tb_endereco_pessoa_tiago tb_end
-            WHERE tb_end.id_pessoa=$1 
+            WHERE tb_end.id_pessoa=$1
             AND tb_end.id=$2
         `,
         valores: [parametros.id, parametros.id_endereco],

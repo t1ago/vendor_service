@@ -38,78 +38,78 @@ When suggesting solutions, favor **clarity over cleverness** — code here is al
 
 ---
 
-## Comandos
+## Commands
 
 ```bash
-# Compilar TypeScript
+# Compile TypeScript
 npm run ts
 
-# Rodar localmente (compila + inicia com .local.env)
+# Run locally (compiles + starts with .local.env)
 npm run local
 
-# Rodar em produção (compila + inicia com .prod.env)
+# Run in production (compiles + starts with .prod.env)
 npm run prod
 
-# Formatar código
+# Format code
 npm run format
 ```
 
-Não há test runner configurado neste projeto.
+No test runner configured in this project.
 
-### Variáveis de ambiente
+### Environment variables
 
-O servidor usa `--env-file` do Node.js. Os arquivos `.local.env` e `.prod.env` devem conter:
+The server uses Node.js `--env-file`. The `.local.env` and `.prod.env` files must contain:
 
 ```
-CONNECTION_STRING=   # string de conexão PostgreSQL
-API_PORT=            # porta do servidor (padrão: 3000)
-SECRET_KEY=          # chave secreta para assinar JWT
-EXPIRES_IN=          # expiração do token em segundos (padrão: 3600)
+CONNECTION_STRING=   # PostgreSQL connection string
+API_PORT=            # server port (default: 3000)
+SECRET_KEY=          # secret key for signing JWT
+EXPIRES_IN=          # token expiration in seconds (default: 3600)
 ```
 
-## Arquitetura
+## Architecture
 
-API REST em **Express + TypeScript** sem framework de injeção de dependência. O banco de dados é **PostgreSQL** (via `pg`). Autenticação via **JWT** (`jsonwebtoken`).
+REST API built with **Express + TypeScript**, no dependency injection framework. Database is **PostgreSQL** (via `pg`). Authentication via **JWT** (`jsonwebtoken`).
 
-### Ponto de entrada
+### Entry point
 
-`app.ts` registra todos os roteadores e inicia o servidor na porta definida por `API_PORT`.
+`app.ts` registers all routers and starts the server on the port defined by `API_PORT`.
 
-### Organização de módulos
+### Module organization
 
-Os módulos ficam em `src/modulos/tiago/` (domínio principal). Outros namespaces existem por razões históricas de aprendizado e serão migrados futuramente.
+Modules live under `src/modulos/tiago/` (main domain). Other namespaces exist for historical learning reasons and will be migrated in the future.
 
-Todo módulo segue o padrão de arquivos definido em `$PWD/.claude/patterns/spec-pattern.md`.
-**`tiago/pessoa` é o módulo canônico de referência** — os demais estão em processo de atualização.
+Every module follows the file pattern defined in `$PWD/.claude/patterns/spec-pattern.md`.
+**`tiago/pessoa` is the canonical reference module** — others are in the process of being updated.
 
-### Prefixos de rotas (registrados em app.ts)
+### Route prefixes (registered in app.ts)
 
-| Prefixo | Módulo |
+| Prefix | Module |
 |---|---|
-| `/tiago/categoria` | categoria do produto |
-| `/tiago/credencial` | login/JWT de Tiago |
-| `/tiago/endereco` | endereços de pessoas |
-| `/tiago/pessoa` | cadastro de pessoas |
-| `/tiago/produto` | produtos |
-| `/miguel/*`, `/victor/*`, `/cores`, `/fornecedoresDam` | outros desenvolvedores |
+| `/tiago/categoria` | product category |
+| `/tiago/credencial` | Tiago's login/JWT |
+| `/tiago/endereco` | person addresses |
+| `/tiago/pessoa` | person registration |
+| `/tiago/produto` | products |
+| `/miguel/*`, `/victor/*`, `/cores`, `/fornecedoresDam` | other developers |
 
-### Utilitários compartilhados (`src/utils/`)
+### Shared utilities (`src/utils/`)
 
-- `banco_dados.ts` — `dbCliente()` (conexão simples), `dbPool()` (pool), `executarQuery()` para executar queries parametrizadas
-- `utils.ts` — helpers de resposta HTTP (`responseAPI`, `responseOK`, `responseInternalServerError`), wrappers de resultado (`processarDados`, `processarDadosEmpty`, `processarRequest`) e `autenticadorInterceptador` (middleware JWT)
-- `error_messages.ts` — constantes de mensagens de erro (sempre adicionar aqui, nunca inline no serviço)
+- `banco_dados.ts` — `dbCliente()` (single connection), `dbPool()` (pool), `executarQuery()` to execute parameterized queries
+- `utils.ts` — HTTP response helpers (`responseAPI`, `responseOK`, `responseInternalServerError`), result wrappers (`processarDados`, `processarDadosEmpty`, `processarRequest`) and `autenticadorInterceptador` (JWT middleware)
+- `error_messages.ts` — error message constants (always add here, never inline in the service)
 
 All feature code follows the spec in `$PWD/.claude/patterns/spec-pattern.md`.
 
-### Contrato de resposta da API
+### API response contract
 
-Todas as respostas seguem `IResultadoAPI`:
+All responses follow `IResultadoAPI`:
 ```ts
 { executado: boolean; mensagem: string; data: any }
 ```
-- Sucesso: `mensagem == ''`, status 200
-- Erro: `mensagem` preenchida com a descrição, status 500
+- Success: `mensagem == ''`, status 200
+- Error: `mensagem` filled with the description, status 500
 
-### Scripts SQL
+### SQL scripts
 
-A pasta `sql/` contém os DDLs de criação das tabelas por módulo. Consulte-os para entender o schema do banco.
+The `sql/` folder contains the DDLs for table creation per module. Consult them to understand the database schema.
