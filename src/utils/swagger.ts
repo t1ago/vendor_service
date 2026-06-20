@@ -3,6 +3,7 @@ import { pessoaSchemas } from '../modulos/tiago/pessoa/pessoa_schema';
 import { enderecoSchemas } from '../modulos/tiago/endereco/endereco_schema';
 import { categoriaSchemas } from '../modulos/tiago/categoria/categoria_schema';
 import { credencialSchemas } from '../modulos/tiago/credencial/credencial_schema';
+import { moedaSchemas } from '../modulos/tiago/moeda/moeda_schema';
 
 const options: swaggerJsdoc.Options = {
     definition: {
@@ -43,6 +44,7 @@ const options: swaggerJsdoc.Options = {
                 ...pessoaSchemas,
                 ...categoriaSchemas,
                 ...credencialSchemas,
+                ...moedaSchemas,
             },
         },
         security: [{ bearerAuth: [] }],

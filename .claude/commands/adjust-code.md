@@ -23,6 +23,7 @@ adding a new service function, fixing a bug, or updating error messages.
    - Does it touch routes? → check `app.ts` registration.
    - Does it touch business rules? → update or create `*_validacoes.ts` accordingly.
    - Does it add/remove a column? → verify mapping between DB, SQL constants, and service.
+   - **Always check Swagger**: does `*_schema.ts` exist? Is the module imported and spread in `swagger.ts`? Is the module path in the `apis` array? Are JSDoc comments present in routes? Include all missing items in the plan — no exceptions.
 4. **Collect from the user** (ask if not already clear):
    - Exact description of what must change and why.
    - Which module / which files are in scope.
