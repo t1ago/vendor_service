@@ -1,6 +1,6 @@
 import express from "express"
 import { alterarCor, criarCor, listarCor, listarCorId, romverCor } from "./cores_controlador"
-import { authenticadorInteceptador } from "../../../utils/miguel/utils"
+import { autenticadorInterceptador as authenticadorInteceptador } from "../../../utils/utils"
 
 
 const rotasCores = express.Router()

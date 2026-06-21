@@ -3,8 +3,6 @@ import cors from "cors"
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './src/utils/swagger'
 
-import miguel_fornecedor from "./src/modulos/miguel/produtos/fornecedor_miguel_rotas"
-import miguel_credencial from "./src/modulos/miguel/credencial/credencial_routes"
 import rotasTiagoMoeda from './src/modulos/tiago/moeda/moeda_rotas';
 import rotasTiagoMedida from './src/modulos/tiago/medida/medida_rotas';
 import rotasCores from './src/modulos/produtos/cores/cores_rotas';
@@ -45,10 +43,6 @@ if (process.env.SWAGGER_ENABLED === 'true') {
         res.json(swaggerSpec);
     });
 }
-
-/**Miguel */
-app.use("/miguel/fornecedor", miguel_fornecedor)
-app.use("/miguel/login", miguel_credencial)
 
 /**Victor */
 app.use("/victor/marca", rotasVictorMarca)
