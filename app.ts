@@ -5,8 +5,8 @@ import { swaggerSpec } from './src/utils/swagger'
 
 import miguel_fornecedor from "./src/modulos/miguel/produtos/fornecedor_miguel_rotas"
 import miguel_credencial from "./src/modulos/miguel/credencial/credencial_routes"
-import miguel_medidas from "./src/modulos/miguel/medidas/medidas_rotas"
 import rotasTiagoMoeda from './src/modulos/tiago/moeda/moeda_rotas';
+import rotasTiagoMedida from './src/modulos/tiago/medida/medida_rotas';
 import rotasCores from './src/modulos/produtos/cores/cores_rotas';
 import rotasFornecedoresDam from './src/modulos/produtos/fornecedores/dam/fornecedores_rotas';
 import rotasTiagoCategoria from './src/modulos/tiago/categoria/categoria_rotas';
@@ -49,7 +49,6 @@ if (process.env.SWAGGER_ENABLED === 'true') {
 /**Miguel */
 app.use("/miguel/fornecedor", miguel_fornecedor)
 app.use("/miguel/login", miguel_credencial)
-app.use("/miguel/medida", miguel_medidas)
 
 /**Victor */
 app.use("/victor/marca", rotasVictorMarca)
@@ -68,6 +67,7 @@ app.use('/tiago/endereco', rotasTiagoEndereco);
 app.use('/tiago/pessoa', rotasTiagoPessoa);
 app.use('/tiago/credencial', rotasTiagoCredencial);
 app.use('/tiago/moeda', rotasTiagoMoeda);
+app.use('/tiago/medida', rotasTiagoMedida);
 
 /** Inicia o Servidor */
 app.listen(port, () => {
