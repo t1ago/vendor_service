@@ -1,38 +1,28 @@
+import { dbCliente, executarQuery } from '../../../utils/banco_dados';
 import { IResultadoAPI } from '../../../interfaces/resultado_api';
-import { dbCliente } from '../../../utils/banco_dados';
+import { processarDados, processarDadosEmpty } from '../../../utils/utils';
+import { ERROR_MESSAGES } from '../../../utils/error_messages';
+import {
+    sqlCriarCategoria,
+    sqlAlterarCategoria,
+    sqlBuscarCategoria,
+    sqlBuscarTodasCategorias,
+    sqlRemoverCategoria,
+} from './categoria_sql_constants';
 
-const resultado: IResultadoAPI = {
-    executado: false,
-    mensagem: '',
-    data: {},
-};
-
-const limparResultado = () => {
-    ((resultado.executado = false), (resultado.mensagem = ''), (resultado.data = {}));
-};
-
-export const criarCategoriaServico = async (categoria: any) => {
+export const criarServico = async (parametros: any) => {
     const cliente = dbCliente();
-    limparResultado();
+    let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
-        const sql = 'INSERT INTO tb_categoria (nome) values ($1) RETURNING id;';
-        const valores = [categoria.nome];
+        const sqlDados = sqlCriarCategoria(parametros);
+        const queryResultado = await executarQuery(cliente, sqlDados);
 
-        const resultado_banco = await cliente.query(sql, valores);
-        const executed = (resultado_banco.rowCount || 0) > 0;
-
-        resultado.executado = executed;
-        resultado.mensagem = '';
-        resultado.data = executed
-            ? {
-                  id: resultado_banco.rows[0].id,
-              }
-            : {};
-    } catch (erro) {
-        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`;
+        resultado = processarDados(() => ({ id: queryResultado.rows[0].id }));
+    } catch (erro: any) {
+        resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
     } finally {
         await cliente.end();
     }
@@ -40,24 +30,19 @@ export const criarCategoriaServico = async (categoria: any) => {
     return resultado;
 };
 
-export const alterarCategoriaServico = async (categoria: any) => {
+export const alterarServico = async (parametros: any) => {
     const cliente = dbCliente();
-    limparResultado();
+    let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
-        const sql = 'UPDATE tb_categoria SET nome=$1 WHERE id=$2;';
-        const valores = [categoria.nome, categoria.id];
+        const sqlDados = sqlAlterarCategoria(parametros);
+        await executarQuery(cliente, sqlDados);
 
-        const resultado_banco = await cliente.query(sql, valores);
-        const executed = (resultado_banco.rowCount || 0) > 0;
-
-        resultado.executado = executed;
-        resultado.mensagem = '';
-        resultado.data = executed ? categoria : {};
-    } catch (erro) {
-        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`;
+        resultado = processarDados(() => ({ id: parametros.id }));
+    } catch (erro: any) {
+        resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
     } finally {
         await cliente.end();
     }
@@ -65,28 +50,19 @@ export const alterarCategoriaServico = async (categoria: any) => {
     return resultado;
 };
 
-export const removerCategoriaServico = async (categoria: any) => {
+export const buscarServico = async (parametros: any) => {
     const cliente = dbCliente();
-    limparResultado();
+    let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
-        const sql = 'DELETE FROM tb_categoria WHERE id=$1;';
-        const valores = [categoria.id];
+        const sqlDados = sqlBuscarCategoria(parametros);
+        const queryResultado = await executarQuery(cliente, sqlDados);
 
-        const resultado_banco = await cliente.query(sql, valores);
-        const executed = (resultado_banco.rowCount || 0) > 0;
-
-        resultado.executado = executed;
-        resultado.mensagem = '';
-        resultado.data = executed
-            ? {
-                  id: categoria.id,
-              }
-            : {};
-    } catch (erro) {
-        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`;
+        resultado = processarDados(() => (queryResultado.rowCount || 0) > 0 ? queryResultado.rows[0] : {});
+    } catch (erro: any) {
+        resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
     } finally {
         await cliente.end();
     }
@@ -94,25 +70,19 @@ export const removerCategoriaServico = async (categoria: any) => {
     return resultado;
 };
 
-export const buscarCategoriaServico = async (categoria: any) => {
+export const buscarTodosServico = async () => {
     const cliente = dbCliente();
-    limparResultado();
+    let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
-        const sql = 'SELECT * FROM tb_categoria WHERE id=$1;';
-        const valores = [categoria.id];
+        const sqlDados = sqlBuscarTodasCategorias();
+        const queryResultado = await executarQuery(cliente, sqlDados);
 
-        const resultado_banco = await cliente.query(sql, valores);
-        const executed = (resultado_banco.rowCount || 0) > 0;
-
-        resultado.executado = true;
-        resultado.mensagem = '';
-        resultado.data = executed ? resultado_banco.rows : [];
-    } catch (erro) {
-        resultado.executado = false;
-        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`;
+        resultado = processarDados(() => queryResultado.rows);
+    } catch (erro: any) {
+        resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
     } finally {
         await cliente.end();
     }
@@ -120,24 +90,19 @@ export const buscarCategoriaServico = async (categoria: any) => {
     return resultado;
 };
 
-export const buscarCategoriasServico = async () => {
+export const removerServico = async (parametros: any) => {
     const cliente = dbCliente();
-    limparResultado();
+    let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
-        const sql = 'SELECT * FROM tb_categoria;';
+        const sqlDados = sqlRemoverCategoria(parametros);
+        await executarQuery(cliente, sqlDados);
 
-        const resultado_banco = await cliente.query(sql);
-        const executed = (resultado_banco.rowCount || 0) > 0;
-
-        resultado.executado = true;
-        resultado.mensagem = '';
-        resultado.data = executed ? resultado_banco.rows : [];
-    } catch (erro) {
-        resultado.executado = false;
-        resultado.mensagem = `Erro de execução no banco de dados. MSG: ${erro}`;
+        resultado = processarDados(() => ({ id: parametros.id }));
+    } catch (erro: any) {
+        resultado = processarDadosEmpty(ERROR_MESSAGES.DEFAULT_BANCO_ERROR.replace('{error}', erro));
     } finally {
         await cliente.end();
     }

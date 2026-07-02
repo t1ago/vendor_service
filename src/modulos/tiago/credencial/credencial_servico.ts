@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { dbCliente, executarQuery } from '../../../utils/banco_dados';
 import { IResultadoAPI } from '../../../interfaces/resultado_api';
 import { sqlValidarCredencial as sqlValidarCredencialLogin } from './credencial_sql_constants';
@@ -8,12 +7,12 @@ import jwt from 'jsonwebtoken';
 
 const HOUR_IN_SECOND = 3600;
 
-export const validarLoginCredencial = async (parametros: any) => {
+export const validarLoginServico = async (parametros: any) => {
     const cliente = dbCliente();
     let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
         const sqlDados = sqlValidarCredencialLogin(parametros);
 
@@ -33,6 +32,10 @@ export const validarLoginCredencial = async (parametros: any) => {
     }
 
     return resultado;
+};
+
+export const buscarUsuarioServico = (user: any) => {
+    return processarDados(() => user);
 };
 
 const gerarToken = (dadosUsuario: any) => {

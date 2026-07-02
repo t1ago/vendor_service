@@ -23,7 +23,7 @@ export const buscarVinculosServico = async () => {
     let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
         const sqlDados = sqlBuscarVinculos();
         const queryResultado = await executarQuery(cliente, sqlDados);
@@ -131,7 +131,7 @@ export const inativarServico = async (parametros: any) => {
     let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
         const sqlDados = sqlInativarPessoa(parametros);
         await executarQuery(cliente, sqlDados);
@@ -155,7 +155,7 @@ export const buscarServico = async (parametros: any) => {
     let queryResultado: QueryResult<any>;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
         if (parametros.id != null) {
             sqlDados = sqlBuscarPorId(parametros);
@@ -201,7 +201,7 @@ export const buscarEnderecoServico = async (parametros: any) => {
     let resultado: IResultadoAPI;
 
     try {
-        cliente.connect();
+        await cliente.connect();
 
         const sqlDados = sqlBuscarEnderecosPorId(parametros);
         const queryResultado = await executarQuery(cliente, sqlDados);

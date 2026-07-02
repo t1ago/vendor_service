@@ -5,7 +5,7 @@ const API_BUSCAR_ESTADOS = 'https://servicodados.ibge.gov.br/api/v1/localidades/
 const API_BUSCAR_LOCALIDADE_POR_CEP = 'https://viacep.com.br/ws/{CEP}/json/';
 
 export const buscarTodosEstados = async () => {
-    const resultado = processarRequest(axios.get(API_BUSCAR_ESTADOS), (data: any) => {
+    const resultado = await processarRequest(axios.get(API_BUSCAR_ESTADOS), (data: any) => {
         return data.map((estado: any) => {
             return {
                 sigla: estado.sigla,
@@ -18,7 +18,7 @@ export const buscarTodosEstados = async () => {
 };
 
 export const buscarLocalidadePorCep = async (cep: string) => {
-    const resultado = processarRequest(
+    const resultado = await processarRequest(
         axios.get(`${API_BUSCAR_LOCALIDADE_POR_CEP.replace('{CEP}', cep)}`),
         (data: any) => {
             return {

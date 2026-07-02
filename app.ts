@@ -2,10 +2,12 @@ import express, { Request, Response } from "express"
 import cors from "cors"
 import { rotaPessoaVictor } from "./src/modulos/victor/pessoas/pessoas_rotas"
 import { rotaEnderecoVictor } from "./src/modulos/victor/endereco/endereco_rotas"
-import miguel_fornecedor from "./src/modulos/miguel/produtos/fornecedor_miguel_rotas"
-import miguel_credencial from "./src/modulos/miguel/credencial/credencial_routes"
-import miguel_medidas from "./src/modulos/miguel/medidas/medidas_rotas"
-import miguel_moedas from "./src/modulos/miguel/moedas/moedas_rotas"
+
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSpec } from './src/utils/swagger'
+
+import rotasTiagoMoeda from './src/modulos/tiago/moeda/moeda_rotas';
+import rotasTiagoMedida from './src/modulos/tiago/medida/medida_rotas';
 import rotasCores from './src/modulos/produtos/cores/cores_rotas';
 import rotasFornecedoresDam from './src/modulos/produtos/fornecedores/dam/fornecedores_rotas';
 import rotasTiagoCategoria from './src/modulos/tiago/categoria/categoria_rotas';
@@ -37,11 +39,13 @@ app.get('/', (req: Request, res: Response) => {
     res.json({ status: 'OK' });
 });
 
-/**Miguel */
-app.use("/miguel/moeda", miguel_moedas)
-app.use("/miguel/fornecedor", miguel_fornecedor)
-app.use("/miguel/login", miguel_credencial)
-app.use("/miguel/medida", miguel_medidas)
+/** Swagger — apenas em ambiente local */
+if (process.env.SWAGGER_ENABLED === 'true') {
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    app.get('/api-spec', (req: Request, res: Response) => {
+        res.json(swaggerSpec);
+    });
+}
 
 /**Victor */
 app.use("/victor/pessoa",rotaPessoaVictor)
@@ -61,6 +65,8 @@ app.use('/tiago/produto', rotasTiagoProduto);
 app.use('/tiago/endereco', rotasTiagoEndereco);
 app.use('/tiago/pessoa', rotasTiagoPessoa);
 app.use('/tiago/credencial', rotasTiagoCredencial);
+app.use('/tiago/moeda', rotasTiagoMoeda);
+app.use('/tiago/medida', rotasTiagoMedida);
 
 
 /** Inicia o Servidor */
