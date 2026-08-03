@@ -8,7 +8,6 @@ import { swaggerSpec } from './src/utils/swagger'
 
 import rotasTiagoMoeda from './src/modulos/tiago/moeda/moeda_rotas';
 import rotasTiagoMedida from './src/modulos/tiago/medida/medida_rotas';
-import rotasCores from './src/modulos/produtos/cores/cores_rotas';
 import rotasFornecedoresDam from './src/modulos/produtos/fornecedores/dam/fornecedores_rotas';
 import rotasTiagoCategoria from './src/modulos/tiago/categoria/categoria_rotas';
 import rotasTiagoCredencial from './src/modulos/tiago/credencial/credencial_rotas';
@@ -19,6 +18,7 @@ import rotasVictorMarca from './src/modulos/victor/marca/marca_rotas';
 import rotasVictorGrupo from './src/modulos/victor/grupo/grupo_rotas';
 import rotasVictorProduto from './src/modulos/victor/produto/produto_rotas';
 import rotasVictorCredencial from './src/modulos/victor/credencial/credencial_rotas';
+import rotasVictorCor from "./src/modulos/victor/cores/cor_rotas"
 
 /** Constantes do Servidor*/
 const app = express();
@@ -54,9 +54,9 @@ app.use("/victor/marca", rotasVictorMarca)
 app.use("/victor/grupo", rotasVictorGrupo)
 app.use("/victor/produto", rotasVictorProduto)
 app.use("/victor/credencial", rotasVictorCredencial)
+app.use('/victor/cor', rotasVictorCor);
 
 /**Danilo */
-app.use('/cores', rotasCores);
 app.use('/fornecedoresDam', rotasFornecedoresDam);
 
 /**Tiago */

@@ -10,15 +10,12 @@ export const buscarMarcaServico = async(marca:any) => {
     var sql : string = ''
     var parametro: any = null
     if(marca == null) {
-        console.log("foi sem parametros")
         sql = MARCA_SQL.SELECT_ALL
     } else {
         if(marca.id) {
-            console.log("Foi por id")
             sql = MARCA_SQL.SELECT_ID;
             parametro = [marca.id];
         } else {
-            console.log("Foi por query")
             sql = MARCA_SQL.SELECT_QUERY;
             parametro = [`%${marca.nome}%`];
         } 

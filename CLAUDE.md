@@ -91,7 +91,7 @@ Every module follows the file pattern defined in `$PWD/.claude/patterns/spec-pat
 | `/tiago/endereco` | person addresses |
 | `/tiago/pessoa` | person registration |
 | `/tiago/produto` | products |
-| `/miguel/*`, `/victor/*`, `/cores`, `/fornecedoresDam` | other developers |
+| `/miguel/*`, `/victor/*`, `/fornecedoresDam` | other developers |
 
 ### Shared utilities (`src/utils/`)
 
